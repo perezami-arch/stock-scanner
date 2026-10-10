@@ -83,7 +83,7 @@ Alpaca (מחירים, חדשות Benzinga, קריפטו), yfinance, OpenBB (FINR
 - **ta-calib:** פיצול כיול/holdout לפי תאריך כניסה, סף נקבע על חצי הכיול, holdout נבדק פעם אחת (נעול), BH-FDR. ההחלטה האמיתית רק על סטאפים מ-12.10.
 - **research_nightly / research_columns:** בדיקת זמן ריצה ודליפה (`rc_test.py`), backfill בתוך המדגם בלבד, parity של vectorbt מול `stop_rules.py`.
 - **TradingAgents (`research/tradingagents/`):** הערכת LLM פיננסיים עם בדיקת דליפה (`leak_test.py`), בקטסט על סטאפי הטראקר (`tracker_backtest.md`, `backtest/`), ריצה על הלפטופ (`laptop-run/`, Ollama + Modelfile), השוואת עלויות API (`cost/`). ספריות TA/אליוט/SMC נבדקו ב-`ta-repos-eval` (בדיקות דליפה `leak_ta.py`, `leak_ew.py`), ומסגרות מסחר ב-`trading-frameworks-eval` (בדיקות סמנטיקה וסימולציות סטופ). קוד צד שלישי (TradingAgents, llama.cpp, ai-hedge-fund וכו') לא הועתק – רק הקוד והתיעוד שלנו.
-  > **הערה – OpenStock:** חיבור הנתונים של TradingAgents ל-OpenStock מוגדר על הלפטופ של אילן ולא על המחשב של הבוט, ולכן הוא לא כלול כאן. **יתווסף בהמשך.**
+  > **הרצה ונתונים:** TradingAgents רץ על הלפטופ של אילן עם מודלי LLM מקומיים דרך Ollama, לא דרך OpenRouter. הנתונים מגיעים מ-yfinance, מ-Alpaca ומתמונת המצב של OpenStock (`laptop_scripts/openstock_market.py`: מחיר וחדשות לכל מניה, רק בריצות חיות; בבקטסט היסטורי הוא חוסם את עצמו כדי למנוע דליפה). הסקריפטים של הלפטופ (ריצת לילה, הגרסה המכוילת, README) נמצאים ב-`research/tradingagents/laptop_scripts/`.
 - **tool_stats:** טסטים סינתטיים (`research/tool_stats_tests/`) לחישוב excess כיווני ול-ev2.
 - **gh-repos-eval:** 7 ריפו מקצועיים נבדקו על אותו harness; LEAN/Nautilus/vectorbt שחזרו את `stop_rules.py` (787–788/788). אף אחד לא הוסיף יתרון.
 
@@ -106,5 +106,5 @@ Private, code-and-docs-only snapshot (10 Oct 2026) of Ilan's unified stock + cry
 - **Active rules:** 4×ATR14 trailing stop on stocks; half off at Fib 1.618 on longs; crypto longs fixed 3×ATR stop; crypto shorts frozen; short rule ck_score≥3 and below SMA200; 12-1 momentum = 10 pts; 5-trading-day earnings block; min $1.5B market cap; max 2 per sector.
 - **Weight-0 policy:** new tools are logged only. Graduation needs ≥30 out-of-sample results from 8–10 entry days, BH-FDR q<0.10, incremental value, and walk-forward stability.
 - **Single source of truth:** the per-run levels JSON (`scanner/levels_schema.json`, `modules/scanner_levelsfile.py`).
-- TradingAgents integration lives in `research/tradingagents/` (our code only; upstream repos not vendored). Its OpenStock data connection is configured on Ilan's laptop and will be added later.
+- TradingAgents integration lives in `research/tradingagents/` (our code only; upstream repos not vendored). It runs on Ilan's laptop with local LLMs via Ollama (not OpenRouter); data comes from yfinance, Alpaca and the OpenStock snapshot (`laptop_scripts/openstock_market.py`, live runs only, self-blocks in historical backtests).
 - No secrets, data, or logs are committed. Env var names are listed above.

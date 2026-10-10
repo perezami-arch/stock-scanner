@@ -1,0 +1,6 @@
+FROM qwen2.5:7b-instruct-q4_K_M
+PARAMETER num_ctx 16384
+PARAMETER temperature 0.3
+# hard cap per call: TradingAgents free-text retries can ignore max_tokens and loop (seen on the box: 11,900-token runaway)
+PARAMETER num_predict 1500
+PARAMETER repeat_penalty 1.1

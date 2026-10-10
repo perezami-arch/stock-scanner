@@ -1,0 +1,5 @@
+FROM hf.co/bartowski/SUFE-AIFLM-Lab_Fin-R1-GGUF:Q4_K_M
+PARAMETER num_ctx 16384
+PARAMETER temperature 0.3
+# reasoning model: allow longer output, but keep a hard cap (see Modelfile)
+PARAMETER num_predict 3000
