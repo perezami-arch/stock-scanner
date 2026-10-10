@@ -50,7 +50,7 @@ def write_report(run_dir, res):
         w('> ## 🔴 חסר קרדיט')
         for x in cr: w(f"> - **{x if str(x).startswith('חסר קרדיט') else 'חסר קרדיט - ' + str(x)}**: העמודות של הפלטפורמה הזו ריקות בדוח. צריך לטעון קרדיט ולהריץ שוב.")
         w('')
-    w('> **חשוב:** עמודות המודלים (Jev, ‏Grok, ‏Perplexity, ‏Claude אנליסט, ‏GPT פרקליט השטן) הן **לתיעוד בלבד, במשקל 0**. הכניסה, הסטופ והיעד מגיעים רק מכללי הבוט, '
+    w('> **חשוב:** עמודות המודלים (Jev, ‏Grok סנטימנט ואנליסט נוסף, ‏Perplexity, ‏Claude אנליסט, ‏GPT פרקליט השטן) הן **לתיעוד בלבד, במשקל 0**. הכניסה, הסטופ והיעד מגיעים רק מכללי הבוט, '
       'דרך קובץ הרמות של הריצה, ואף מודל לא שינה אותם. פסקי הדין נמדדים **רק קדימה, מ-12.10.2026**, בלי בקטסט היסטורי. '
       'כלל הדוחות (אין כניסה חדשה בתוך 5 ימי מסחר לפני דוח) הוא **כלל פעיל**. זה לא ייעוץ השקעות.\n')
     # ---- partition
@@ -102,11 +102,13 @@ def write_report(run_dir, res):
     # ---- 3 summary table
     def table(items, title):
         w(title)
-        hdr = ['#', 'טיקר', 'כיוון', 'כניסה (ייחוס)', 'סטופ', 'יעד', 'דירוג', 'דוח', 'Jev', 'Grok', 'Perplexity', 'Claude', 'GPT', 'חולקים על הגרף']
+        hdr = ['#', 'טיקר', 'כיוון', 'כניסה (ייחוס)', 'סטופ', 'יעד', 'דירוג', 'דוח', 'Jev', 'Grok: סנטימנט / אנליסט', 'Perplexity', 'Claude', 'GPT', 'חולקים על הגרף']
         w('| ' + ' | '.join(hdr) + ' |'); w('|---' * len(hdr) + '|')
         for i, (c, r) in enumerate(items, 1):
             tgt = _nd(c['target']) if c['target'] else ('100% שנדלייר' if c['direction'] == 'LONG' and c.get('asset') != 'crypto' else 'אין')
             gs = f"{VERD[r['grok_verdict']]} (\u200e{r['grok_sentiment']:+d})" if r.get('grok_verdict') else _vd(r, 'grok_verdict')
+            gs += (f" / אנליסט {r['grok_analyst_conviction']}/100 ({DVIEW.get(r.get('grok_analyst_direction_view'), '—')})"
+                   if r.get('grok_analyst_conviction') is not None else ' / אנליסט: לא התקבל')
             cl = f"{r['claude_conviction']} ({DVIEW.get(r.get('claude_direction_view'), '')})" if r.get('claude_conviction') is not None else _vd(r, 'claude_verdict')
             jv = f"{_t(r.get('jev_news_sentiment'))}" if r.get('jev_n_headlines') is not None else '—'
             rk = _n(c.get('rank_score'), 1)
@@ -117,7 +119,7 @@ def write_report(run_dir, res):
                                  _vd(r, 'pplx_verdict'), cl, _vd(r, 'gpt_verdict'), f'{dis}/4' if r.get('image_inputs') else '—']) + ' |')
         w('')
     table(stock_recs, f'## 3. המלצות – מניות ({len(stock_recs)})')
-    w('_דירוג: ציון הבסיס עם שכבת המחקר הזמינה. ציוני המודלים אינם רכיבים בניקוד הטכני. Grok בסוגריים: סנטימנט 2- עד 2+. Claude: ביטחון 0–100 ועמדה. "חולקים על הגרף": מספר המודלים שחולקים על הספירה או הרמות._\n')
+    w('_דירוג: ציון הבסיס עם שכבת המחקר הזמינה. ציוני המודלים אינם רכיבים בניקוד הטכני. Grok: סנטימנט 2- עד 2+ ולצדו ניתוח נפרד. Grok אנליסט ו-Claude: ביטחון 0–100 ועמדה ביחס לכיוון העסקה; הביטחון אינו הסתברות מכוילת. "חולקים על הגרף": מספר המודלים שחולקים על הספירה או הרמות._\n')
     # ---- 4 crypto
     w(f'## 4. קריפטו – לונג בלבד ({len(crypto_recs)})')
     if crypto_recs:
@@ -197,6 +199,11 @@ def write_report(run_dir, res):
                     w(f"- **Grok{' (סנטימנט ראשי לקריפטו)' if c.get('asset') == 'crypto' else ''} ({M['grok']}, {src}):** {VERD[r['grok_verdict']]} · סנטימנט \u200e{r['grok_sentiment']:+d} · "
                       f"ביטחון {_t(r.get('grok_confidence'))} · {_t(r.get('grok_n_posts'))} פוסטים · {_t(r.get('grok_reason'))} · חשבונות מאומתים: {_t(r.get('grok_accounts'))}")
                 else: w(f"- **Grok:** לא התקבל ({_t(r.get('grok_error'))[:160]})")
+                if r.get('grok_analyst_conviction') is not None:
+                    w(f"- **Grok, אנליסט נוסף:** ביטחון **{r['grok_analyst_conviction']}/100** · {DVIEW.get(r.get('grok_analyst_direction_view'), '—')} · סיכון: {_t(r.get('grok_analyst_key_risk'))}")
+                    w(f"  - תזה: {_t(r.get('grok_analyst_thesis'))} · טכני: {_t(r.get('grok_analyst_technical_read'))}")
+                    w(f"  - קטליסטים: {_t(r.get('grok_analyst_catalyst_read'))} · פונדמנטלס: {_t(r.get('grok_analyst_fundamental_read'))}")
+                else: w(f"- **Grok, אנליסט נוסף:** לא התקבל ({_t(r.get('grok_analyst_error') or r.get('grok_error'))[:160]})")
             if p == 'pplx':
                 if r.get('pplx_verdict'):
                     w(f"- **Perplexity ({M['pplx']}):** {VERD[r['pplx_verdict']]} · {_t(r.get('pplx_reason'))} · קטליזטור: {_t(r.get('pplx_catalyst_strength'))}"
@@ -212,10 +219,12 @@ def write_report(run_dir, res):
                 if r.get('gpt_verdict'):
                     w(f"- **GPT, פרקליט השטן ({M.get('gpt')}):** {VERD[r['gpt_verdict']]} · הסיכון הגדול: {_t(r.get('gpt_main_risk'))} · {_t(r.get('gpt_reason'))}")
                     if r.get('gpt_rebuttal_of_analyst'): w(f"  - נגד התזה של Claude: {_t(r['gpt_rebuttal_of_analyst'])}")
+                    if r.get('gpt_rebuttal_of_grok'): w(f"  - נגד התזה של Grok: {_t(r['gpt_rebuttal_of_grok'])}")
                 elif M.get('gpt'): w(f"- **GPT:** לא התקבל ({_t(r.get('gpt_error'))[:160]})")
         dl = [f"{nm}: {_t(r.get(f'{p}_chart_disagree'))}" for p, nm in (('grok', 'Grok'), ('pplx', 'Perplexity'), ('claude', 'Claude'), ('gpt', 'GPT')) if r.get(f'{p}_chart_disagree')]
         if dl: w(f"- **האם הגרף נראה נכון? (ניסיוני):** {' · '.join(dl)} · קלט: {_t(r.get('image_inputs'))}")
         if r.get('cross_challenge'): w(f"- **אתגור הדדי:** {_t(r['cross_challenge'])}")
+        if r.get('analyst_comparison'): w(f"- **השוואת האנליסטים:** {_t(r['analyst_comparison'])}")
         w('')
     # ---- 9 tool stats
     w('## 9. סטטיסטיקת כלים (tool_stats, משקל 0)')
@@ -229,7 +238,7 @@ def write_report(run_dir, res):
         pc = est.get('per_call_avg_usd', {})
         w(f"- **ממוצע למועמד:** כ-${est.get('per_candidate_usd', 0):.3f} (Grok {_n(pc.get('grok'), 3)}, Perplexity {_n(pc.get('pplx'), 3)}, Jev {_n(pc.get('jev_per_ticker'), 4)}, "
           f"Claude {_n(pc.get('claude_analyst'), 3)}, GPT {_n(pc.get('gpt_advocate'), 3)}) · הערכה שבועית: כ-${_n(est.get('weekly_estimate_usd'))}.")
-    for k, lab in [('grok', 'Grok'), ('pplx', 'Perplexity'), ('claude', 'Claude'), ('gpt', 'GPT')]:
+    for k, lab in [('grok', 'Grok סנטימנט'), ('grok_analyst', 'Grok אנליסט'), ('pplx', 'Perplexity'), ('claude', 'Claude'), ('gpt', 'GPT')]:
         if k in st: w(f"- **{lab}:** {st[k]['ok']} מתוך {st[k]['of']} הצליחו")
     w(f"- **עמודות מחקר (research_columns):** {_t(json.dumps(res.get('research_status'), ensure_ascii=False)[:200]) if res.get('research_status') else 'לא רצו'}")
     w('- **קבצים:** `candidates_full.csv`, ‏`levels/`, ‏`charts/` + `chart_index.json`, ‏`tracker_rows.csv`, ‏`reconciliation.json`, ‏`platform_enrichment.csv`, ‏`platform_raw.json`, ‏`research_columns.csv`.')

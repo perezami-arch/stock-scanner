@@ -17,7 +17,7 @@ sys.path.insert(0, '/workspace')
 import scanner_lessons as SLS, scanner_levelsfile as LF, scanner_stops as ST
 
 SKIP = 'skipped - no material change'
-PLATS = ('jev', 'grok', 'pplx', 'claude', 'gpt')
+PLATS = ('jev', 'grok', 'grok_analyst', 'pplx', 'claude', 'gpt')
 
 def log(*a): print('[checkpoints]', *a, flush=True)
 
@@ -62,13 +62,13 @@ def ledger_rows(T, dp, asof_local, cut, cp_dir, models, outs, costs, trig, skipp
                 verdict = o.get('sentiment_label'); risk = o.get('top_catalyst')
             elif p == 'grok': verdict, conv, risk = o.get('verdict'), o.get('sentiment'), o.get('reason_he')
             elif p == 'pplx': verdict, risk = o.get('verdict'), o.get('reason_he')
-            elif p == 'claude': verdict, conv, risk = o.get('direction_view'), o.get('conviction'), o.get('key_risk_he')
+            elif p in ('claude', 'grok_analyst'): verdict, conv, risk = o.get('direction_view'), o.get('conviction'), o.get('key_risk_he')
             elif p == 'gpt': verdict, risk = o.get('verdict'), o.get('main_risk_he')
             act = o.get('checkpoint_action')
         cd = (o or {}).get('chart_count_disagree') if isinstance(o, dict) else None
         rows.append({'trade_key': T['trade_key'], 'ticker': T['ticker'], 'asset': T['asset'], 'direction': T['direction'], 'decision_point': dp,
-                     'asof_local': asof_local, 'data_cutoff_utc': str(cut), 'run_dir': cp_dir, 'platform': p, 'model': models.get(p),
-                     'role': {'claude': 'analyst', 'gpt': 'devils_advocate'}.get(p, 'checker'), 'prompt_version': prompt_version(p)[0],
+                     'asof_local': asof_local, 'data_cutoff_utc': str(cut), 'run_dir': cp_dir, 'platform': p, 'model': models.get('grok' if p == 'grok_analyst' else p),
+                     'role': {'claude': 'analyst', 'grok_analyst': 'analyst', 'gpt': 'devils_advocate'}.get(p, 'checker'), 'prompt_version': prompt_version(p)[0],
                      'verdict': verdict, 'conviction_or_sentiment': conv, 'main_risk_or_reason': risk, 'checkpoint_action': act,
                      'cost_usd_this_pass': round(costs.get(p, 0.0), 5), 'fresh': o is not None,
                      'skipped_reason': (SKIP if (skipped and p != 'jev') else err), 'trigger': ' ; '.join(trig) or None,
@@ -150,6 +150,7 @@ def run(asof, registry, ledger, out_dir, budget_usd=1.0, no_models=False, max_ll
                 a, outs['claude_err'] = SP.analyst(c, facts, g, p, budget, heads=heads, trusted=trusted)
                 v, outs['gpt_err'] = SP.advocate(c, facts, g, p, a, budget, heads=heads, trusted=trusted)
                 outs.update(grok=g, pplx=p, claude=a, gpt=v)
+                outs.update(grok_analyst=SP.grok_analysis(g), grok_analyst_err=SP.grok_analyst_error(g, outs.get('grok_err')))
             for xlog in budget.log:
                 if xlog.get('ticker') == t and not xlog.get('_counted'):
                     pl = 'grok' if xlog['platform'] == 'grok_cache' else xlog['platform']
@@ -161,7 +162,9 @@ def run(asof, registry, ledger, out_dir, budget_usd=1.0, no_models=False, max_ll
             summary['checkpoints'].append({'ticker': t, 'direction': d, 'day': day, 'triggers': trig, 'llm_called': call,
                                            'jev': None if not jv else {k: jv.get(k) for k in ('n_headlines', 'n_material', 'sentiment_label')},
                                            'unrealized_dir_pct': None if unreal is None else round(100 * unreal, 2), 'stop': st_d.get('next_level'),
-                                           'actions': {p: (outs.get(p) or {}).get('checkpoint_action') for p in ('grok', 'pplx', 'claude', 'gpt') if outs.get(p)}})
+                                           'analysts': {p: {k: outs[p].get(k) for k in SP.ANALYST_FIELDS} for p in ('grok_analyst', 'claude') if outs.get(p)},
+                                           'gpt_rebuttals': {k: (outs.get('gpt') or {}).get(k) for k in ('rebuttal_of_grok_he', 'rebuttal_of_analyst_he')},
+                                           'actions': {p: (outs.get(p) or {}).get('checkpoint_action') for p in ('grok', 'grok_analyst', 'pplx', 'claude', 'gpt') if outs.get(p)}})
         # --- registry update
         lc = _f(x.Close.iloc[-1])
         reg.at[i, 'checkpoints_done'] = ','.join(sorted(done)); reg.at[i, 'last_state'] = json.dumps(prev, default=str)

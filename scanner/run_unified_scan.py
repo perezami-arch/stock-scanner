@@ -10,8 +10,8 @@ Pipeline (one run folder = one SINGLE SOURCE OF TRUTH, <run_dir>/levels/<T>.json
  6. selection: top N (--candidates, default 50) with the sector cap (--sector-cap, default 2, 0 = off), blocked names replaced by
     the next eligible name (blocked names ranked above the cut are still researched, for the exception check and the ledger)
  7. charts from the levels JSON (scanner_charts.render_from_levels via scanner_levelsfile.render)
- 8. platforms (skipped with --no-models): Jev -> Grok (free X cache first; chart image) -> Perplexity (chart image) -> Claude analyst
-    (chart image) -> GPT devil's advocate (chart image). Numbers in prompts come only from the levels JSON. Weight 0.
+ 8. platforms (skipped with --no-models): Grok sentiment + additional analyst -> Perplexity -> Jev -> Claude analyst -> GPT critiques BOTH analysts.
+    Chart input when available; numbers come only from the levels JSON. Weight 0.
  9. tracker_rows.csv (from the levels JSON), reconciliation (report / tracker / chart index vs levels, 1e-6 rel) -> 'לא תואם' excluded
 10. research_columns.csv (research_columns.py, INTEGRATION.md; SHORT view only for short-rule names), tool_stats.py, Hebrew report.
 Paper mode (--paper --no-models): steps 1-5 + research columns, folder scan-runs/YYYY-MM-DD_paper, every passing name appended to

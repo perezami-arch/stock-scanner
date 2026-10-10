@@ -16,7 +16,7 @@ import scanner_lessons as SLS, run_checkpoints as RC
 import scanner_research_ledger as RL, scanner_trade_followup as TF
 
 VERD_HE = {'approve': 'אישר', 'flag': 'דגל', 'veto': 'וטו', 'supports': 'תומך', 'opposes': 'מתנגד', 'neutral': 'ניטרלי'}
-PL_HE = {'jev': 'Jev', 'grok': 'Grok', 'pplx': 'Perplexity', 'claude': 'Claude', 'gpt': 'GPT'}
+PL_HE = {'jev': 'Jev', 'grok': 'Grok סנטימנט', 'grok_analyst': 'Grok אנליסט', 'pplx': 'Perplexity', 'claude': 'Claude אנליסט', 'gpt': 'GPT'}
 DIRH = {'LONG': 'לונג', 'SHORT': 'שורט'}
 
 def openbb():
@@ -99,6 +99,12 @@ def main():
           f"Jev: {j.get('n_headlines', '—')} כותרות, {j.get('n_material', '—')} מהותיות ({j.get('sentiment_label') or '—'}) · "
           + (f"טריגרים: {'; '.join(c['triggers'])} → מחקר מחדש: " + ', '.join(f"{PL_HE[p]}={v}" for p, v in c['actions'].items())
              if c['llm_called'] else ('אין שינוי מהותי – המודלים בתשלום לא נקראו' if not c['triggers'] else f"טריגרים: {'; '.join(c['triggers'])} (מעבר לתקרה, לא נקראו)")))
+        for platform, opinion in (c.get('analysts') or {}).items():
+            w(f"  - **{PL_HE.get(platform, platform)}:** {VERD_HE.get(opinion.get('direction_view'), '—')} · ביטחון {opinion.get('conviction')}/100 · "
+              f"תזה: {UR._t(opinion.get('thesis_he'))} · סיכון: {UR._t(opinion.get('key_risk_he'))}")
+        for field, name in [('rebuttal_of_grok_he', 'Grok'), ('rebuttal_of_analyst_he', 'Claude')]:
+            rebuttal = (c.get('gpt_rebuttals') or {}).get(field)
+            if rebuttal: w(f"  - **GPT מול {name}:** {UR._t(rebuttal)}")
     # 3. closures
     w(f"\n## 3. סגירות ({len(s['closed'])})")
     sc = pd.read_csv(f"{s['cp_dir']}/scored_rows.csv") if os.path.exists(f"{s['cp_dir']}/scored_rows.csv") else pd.DataFrame()

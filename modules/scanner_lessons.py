@@ -17,7 +17,7 @@ sys.path.insert(0, '/workspace')
 PROMPTS = os.environ.get('LESSONS_PROMPTS_DIR', '/workspace/prompts')
 REGISTRY = '/workspace/scan-runs/positions_registry.csv'
 FORWARD_FROM = '2026-10-12'
-PLATFORMS = ('grok', 'pplx', 'claude', 'gpt', 'jev')
+PLATFORMS = ('grok', 'grok_analyst', 'pplx', 'claude', 'gpt', 'jev')
 HORIZON = 20
 REG_COLS = ['trade_id', 'trade_key', 'ticker', 'asset', 'direction', 'source_run', 'scan_asof_local', 'cutoff_utc', 'entry_session', 'entry_ref',
             'entry_price', 'entry_fill', 'stop_initial', 'target', 'atr14_at_cutoff', 'levels_file', 'status', 'checkpoints_done', 'last_decision_utc',
@@ -137,6 +137,10 @@ def call_of(row):
     cv = row.get('conviction_or_sentiment')
     try: cv = float(cv)
     except Exception: cv = None
+    if p == 'grok_analyst':
+        if cv is None or not math.isfinite(cv) or v not in ('supports', 'neutral', 'opposes'): return None
+        if v == 'neutral': return 0
+        return -1 if v == 'opposes' or cv < 45 else 1 if cv >= 60 else 0
     if p == 'claude':
         if cv is None: return None
         return 1 if (cv >= 60 and v != 'opposes') else -1 if (cv < 45 or v == 'opposes') else 0

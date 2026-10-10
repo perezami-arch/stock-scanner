@@ -17,15 +17,15 @@
 > **חשוב:** הקוד מייבא קבצים לפי נתיבים מוחלטים תחת `/workspace/...` (ולפעמים `sys.path.insert('/workspace')`). הקוד **לא שוכתב**. טבלת הנתיבים המקוריים נמצאת בהמשך.
 
 ## ארכיטקטורה ותפקידי הפלטפורמות
-תפקידי המודלים בטבלה הם העדכון האחרון שאילן אישר בשיחה: **Claude אנליסט, GPT פרקליט השטן**. הגדרת Claude במסמך 8.10 נשמרת כהיסטוריה בלבד.
+תפקידי המודלים בטבלה הם העדכון האחרון שאילן אישר בשיחה: **Claude אנליסט, Grok אנליסט נוסף לצד סנטימנט וקריפטו, GPT פרקליט השטן מול שניהם**. הגדרת Claude במסמך 8.10 נשמרת כהיסטוריה בלבד. [פרטי שילוב Grok כאנליסט](docs/GROK_ANALYST.he.md).
 
 | רכיב | תפקיד |
 |---|---|
 | **הבוט (שוק ההון)** | כל הטכני: מחירים, ATR, סטופים, פיבו/אליוט, רמות, גלי ווליום, מומנטום 12-1, ניקוד |
-| **Grok (xAI)** | סנטימנט מ-X, וקריפטו |
+| **Grok (xAI)** | אנליסט נוסף: טכני, תזה וסיכונים; במקביל סנטימנט מ-X והקשר קריפטו |
 | **Perplexity Sonar** | קטליסטים (דוחות, חדשות, אירועים) |
 | **Claude** | האנליסט: מסכם וממליץ על כל מועמד |
-| **GPT** | פרקליט השטן: מאתגר את התזה של Claude |
+| **GPT** | פרקליט השטן: מאתגר בנפרד את התזות של Claude ושל Grok |
 | **Jev** | פילטר מקדים לכותרות חדשות לפני שהן מגיעות למודלים |
 
 ראו [ארכיטקטורה מלאה ותרשימי התהליך](ARCHITECTURE.he.md), המבוססים על מסלול הקריאות בקוד.
@@ -115,7 +115,7 @@ Alpaca (מחירים, חדשות Benzinga, קריפטו), yfinance, OpenBB (FINR
 ## English summary
 Private code/research repository based on the 10 Oct 2026 snapshot of Ilan's unified stock + crypto scanner. The live system runs from `/workspace` on the bot's box; existing imports still use those paths. GitHub updates require deployment to that Linux environment.
 
-- **Roles:** bot = technicals; Grok = X sentiment + crypto; Perplexity Sonar = catalysts; Claude = analyst; GPT = devil's advocate; Jev = news pre-filter.
+- **Roles:** bot = technicals; Grok = X sentiment + crypto + an additional analyst; Perplexity Sonar = catalysts; Claude = analyst; GPT = devil's advocate challenging both analysts; Jev = news pre-filter.
 - **Flow:** regime check → candidates → enrichment → cross-challenges → scoring → Hebrew report → tracker + learning loop.
 - **Schedule (Israel time):** weekly Monday 09:00, full models, up to 50 names by score, no long/short split; daily paper scan + interim report every day at 08:24.
 - **Active rules:** 4×ATR14 trailing stop on stocks; half off at Fib 1.618 on longs; crypto longs fixed 3×ATR stop; crypto shorts frozen; short rule ck_score≥3 and below SMA200; 12-1 momentum = 10 pts; 5-trading-day earnings block; min $1.5B market cap; max 2 per sector.
