@@ -7,5 +7,5 @@ After=network-online.target
 Type=oneshot
 WorkingDirectory=/workspace
 EnvironmentFile=-/workspace/scanner-runtime.env
-ExecStart=/usr/bin/env python3 /workspace/run_scheduled.py weekly
+ExecStart=/usr/bin/env python3 /workspace/run_scheduled.py weekly --archive-data
 TimeoutStartSec=6h

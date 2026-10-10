@@ -32,8 +32,8 @@ systemctl --user list-timers 'stock-scanner-*'
 אם אין systemd במחשב הפנימי, להשתמש במנגנון השגרות של גרוק עם אותו אזור זמן ושתי הפקודות:
 
 ```bash
-python3 /workspace/run_scheduled.py weekly
-python3 /workspace/run_scheduled.py daily --publish-progress
+python3 /workspace/run_scheduled.py weekly --archive-data
+python3 /workspace/run_scheduled.py daily --archive-data --publish-progress
 ```
 
 אין להתקין מתזמן נוסף לצד שגרת גרוק פעילה. אלה חלופות לאותו תזמון.
@@ -49,3 +49,7 @@ python3 /workspace/run_scheduled.py daily --publish-progress
 לוודא שריצת יום שני רשומה עם `candidates=50`; קיימים קובצי רמות ו־`research_snapshot.json`; העסקאות השבועיות נרשמות ב־`positions_registry.csv`; דוח יומי מכיל חדשות לכל טיקר או סיבת חוסר כיסוי; תוצאות 5/10/20 שלא הבשילו מוצגות כממתינות; ו־commit תוצאות מופיע בגיטהאב. הגדרת timer לבדה אינה מאשרת שהסריקה הצליחה.
 
 תקציבי המודלים לא הוגדלו. ייתכן שהתקציב הקיים לא יספיק לכל ההעשרה של 50 שמות; כשל/חוסר קרדיט נשמרים בדוח ולא מומצאת תשובת מודל.
+
+## נתונים במחשב Windows
+
+לבקשת אילן נוספה שמירה מקומית ב־Windows: [מבנה וזרימת הסנכרון](WINDOWS_STORAGE.he.md). השירותים המעודכנים מפעילים גם `--archive-data`, לאריזה מצטברת של קבצי המחקר והמעקב ב־Releases פרטיים. נדרש `gh` מאומת גם בבוט, והתקנה מחדש של קובצי השירות המעודכנים. חלופת שגרות גרוק משתמשת באותם דגלים. מפתחות אינם מועתקים.

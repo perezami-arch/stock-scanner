@@ -61,13 +61,14 @@ def main():
     ap.add_argument('kind', choices=['weekly', 'daily'])
     ap.add_argument('--repo', default='/workspace/stock-scanner')
     ap.add_argument('--publish-progress', action='store_true')
+    ap.add_argument('--archive-data', action='store_true', help='private data archives for verified Windows synchronization')
     ap.add_argument('--dry-run', action='store_true')
     a = ap.parse_args()
     now = datetime.now(ZoneInfo('Asia/Jerusalem')); day = now.date().isoformat()
     cmds = commands(a.kind)
     if a.dry_run:
         print(json.dumps({'timezone': 'Asia/Jerusalem', 'kind': a.kind, 'commands': cmds,
-                          'publish_progress': a.publish_progress}, indent=2)); return
+                          'publish_progress': a.publish_progress, 'archive_data': a.archive_data}, indent=2)); return
     if a.kind == 'weekly' and now.weekday() != 0:
         raise SystemExit('Weekly scheduled job only runs on Monday (Asia/Jerusalem)')
     state = Path('/workspace/scan-runs/schedule'); state.mkdir(parents=True, exist_ok=True)
@@ -107,6 +108,9 @@ def main():
                 raise SystemExit(result.returncode)
         if len(saved['completed_steps']) != len(cmds):
             raise SystemExit('One or more steps failed; see schedule logs. Daily review was still attempted.')
+        if a.archive_data:
+            from publish_research_archive import publish
+            saved['data_archive'] = publish('/workspace', '/workspace/scanner-archives')
         if a.kind == 'daily' and a.publish_progress:
             publish_progress(a.repo, f'/workspace/scan-runs/daily/{day}', day)
         saved.update(status='complete', completed_at=now.isoformat())

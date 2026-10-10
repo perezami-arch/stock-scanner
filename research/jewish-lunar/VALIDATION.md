@@ -7,7 +7,7 @@ Source base: `b399f53e08bb078aa95108170903b6b07b862a3a`; changes are recorded in
 
 ```text
 python -X utf8 -B -W ignore::ResourceWarning -m unittest discover -s tests -p 'test_*.py' -q
-Ran 54 tests in 9.834s
+Ran 62 tests in 10.288s
 OK
 ```
 
@@ -37,6 +37,14 @@ OK
 - Monthly astronomy generator replayed October 2026 from saved public sources: all 31 days,
   sunset boundaries, lunar phases and illumination match the prior pilot exactly. See
   `calendar-generator-validation.json`. No network or market data required for that replay.
+- Archive/restore: Hebrew filenames, content deduplication, split bundles, unchanged replays,
+  preservation of prior local versions and upstream-deleted files, corrupt bundle rejection,
+  Windows path/device rejection before download, credential/dependency exclusions, SQLite WAL backup,
+  and a fresh archive generation when content returns to an older version (A → B → A).
+
+Windows local collection was separately copied and SHA256-verified. The authenticated remote
+archive check returned `waiting_for_linux_archive`: no Linux data archive was available yet.
+Local fixture round trips are not proof of a completed Linux-to-Windows transfer.
 
 The legacy levels/report writers emit ResourceWarnings about existing unclosed-file patterns;
 the final test command suppresses that warning category only. It does not suppress test failures.

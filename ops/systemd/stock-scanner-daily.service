@@ -7,5 +7,5 @@ After=network-online.target
 Type=oneshot
 WorkingDirectory=/workspace
 EnvironmentFile=-/workspace/scanner-runtime.env
-ExecStart=/usr/bin/env python3 /workspace/run_scheduled.py daily --publish-progress
+ExecStart=/usr/bin/env python3 /workspace/run_scheduled.py daily --archive-data --publish-progress
 TimeoutStartSec=6h
