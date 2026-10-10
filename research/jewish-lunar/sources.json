@@ -1,0 +1,128 @@
+{
+  "version": "research-provenance-0.2.0",
+  "relationship": "Sources motivate hypotheses. All numeric trading transformations and weights belong to the experimental overlay, not to the cited texts.",
+  "reports": [
+    "sources/jewish-lunar-thesis.md",
+    "sources/gann-jewish-research.md",
+    "sources/book-research.md",
+    "sources/historical-market-results.md",
+    "sources/mavo-hashemesh.md",
+    "sources/trading-research-protocol.md",
+    "sources/daily-research-pilot.md",
+    "sources/lunar-data-ready.md"
+  ],
+  "sources": [
+    {
+      "id": "JEWISH-CYCLE",
+      "primary_references": [
+        "https://he.wikisource.org/wiki/פרי_עץ_חיים_שער_ר%22ח_חנוכה_ופורים_פרק_ב",
+        "https://he.wikisource.org/wiki/סנהדרין_מא_ב",
+        "https://he.wikisource.org/wiki/סנהדרין_מב_א",
+        "https://he.wikisource.org/wiki/שמות_רבה_טו_כו",
+        "https://he.wikisource.org/wiki/זהר_חלק_ב_פה_א"
+      ],
+      "supports": "Textual motifs of renewal, waxing, fullness and waning; not a market direction or physical energy measurement.",
+      "implemented_hypothesis": "Calendar context only; no bullish/weak half-month score. Actual phase is used only in the explicit H3 interaction.",
+      "limits": "Peri Etz Chaim passage marked me-hachaverim; parallel textual motifs are not independent market observations. Calendar bins and coefficients are ours."
+    },
+    {
+      "id": "TEKUNAH-CALENDAR",
+      "primary_references": [
+        "https://hebrewbooks.org/46686",
+        "https://he.wikisource.org/wiki/ראש_השנה_כה_א",
+        "https://he.wikisource.org/wiki/רמב%22ם_הלכות_קידוש_החודש_א",
+        "https://daat.ac.il/he-il/toshba/rambam/amanim/kudush-hahodesh/kidush-hahodesh8.htm"
+      ],
+      "supports": "Astronomical and calendrical context; distinguish Hebrew date, visible/astronomical phase and calendrical molad.",
+      "implemented": "Jerusalem sunset intervals and distinct modern astronomical phase fields",
+      "limits": "Historical cosmology is not used as a numerical ephemeris. Original photograph's exact edition remains unidentified; 2023 edition not read in full."
+    },
+    {
+      "id": "GANN-TIME-PRICE",
+      "primary_references": [
+        "https://www.gutenberg.org/files/74988/74988-h/74988-h.htm",
+        "https://investmenttheory.org/uploads/3/4/8/2/34825752/wdgannbook.pdf"
+      ],
+      "report": "sources/gann-jewish-research.md",
+      "supports": "Gann's documented use of Biblical cycles; historical trading writings reviewed in the source report.",
+      "implemented_hypothesis": "Existing scanner Gann box, angle and bar-count timing, normalized by ATR",
+      "limits": "The novel is not an audited trading record. These formulas are the scanner's reproducible interpretation, not a claimed decoded Gann secret; no established direct link to Vital or Talmud. Master Course PDF is a later transcription, not an authenticated manuscript. Asset-phase formula belongs to our research."
+    },
+    {
+      "id": "TECH-FIB",
+      "code": [
+        "modules/scanner_geometry.py",
+        "modules/scanner_elliott_v2.py"
+      ],
+      "implemented": "Confirmed nonstale v2 Fibonacci retracements and ATR-normalized spiral proximity",
+      "limits": "Shared swing anchors; no independent evidence per Fibonacci ratio, no future anchor confirmation."
+    },
+    {
+      "id": "TECH-ELLIOTT",
+      "code": [
+        "modules/scanner_elliott_v2.py",
+        "modules/scanner_charts.py"
+      ],
+      "implemented": "Trade-direction impulse/ABC state; provisional discount; future confirmations rejected",
+      "limits": "Deterministic count is not unique or proven predictive; no historical relabeling using later candles."
+    },
+    {
+      "id": "TECH-CANDLES",
+      "code": [
+        "modules/scanner_geometry.py"
+      ],
+      "implemented": "Last closed candle bias relative to trade direction; H2/H3 market response. No waxing/waning direction prior.",
+      "limits": "A bullish pattern is not automatically positive for a SHORT setup."
+    },
+    {
+      "id": "TECH-PARTICIPATION",
+      "code": [
+        "modules/scanner_waves.py",
+        "modules/scanner_geometry.py"
+      ],
+      "implemented": "Start/end families; RVOL against median of 20 PRECEDING bars; RSI/CCI divergence counted once; Elliott excluded.",
+      "limits": "Families may remain correlated. Daily volume is not volume measured over Jerusalem sunset intervals. CRSI and raw oscillator readings are context, not additional independent votes."
+    },
+    {
+      "id": "JOINT-HYPOTHESIS",
+      "report": "sources/gann-jewish-research.md, sections 7-11",
+      "implemented": "Our fixed-budget H2/H3 interaction of grouped geometry, candle/volume response and normalized two-clock relation.",
+      "limits": "Our hypothesis, unvalidated. Does not imply physical energy or claim the Jewish texts contain a stock-picking formula."
+    },
+    {
+      "id": "TEKUNAH-RELATIONS",
+      "report": "sources/gann-jewish-research.md, section 2",
+      "primary_references": [
+        "https://hebrewbooks.org/46686"
+      ],
+      "supports": "Sefer HaTekunah chapter 2: relationships and motions of celestial bodies in the historical author's cosmology.",
+      "limits": "Does not supply a stock-price formula; no proven direct Gann-to-Vital transmission."
+    },
+    {
+      "id": "H3-TWO-CLOCKS",
+      "report": "sources/gann-jewish-research.md, sections 7-11",
+      "implemented_hypothesis": "Our H3-phase-relation-v1: completed bars since confirmed pivot normalized by confirmed swing duration; compare with astronomical phase via (1+cos(delta))/2, interacting with market response.",
+      "limits": "New unvalidated operationalization, NOT a formula from Gann/Vital. No assumption the two periods are physically identical. Confirmed asset clock required."
+    },
+    {
+      "id": "H2-PRICE-RESPONSE",
+      "report": "sources/gann-jewish-research.md, sections 8-11",
+      "implemented_hypothesis": "Record whether candle, participation and geometry agree at a clock relation.",
+      "limits": "Broader scanner patterns are not a completed test of the original single bullish-engulfing five-session hypothesis."
+    }
+  ],
+  "non_numeric_research": [
+    {
+      "topic": "Mavo HaShemesh and edition comparison",
+      "treatment": "Attribution and source criticism; no invented per-stock trading bonus"
+    },
+    {
+      "topic": "Annual Av/Adar discussion, Sefer Yetzirah variants, weekday/hour astrology",
+      "treatment": "Documented in source report; separate research questions, not silently converted into monthly/market-hour effects"
+    },
+    {
+      "topic": "Prior SPY lunar study",
+      "treatment": "Retain the failure to meet the predefined volume-model criterion; no claim of validated edge for this new 30% overlay"
+    }
+  ]
+}

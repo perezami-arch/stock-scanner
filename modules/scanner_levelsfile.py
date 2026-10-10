@@ -130,6 +130,7 @@ def facts_for_prompt(L):
                             'bar_hash': L['data'].get('bar_hash'), 'source': L['data']['source']},
             'trade': {k: L['trade'].get(k) for k in ('entry', 'stop', 'stop_rule', 'target', 'target_rule', 'target_note')},
             'technical': L.get('technical'),
+            'research_score': L.get('research_score'),
             'elliott_v1': {k: e1.get(k) for k in ('label', 'valid', 'deviations', 'target_w3', 'target_w5')},
             'elliott_v2': {k: e2.get(k) for k in ('label', 'state', 'kind', 'provisional', 'beyond_target', 'target', 'target_name')},
             'fib_v1': {'origin': (f1.get('origin') or {}).get('price'), 'end': (f1.get('end') or {}).get('price'), 'levels': f1.get('levels'), 'stale': f1.get('stale')},
@@ -213,11 +214,17 @@ def earnings_gate(c, cut, pplx=None, claude=None, gpt=None):
 # ------------------------------------------------------------------ tracker rows (from the levels JSON only)
 TRACKER_FIELDS = ['setup_id', 'ticker', 'asset', 'direction', 'alert_date', 'cutoff_utc', 'entry', 'stop', 'target', 'stop_rule', 'target_rule',
                   'elliott_v1', 'elliott_v2', 'fib_v1_1618', 'fib_v2_x1618', 'vp120_poc', 'vp120_vah', 'vp120_val', 'sr_support', 'sr_resistance',
-                  'earnings_status', 'bar_hash', 'levels_hash', 'recon_status']
+                  'earnings_status', 'bar_hash', 'levels_hash', 'recon_status', 'unified_score', 'baseline_score',
+                  'research_score', 'research_delta', 'research_coverage', 'research_effective_weight', 'research_status', 'research_version']
 
 def tracker_row(L, setup_id, alert_date):
     f = facts_for_prompt(L)
     return {'setup_id': setup_id, 'ticker': L['symbol'], 'asset': L['asset'], 'direction': L['direction'], 'alert_date': alert_date,
+            'unified_score': (L.get('score') or {}).get('value'),
+            **{name: (L.get('research_score') or {}).get(key) for name, key in
+               (('baseline_score', 'baseline_score'), ('research_score', 'research_score'), ('research_delta', 'delta_points'),
+                ('research_coverage', 'coverage'), ('research_effective_weight', 'effective_research_weight'),
+                ('research_status', 'status'), ('research_version', 'version'))},
             'cutoff_utc': L['data']['cutoff_utc'], 'entry': L['trade']['entry'], 'stop': L['trade']['stop'], 'target': L['trade']['target'],
             'stop_rule': L['trade'].get('stop_rule'), 'target_rule': L['trade'].get('target_rule'), 'elliott_v1': f['elliott_v1'].get('label'),
             'elliott_v2': f['elliott_v2'].get('label'), 'fib_v1_1618': (f['fib_v1'].get('levels') or {}).get('1.618'),

@@ -1,12 +1,12 @@
 """Setup charts for the scanner (08.10.2026, Ilan: "פיבו ואליוט לא רק מתמטי - צריך קשר ויזואלי").
-VISUAL ONLY - nothing here feeds the score, stops or targets. Import-safe (no work at import time).
+Rendering reads saved scores, stops and targets. The levels producer also supplies the experimental research overlay.
+Import-safe (no work at import time).
 
 Every number drawn comes from the SAME point-in-time data and the SAME functions the scanner uses:
   * bars      : scanner_stops.daily_bars(symbol, 'stock', cutoff, px_dir) - the cached Yahoo daily bars of that scan
                 (scanner-momentum-cache/<cutoff>), only bars whose 16:00 ET close <= cutoff (pit.history).
   * ATR/zigzag: scanner_stops.atr14 / zigzag (iaf/sim_fib.py exec'd unchanged), ZZ = 2.0 x ATR14, confirmed pivots only.
-  * Elliott   : scanner_stops.elliott_counts + select_count (the count fib_elliott() reports). The scanner's Elliott logic
-                only builds IMPULSE counts (1-5); it does not compute A-B-C corrections, so none are drawn.
+  * Elliott   : scanner_stops impulse counts (v1); scanner_elliott_v2 also supplies A-B-C and provisional counts (v2).
   * Fib       : scanner_stops.fib_elliott() -> fib_r382..r786, fib_tp_1272/1618 (leg = geometry.swing_anchor()).
   * VP120     : scanner_geometry.volume_profile() -> vp120_poc / vah / val (last 120 daily bars).
   * Stops     : scanner_stops.active_stop() -> initial_stop (entry -/+ 4xATR14), tp_half_1618 (LONG active target).
@@ -430,8 +430,12 @@ def render_from_levels(levels, bars_df, out_png, bars=130, max_bars=250, dpi=130
     fig.text(0.215, ty, f"score {_fmt(sc_) if sc_ is not None else '-'}" + (f" ({basis})" if basis else "") +
              f"   |   last bar {pd.Timestamp(L['data']['last_bar']):%d.%m.%Y}   |   scan cutoff {cut_il:%d.%m.%Y %H:%M} IL   |   ATR14 {_fmt(L['data'].get('atr14'))}",
              fontsize=10, va="center", color="#37474f")
-    fig.text(0.055, sy, f"Drawn only from the levels file ({L.get('generated_by')}, {L['schema_version']}); bars: {L['data']['source']}. "
-             "Fib/Elliott/VP/S-R/waves = experimental, weight 0.", fontsize=7.6, va="center", color="#616161")
+    research = L.get('research_score') or {}
+    score_note = (f"Experimental research: {research.get('effective_research_weight', 0):.1%} effective; "
+                  f"delta {research.get('delta_points', 0):+.2f}; unvalidated." if research else
+                  "No weighted research overlay in this snapshot.")
+    fig.text(0.055, sy, f"Drawn from {L['schema_version']}; bars through {L['data']['last_bar']}. " + score_note,
+             fontsize=7.6, va="center", color="#616161")
     foot = ([f"off chart: {'; '.join(off_chart)}"] if off_chart else []) + (["; ".join(notes)] if notes else [])
     if foot: fig.text(0.055, 0.03 if WV else 0.008, "  |  ".join(foot)[:260], fontsize=7.3, color="#6d4c41")
     hs = [Line2D([], [], color=C_ZZ, lw=1.1, label="2xATR zigzag"), Line2D([], [], color=C_ZZ, lw=1.1, ls="--", label="tentative (provisional)"),
@@ -523,7 +527,7 @@ def build_pdf(run_dir, items, cut):
               ("• פאנל גלי נפח (Weis), ופאנלים של RSI14, Connors RSI ו-CCI20 עם קווי דיברגנס (אדום = דובי, ירוק = שורי).", 12, "normal"),
               ("• סימן סוף/תחילת גל נדלק רק כשיש לפחות 2 משפחות סימנים בלתי תלויות.", 12, "normal"),
               ("", 10, "normal"),
-              ("אליוט, פיבונאצ'י, פרופיל נפח, תמיכה/התנגדות וגלי נפח - עמודות ניסיוניות במשקל 0. הכניסה, הסטופ והיעד מפלט הסריקה.", 12, "bold")]
+              ("הניקוד כולל שכבת מחקר אם נשמרה בריצה; המשקל והתרומה מופיעים בכל גרף. המשקולות ניסיוניות.", 12, "bold")]
         y = 0.92
         for t, fs, fw in Lg:
             fig.text(0.94, y, heb(t), ha="right", va="top", fontsize=fs, fontweight=fw); y -= 0.042 if fs < 20 else 0.065
@@ -544,6 +548,9 @@ def build_pdf(run_dir, items, cut):
                      f"אליוט v2 (מבט {dir_he[oth]}): {(v2.get(oth) or {}).get('label', 'אין ספירה תקפה')}",
                      f"אליוט v1 (הספירה הנוכחית של הסורק): {L['elliott']['v1'].get('label')}",
                      f"נקודת השליטה בפרופיל הנפח (POC) ל-120 יום: {_fmt(vp.get('poc'))} (אזור ערך {_fmt(vp.get('val'))} - {_fmt(vp.get('vah'))})"]
+            rs = L.get('research_score') or {}
+            if rs:
+                lines.insert(1, f"מחקר ניסיוני: בסיס {_fmt(rs.get('baseline_score'))} · שינוי {_fmt(rs.get('delta_points'))} נקודות · משקל בפועל {rs.get('effective_research_weight', 0):.1%}")
             f1, f2 = L["fib"].get("v1"), L["fib"].get("v2")
             if f2 and f2.get("reanchored"):
                 lines.append(f"פיבונאצ'י: הרגל הישנה נשברה (מוצא {_fmt(f1['origin']['price'])}) - עוגן חדש {_fmt(f2['origin']['price'])} עד {_fmt(f2['end']['price'])}")

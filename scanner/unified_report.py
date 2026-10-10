@@ -59,6 +59,7 @@ def write_report(run_dir, res):
     blocked = [(c, r) for c, r in zip(cands, rows) if (c.get('_eg') or {}).get('blocked')]
     exc = [(c, r) for c, r in zip(cands, rows) if (c.get('_eg') or {}).get('exception')]
     recs = [(c, r) for c, r in zip(cands, rows) if not (c.get('_eg') or {}).get('blocked') and rec_ok(c) and (c.get('_selected') or (c.get('_eg') or {}).get('exception'))]
+    recs = recs[:res.get('candidates_n', 50)]
     stock_recs = [x for x in recs if x[0].get('asset') != 'crypto']; crypto_recs = [x for x in recs if x[0].get('asset') == 'crypto']
     # ---- 1 regime
     w('## 1. מצב השוק')
@@ -76,15 +77,20 @@ def write_report(run_dir, res):
     cap = res.get('sector_cap', 2)
     w('## 2. איך נבחרו המועמדים')
     w(f"- **{res.get('n_full', '—')} שמות עברו את הכללים** (הרשימה המלאה ב-`candidates_full.csv`, עם ציוני הכללים, הרמות מקובץ הרמות, כניסה/סטופ/יעד ודגל הדוח). "
-      f"מתוכם נבחרו עד **{res.get('candidates_n', 20)}** לדוח.")
+      f"מתוכם נבחרו עד **{res.get('candidates_n', 50)}** לדוח.")
+    if len(recs) < res.get('candidates_n', 50):
+        w(f"- **חסר לעומת יעד הפלט:** {res.get('candidates_n', 50)-len(recs)}. לא הוקלו סף הציון, סינון הדוחות או תקרת הסקטור כדי למלא את המכסה; סיבת כל סינון ב־candidates_full.csv.")
     w('- **מניות לונג:** סגירה מעל SMA50 ו-SMA200, שיפוע SMA50 עולה, עד 3 ATR מעל SMA20, שווי ≥ $1.5B, מחזור > $14M, מחיר ≥ $5.')
     w('- **מניות שורט:** רק מי שעובר את כלל השורט המאושר (ck_score≥3 וסגירה מתחת ל-SMA200).')
     w('- **קריפטו (לונג בלבד):** BTC, ‏ETH, ‏SOL ומטבעות גדולים, נרות יומיים של Alpaca. אותו מסנן מגמה, סטופ קבוע 3×ATR14 על סגירה יומית, בלי יעד. שורט קריפטו מוקפא. Grok הוא פלטפורמת הסנטימנט הראשית.')
-    w(f"- **דירוג אחד לכולם (אין חלוקה קבועה לונג/שורט):** ציון אחיד 0–100 = אחוזון המומנטום 12-1 בתוך קבוצת הנכס, "
-      f"ובשורט הפוך (100 פחות האחוזון). ככל שהציון גבוה יותר המומנטום מצביע לכיוון העסקה, ושורט מדורג מעל לונג רק כשהמומנטום שלו חזק יותר. "
-      f"נבחרים עד {res.get('candidates_n', 20)} בעלי הציון הגבוה ביותר - יכולים להיות 20 לונג ו-0 שורט. "
-      f"**סף כניסה: {res.get('min_score', 60):g}** (דגל `--min-score`); מתחתיו שם לא נכנס גם אם נשארו פחות מ-{res.get('candidates_n', 20)} מקומות. "
-      f"ברירת המחדל 60 נקבעה לפי מדגם מאומת (139 סטאפי מניות עם תוצאה ליום 20, 15 ימי כניסה שונים): מציון 60 ומעלה שיעור הפגיעה בתשואה מכוונת ליום 20 היה 58.9% מול 51.8% מתחת, בלי יתרון בממוצע. מדגם קטן - הסף עצמו נמדד קדימה.")
+    rw = res.get('research_weight', 0)
+    w(f"- **דירוג אחד לכולם:** הבסיס הוא אחוזון מומנטום 12-1, הפוך בשורט. "
+      f"משקל המחקר המוגדר הוא {rw:.0%}, ולבסיס {1-rw:.0%} כאשר כל הנתונים זמינים. "
+      f"המחקר משלב מחזור ירח ויום עברי בירושלים, גאן, פיבו, אליוט, נרות ונפח. "
+      f"חלקו של רכיב חסר חוזר לבסיס. המשקולות ניסיוניות ולא הוכחו כמנבאות תשואה. "
+      f"נבחרים עד {res.get('candidates_n', 50)} בעלי הציון הגבוה ביותר. "
+      f"**סף כניסה: {res.get('min_score', 60):g}** (`--min-score`). הסף הקודם נשמר, אך טרם אומת לציון המשולב. "
+      f"הדירוג המקורי והתרומות זמינים ב-`candidates_full.csv` וב-`research_scores.json`.")
     w(f"- **גיוון:** " + (f"לכל היותר {cap} שמות מאותו סקטור בכל צד (דגל `--sector-cap`, 0 מבטל)." if cap else 'מגבלת הסקטור כבויה בריצה הזו.'))
     w('- **כלל הדוחות (פעיל):** אין כניסה חדשה במניה אם הדוח הבא בתוך 5 ימי מסחר מיום הכניסה. מקורות התאריך: לוח Yahoo, ‏OpenBB/Nasdaq ו-Perplexity (רק כשהוא מאשר עם מקור). '
       'אם יש מחלוקת, לוקחים את התאריך **המוקדם**. אין תאריך מאומת: מסומן "תאריך דוח לא מאומת". חריגה רק בקטליזטור חזק מאוד: Perplexity מדרג "חזק" עם מקור מתוארך, '
@@ -111,7 +117,7 @@ def write_report(run_dir, res):
                                  _vd(r, 'pplx_verdict'), cl, _vd(r, 'gpt_verdict'), f'{dis}/4' if r.get('image_inputs') else '—']) + ' |')
         w('')
     table(stock_recs, f'## 3. המלצות – מניות ({len(stock_recs)})')
-    w('_דירוג: הציון האחיד 0–100 (אחוזון מומנטום 12-1, הפוך בשורט). Grok בסוגריים: סנטימנט 2- עד 2+. Claude: ביטחון 0–100 ועמדה. "חולקים על הגרף": כמה מודלים אמרו שספירת האליוט/פיבו/תמיכה שצוירו לא נראית נכונה. הכל במשקל 0._\n')
+    w('_דירוג: ציון הבסיס עם שכבת המחקר הזמינה. ציוני המודלים אינם רכיבים בניקוד הטכני. Grok בסוגריים: סנטימנט 2- עד 2+. Claude: ביטחון 0–100 ועמדה. "חולקים על הגרף": מספר המודלים שחולקים על הספירה או הרמות._\n')
     # ---- 4 crypto
     w(f'## 4. קריפטו – לונג בלבד ({len(crypto_recs)})')
     if crypto_recs:
@@ -147,6 +153,20 @@ def write_report(run_dir, res):
         tag = '' if not (c.get('_eg') or {}).get('blocked') else ' · ⛔ נחסם (דוח)'
         if rec.get(key(c)): tag += ' · ❗ לא תואם'
         w(f"### {i}. {c['t']} – {DIRH[c['direction']]}{' (קריפטו)' if c.get('asset') == 'crypto' else ''} · דירוג {_n(c.get('rank_score'), 1)}{tag}")
+        research = L.get('research_score') or {}
+        if research:
+            w(f"- **שקלול מחקר ניסיוני:** בסיס {_n(research.get('baseline_score'), 2)} · שינוי {_n(research.get('delta_points'), 2)} נקודות · "
+              f"כיסוי {research.get('coverage', 0):.0%} · משקל בפועל {research.get('effective_research_weight', 0):.1%} · מצב {_t(research.get('status'))}.")
+            labels = dict(lunar_calendar='יחס שעוני הירח והנכס', gann='גאן', fibonacci='פיבו וספירלה', elliott='אליוט',
+                          candles='נרות', volume='נפח ודיברגנס', confluence='שילובים')
+            w('- **תרומה בנקודות:** ' + ' · '.join(f"{labels.get(k, k)} {_n(v.get('contribution_points'), 2)}" for k, v in research.get('components', {}).items()))
+            lunar = research.get('lunar') or {}
+            w(f"- **יום המחקר בירושלים:** {_t(lunar.get('lunar_hebrew_date'))} · מופע {_n(lunar.get('lunar_phase_deg'), 1)}° · "
+              f"דגימה {_t(lunar.get('lunar_sample_utc'))} · מצב {_t(lunar.get('lunar_status'))}.")
+            clocks = research.get('clocks') or {}
+            w(f"- **בדיקת שני השעונים (H3):** מצב {_t(clocks.get('status'))} · "
+              f"גיל מהעוגן {_n(clocks.get('bars_since_origin'), 0)} נרות · מחזור הנכס {_n(clocks.get('asset_period_bars'), 0)} נרות · "
+              f"הפרש מופע {_n(clocks.get('phase_difference_deg'), 1)}°. זהו כלל בדיקה שלנו, שטרם אומת למסחר.")
         if r.get('credit_status'): w(f"- **🔴 {r['credit_status']}**")
         T = f.get('trade') or {}; te = f.get('technical') or {}
         w(f"- **רמות (קובץ הרמות, נר אחרון {_t((f.get('levels_file') or {}).get('last_bar'))}, hash {_t((f.get('levels_file') or {}).get('bar_hash'))}):** "
@@ -156,7 +176,7 @@ def write_report(run_dir, res):
         e1, e2 = f.get('elliott_v1') or {}, f.get('elliott_v2') or {}
         f1, f2 = f.get('fib_v1') or {}, f.get('fib_v2') or {}
         vp, sr = f.get('vp120') or {}, f.get('sr_nearest') or {}
-        w(f"- **ניסיוני (משקל 0):** אליוט v2: {_t(e2.get('label'))} · אליוט v1: {_t(e1.get('label'))} · פיבו v2 {_nd(f2.get('origin'))}→{_nd(f2.get('end'))} (1.618={_nd((f2.get('levels') or {}).get('1.618'))}) · "
+        w(f"- **הקשר טכני (רכיבים משוקללים מפורטים לעיל):** אליוט v2: {_t(e2.get('label'))} · אליוט v1: {_t(e1.get('label'))} · פיבו v2 {_nd(f2.get('origin'))}→{_nd(f2.get('end'))} (1.618={_nd((f2.get('levels') or {}).get('1.618'))}) · "
           f"VP120 POC {_nd(vp.get('poc'))} (VAH {_nd(vp.get('vah'))}, VAL {_nd(vp.get('val'))}) · תמיכה {_nd(sr.get('sr_support'))} · התנגדות {_nd(sr.get('sr_resistance'))} · "
           f"סוף גל: {_t((f.get('waves') or {}).get('wave_end_n'))} משפחות ({_t((f.get('waves') or {}).get('wave_end_families'))}) · "
           f"תחילת גל: {_t((f.get('waves') or {}).get('wave_start_n'))} ({_t((f.get('waves') or {}).get('wave_start_families'))})")

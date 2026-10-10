@@ -1,6 +1,13 @@
 # סורק מניות וקריפטו של אילן (stock-scanner)
 
-ריפו פרטי שמכיל **רק קוד ותיעוד**: בלי נתונים, בלי לוגים, בלי מפתחות. מטרתו לאפשר ל-GPT (דרך מחבר GitHub של ChatGPT) ולבוטים אחרים לקרוא את הסורק ואת המבנה שלו.
+שכבת מחקר משולבת: [שילוב המחקר בניקוד הטכני](research/jewish-lunar/INTEGRATION.he.md).
+בכניסה `run_unified_scan.py` נוספה שכבה ניסיונית שמשקלה המוגדר 30%, לצד 70% לציון הבסיס, לפי בקשת אילן.
+היא כוללת לוח אסטרונומי ציבורי ומנגנון הרחבה חודשי. התיעוד להלן מתאר את תמונת המקור; אזכורי משקל 0 קודמים אינם מתארים את שכבת השקלול החדשה.
+
+
+הרחבת המעקב: [מחקר מצטבר ומעקב יומי](research/jewish-lunar/FORWARD_RESEARCH.he.md), כולל חדשות לכל עסקה פתוחה ובדיקות 5/10/20 ימי מסחר **אחרי סגירת עסקה**. קובצי הפעלה למחשב הלינוקס: [התקנה ותזמון](ops/LINUX_DEPLOYMENT.he.md). עדכון הריפו לבדו אינו מפעיל את הבוט. סיכומי המעקב יתפרסמו כאן מדי יום לאחר הפעלת המתזמן.
+
+ריפו פרטי שמכיל **קוד, תיעוד ומחקר**: כולל לוח אסטרונומי ציבורי וסיכומי מעקב עתידיים; בלי מפתחות או מטמוני מחירים גולמיים. מטרתו לאפשר ל-GPT (דרך מחבר GitHub של ChatGPT) ולבוטים אחרים לקרוא את הסורק ואת המבנה שלו.
 התמונה צולמה מהמחשב של הבוט ב-10.10.2026. הקוד רץ בפועל מ-`/workspace` על המחשב הזה, ולא מהריפו.
 
 > **חשוב:** הקוד מייבא קבצים לפי נתיבים מוחלטים תחת `/workspace/...` (ולפעמים `sys.path.insert('/workspace')`). הקוד **לא שוכתב**. טבלת הנתיבים המקוריים נמצאת בהמשך.
@@ -22,13 +29,13 @@
 2. **מועמדים**: סריקה טכנית על היקום (מניות ארה"ב ≥ $1.5B, קריפטו) ב-`scanner/swing_scan.py` + `modules/scanner_crypto.py`.
 3. **העשרה**: פונדמנטלס, חדשות, שורט, רמות, גלים, גאומטריה, אליוט v2, עמודות מחקר (רובן במשקל 0).
 4. **אתגרים צולבים** בין הפלטפורמות (`scanner/scanner_platforms.py`): Grok ↔ Perplexity ↔ Claude ↔ GPT.
-5. **ניקוד** ובחירת עד 20 שמות.
+5. **ניקוד** ובחירת עד 50 שמות.
 6. **דוח** בעברית (Markdown + PDF) – `scanner/unified_report.py`, `scanner/run_daily_report.py`.
 7. **טראקר ולולאת למידה**: `tracker/` (build7, engine, alerts), `modules/scanner_lessons.py`, `scanner/run_checkpoints.py`, `scanner/tool_stats.py`.
 
-## לוחות זמנים (שעון ישראל)
-- **שבועי:** יום שני 09:00 – ריצה מלאה עם כל המודלים, עד 20 שמות לפי ציון, **בלי חלוקה ללונג/שורט**.
-- **יומי:** ימי חול 08:24 – סריקת נייר (`--paper --no-models`) ואחריה דוח ביניים.
+## לוחות זמנים מבוקשים (שעון ישראל; דורשים התקנה במחשב הבוט)
+- **שבועי:** יום שני 09:00 – ריצה מלאה עם כל המודלים, עד 50 שמות לפי ציון, **בלי חלוקה ללונג/שורט**.
+- **יומי:** כל יום 08:24 – סריקת נייר (`--paper --no-models`) ואחריה דוח ביניים.
 
 ## כללים פעילים
 - מניות: **סטופ נגרר 4×ATR14** (שנדליר).
@@ -41,7 +48,9 @@
 - **מקסימום 2 מניות לסקטור.**
 
 ## מדיניות משקל 0 וכלל ה"סיום"
-כל כלי חדש נכנס כעמודה **במשקל 0**: נרשם בדוח ובטראקר, ולא משנה ציון, כניסה, סטופ או יעד.
+שכבת גאן/תכונה מתועדת כחריגה מפורשת לפי בקשת אילן: 30% למחקר, אף שטרם אומת יתרון. אין בכך שינוי אוטומטי של משקלי כלים אחרים.
+
+המדיניות הקודמת לכלים אחרים: כל כלי חדש נכנס כעמודה **במשקל 0**: נרשם בדוח ובטראקר, ולא משנה ציון, כניסה, סטופ או יעד.
 כלי "מסיים" ומקבל משקל רק אם:
 - **≥ 30 תוצאות מחוץ למדגם** מ-**8–10 ימי כניסה** שונים לפחות (מדידה קדימה מ-12.10.2026);
 - **FDR (Benjamini–Hochberg) q < 0.10**;
@@ -98,13 +107,13 @@ Alpaca (מחירים, חדשות Benzinga, קריפטו), yfinance, OpenBB (FINR
 ---
 
 ## English summary
-Private, code-and-docs-only snapshot (10 Oct 2026) of Ilan's unified stock + crypto scanner. The live system runs from `/workspace` on the bot's box; imports use absolute `/workspace` paths and were **not** rewritten (see the module map above for original paths).
+Private code/research repository based on the 10 Oct 2026 snapshot of Ilan's unified stock + crypto scanner. The live system runs from `/workspace` on the bot's box; existing imports still use those paths. GitHub updates require deployment to that Linux environment.
 
 - **Roles:** bot = technicals; Grok = X sentiment + crypto; Perplexity Sonar = catalysts; Claude = analyst; GPT = devil's advocate; Jev = news pre-filter.
 - **Flow:** regime check → candidates → enrichment → cross-challenges → scoring → Hebrew report → tracker + learning loop.
-- **Schedule (Israel time):** weekly Monday 09:00, full models, up to 20 names by score, no long/short split; daily paper scan + interim report on weekdays at 08:24.
+- **Schedule (Israel time):** weekly Monday 09:00, full models, up to 50 names by score, no long/short split; daily paper scan + interim report every day at 08:24.
 - **Active rules:** 4×ATR14 trailing stop on stocks; half off at Fib 1.618 on longs; crypto longs fixed 3×ATR stop; crypto shorts frozen; short rule ck_score≥3 and below SMA200; 12-1 momentum = 10 pts; 5-trading-day earnings block; min $1.5B market cap; max 2 per sector.
-- **Weight-0 policy:** new tools are logged only. Graduation needs ≥30 out-of-sample results from 8–10 entry days, BH-FDR q<0.10, incremental value, and walk-forward stability.
+- **Research overlay:** explicit user-selected experimental 30% budget / 70% baseline. Other tools retain the prior weight-0 graduation policy. Daily news/technical follow-up and post-exit 5/10/20-session audits are included; coefficients do not update automatically.
 - **Single source of truth:** the per-run levels JSON (`scanner/levels_schema.json`, `modules/scanner_levelsfile.py`).
 - TradingAgents integration lives in `research/tradingagents/` (our code only; upstream repos not vendored). It runs on Ilan's laptop with local LLMs via Ollama (not OpenRouter); data comes from yfinance, Alpaca and the OpenStock snapshot (`laptop_scripts/openstock_market.py`, live runs only, self-blocks in historical backtests).
-- No secrets, data, or logs are committed. Env var names are listed above.
+- No secrets or raw price caches are committed. Public calendar fixtures and generated research/follow-up summaries are explicitly included. Env var names are listed above.

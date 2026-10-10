@@ -26,6 +26,21 @@
       }
     },
     "score": {"type": ["object", "null"], "properties": {"value": {"type": ["number", "null"]}, "basis": {"type": ["string", "null"]}}},
+    "research_score": {
+      "type": "object",
+      "description": "Experimental research overlay applied before selection. Missing weight returns to baseline; component contributions are score points, not return probabilities.",
+      "required": ["version", "configured_weight", "baseline_score", "score", "coverage", "effective_research_weight", "components", "status"],
+      "properties": {
+        "version": {"type": "string"},
+        "configured_weight": {"type": "number", "minimum": 0, "maximum": 1},
+        "baseline_score": {"type": ["number", "null"]},
+        "score": {"type": ["number", "null"]},
+        "coverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "effective_research_weight": {"type": "number", "minimum": 0, "maximum": 1},
+        "components": {"type": "object"},
+        "status": {"enum": ["complete", "partial", "unavailable", "disabled", "invalid_baseline", "error"]}
+      }
+    },
     "trade": {
       "type": "object",
       "required": ["entry", "stop", "target"],

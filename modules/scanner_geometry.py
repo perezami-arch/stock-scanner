@@ -278,6 +278,9 @@ def gann_box(df, cutoff=None, asset="stock", direction="LONG", anchor=None):
     tb = tb if tb >= n + 1 else tb + D
     r.update(exp_gann_next_box_date=_future_date(x.index[-1], tb - n, asset), exp_gann_next_box_bars=int(math.ceil(tb - n)))
     r.update(exp_gann_box_bars=int(D), exp_gann_box_range=_r(abs(R)), exp_gann_scale_per_bar=_r(s), exp_gann_scale_atr=_r(s / A, 3))
+    # Research H3: asset clock from pivots already confirmed in this cut frame.
+    # These are completed-bar counts, not calendar days or astronomical degrees.
+    r.update(exp_gann_origin_age_bars=int(n - i0), exp_gann_end_age_bars=int(n - i1))
     return r
 
 # ------------------------------------------------------------------ 3. volume profile
@@ -454,10 +457,18 @@ def candle_columns(df, cutoff=None, asset="stock", recent=3):
     nb = sum(p in BULL for p in on); ns = sum(p in BEAR for p in on)
     bias = "none" if not on else ("bullish" if nb > ns else ("bearish" if ns > nb else ("mixed" if nb else "neutral")))
     tv = last["trend10_atr"]; vr = last["vol_ratio20"]
+    x = pit_cut(df, cutoff, asset)
+    prior_volume = x.Volume.iloc[-21:-1].astype(float)
+    median_volume = float(prior_volume.median())
+    current_volume = float(x.Volume.iloc[-1])
+    rv_median = (current_volume / median_volume if len(prior_volume) == 20 and
+                 np.isfinite(prior_volume).all() and (prior_volume >= 0).all() and median_volume > 0 and
+                 np.isfinite(current_volume) and current_volume >= 0 else None)
     r = dict(candle_last_bar=str(f.index[-1].date()), candle_patterns_last=",".join(on) or None, candle_bias_last=bias,
              candle_score_last=nb - ns, candle_trend10_atr=_r(tv, 2),
              candle_context=None if pd.isna(tv) else ("downtrend" if tv <= -TREND_ATR else ("uptrend" if tv >= TREND_ATR else "sideways")),
              candle_vol_ratio20=_r(vr, 2),
+             candle_vol_ratio20_median=_r(rv_median, 6),
              candle_vol_confirmed=bool(bias in ("bullish", "bearish") and pd.notna(vr) and vr >= VOL_CONFIRM))
     rec = []
     for i in range(1, min(recent, len(f))):

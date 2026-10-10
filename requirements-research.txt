@@ -1,0 +1,5 @@
+# Additional astronomy dependencies; use the existing bot environment.
+skyfield==1.55
+jplephem==2.24
+sgp4==2.27
+tzdata>=2025.2

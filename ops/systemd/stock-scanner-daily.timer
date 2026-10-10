@@ -1,0 +1,10 @@
+[Unit]
+Description=Every day 08:24 Asia/Jerusalem follow-up including weekends
+
+[Timer]
+OnCalendar=*-*-* 08:24:00 Asia/Jerusalem
+Persistent=true
+AccuracySec=1min
+
+[Install]
+WantedBy=timers.target

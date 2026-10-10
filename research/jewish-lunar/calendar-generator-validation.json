@@ -1,0 +1,7 @@
+{
+  "rows": 31,
+  "max_phase_difference_deg": 0.0,
+  "max_illumination_difference_percentage_points": 0.0,
+  "boundaries_identical": true,
+  "offline_source_replay": true
+}

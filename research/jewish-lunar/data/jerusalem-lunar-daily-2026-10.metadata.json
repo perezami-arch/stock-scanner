@@ -1,0 +1,54 @@
+{
+  "status": "calendar_and_astronomy_pilot_complete_no_market_backtest",
+  "rows": 31,
+  "created_utc": "2026-10-09T14:08:55Z",
+  "israeli_calendar_rows": 365,
+  "sunset_source_url": "https://calendar.2net.co.il/AnnualDayTimes.aspx?year=2026&placeId=19&methodId=0",
+  "sunset_primary": "Original Hebcal sea-level Jerusalem boundaries retained; 2net planar sunset used as cross-check",
+  "location": {
+    "city": "Jerusalem",
+    "latitude": 31.76904,
+    "longitude": 35.21633,
+    "timezone": "Asia/Jerusalem"
+  },
+  "boundary_rule": "start_sunset < timestamp <= end_sunset",
+  "sample_rule": "one second after opening sunset (computational convention, not observational accuracy claim)",
+  "lunar_frame": "geocentric apparent ecliptic longitude difference of date, 0=new, 90=first quarter, 180=full, 270=last quarter",
+  "illumination": "Skyfield apparent geocentric position fraction_illuminated(Sun), in percent; not cos(phase) approximation",
+  "timescale": "UTC input/output; bundled Skyfield timescale, internal dynamical conversion",
+  "ephemeris": {
+    "name": "DE440s",
+    "file": "de440s.bsp",
+    "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2",
+    "source": "https://ssd.jpl.nasa.gov/ftp/eph/planets/bsp/de440s.bsp",
+    "coverage": "JD 2396752.50 - JD 2506352.50  (1849-12-25 through 2150-01-21)"
+  },
+  "versions": {
+    "skyfield": "1.55",
+    "numpy": "2.3.5",
+    "jplephem": "2.24",
+    "sgp4": "2.27",
+    "tzdata": "2026.4"
+  },
+  "source_hashes": {
+    "2net-jerusalem-2026.source.html": "24d3842a3ccf9d3a4b47c23eb2c551f4d02dd689f1735d402f1e9e20b9bae6ea",
+    "jerusalem-sunsets-2026-10.source.json": "876532bb149b664ddf14f619efaadb5ce76cf2a6a7ce00faedd05502297c2c12",
+    "hebrew-dates-2026-10.source.json": "86c21acbfc88c37c1fb4bdaaff2eb472f25a7ff09913d9bec8da19244ecb8648",
+    "nasa-phase-check-2026-10.json": "9e12b3ef4a539c4ccf669dbae6778c216bd209d68f3b9f1a6cbd6b96933bdd2e"
+  },
+  "validation": {
+    "sunset_pairs": 32,
+    "sunset_max_absolute_seconds": 32.0,
+    "sunset_median_absolute_seconds": 19.0,
+    "nasa_phase_events": 4,
+    "nasa_max_absolute_seconds": 18.866,
+    "hebrew_date_comparisons": 31,
+    "october_new_moon_assigned_after_sunset": true
+  },
+  "limits": [
+    "No market prices, volume, trading signals or returns loaded.",
+    "Yeshiva molad page downloaded but dynamically rendered table not extracted; mean calendar molad is not substituted for astronomical new moon.",
+    "Future astronomical dates in October are predictions of positions, not observed market outcomes.",
+    "2net minute display and sunset conventions limit absolute boundary accuracy."
+  ]
+}

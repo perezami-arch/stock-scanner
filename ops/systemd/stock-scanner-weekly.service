@@ -1,0 +1,11 @@
+[Unit]
+Description=Weekly 50-candidate scanner (Jerusalem research overlay)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/workspace
+EnvironmentFile=-/workspace/scanner-runtime.env
+ExecStart=/usr/bin/env python3 /workspace/run_scheduled.py weekly
+TimeoutStartSec=6h

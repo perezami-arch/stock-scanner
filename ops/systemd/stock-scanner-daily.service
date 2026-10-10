@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily news, positions, forward research and post-exit review
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/workspace
+EnvironmentFile=-/workspace/scanner-runtime.env
+ExecStart=/usr/bin/env python3 /workspace/run_scheduled.py daily --publish-progress
+TimeoutStartSec=6h

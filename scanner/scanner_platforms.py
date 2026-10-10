@@ -79,7 +79,7 @@ def _sector_cap(df, n):
         if len(keep) >= n: break
     return df.loc[keep]
 
-def select_candidates(run_dir, n_long=None, n_short=None):
+def select_candidates(run_dir, n_long=None, n_short=None, *, respect_env=True):
     """Deterministic TRIAL ranking from scan_raw.csv (code has no full v2.8 composite score; that is computed by the routine).
     Universe: US stocks (no ETFs/indices), mcap >= $1.5B (mcap_ok and mcap_b >= 1.5), $vol20 > $14M, px >= 5.
     LONG : close > SMA50 and > SMA200, SMA50 slope up, ext20 <= 3 ATR (not stretched) -> rank by momentum_score (12-1, the coded score component).
@@ -87,7 +87,13 @@ def select_candidates(run_dir, n_long=None, n_short=None):
     Entry = last close (stop_entry_ref=last_close); LONG stop = initial_stop (entry-4xATR14), target = tp_half_1618 (half) or fallback;
     SHORT stop = short_initial_stop (entry+4xATR14), no fixed target (4xATR chandelier).
     Diversity: at most MAX_PER_SECTOR (2) names per sector ETF per side, so one theme does not fill the list."""
-    n_long = int(os.environ.get('PLATFORM_TOP_LONG', 5 if n_long is None else n_long)); n_short = int(os.environ.get('PLATFORM_TOP_SHORT', 5 if n_short is None else n_short))
+    # The unified pipeline needs ALL rule-passing names before research scoring.
+    # Legacy platform-only callers retain environment limits by default.
+    n_long = 5 if n_long is None else n_long
+    n_short = 5 if n_short is None else n_short
+    if respect_env:
+        n_long = int(os.environ.get('PLATFORM_TOP_LONG', n_long))
+        n_short = int(os.environ.get('PLATFORM_TOP_SHORT', n_short))
     d = pd.read_csv(f'{run_dir}/scan_raw.csv')
     d = d[~d['t'].astype(str).str.startswith('^') & ~d['t'].isin(ETF_LIKE) & ~d['t'].astype(str).str.upper().str.startswith('RELAYTEST')]
     if 'err' in d.columns: d = d[d['err'].isna()]
