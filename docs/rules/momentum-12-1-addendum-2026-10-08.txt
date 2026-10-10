@@ -1,0 +1,27 @@
+ADDENDUM to work-plan v2.8 — 12-1 MOMENTUM SCORE COMPONENT (added 08.10.2026, applies from the Sun 11.10 run)
+
+Why: researcher's point-in-time test on 828 tracker setups (/workspace/scanner-tool-eval/tracker_eval.md): momentum 12-1 was the
+only tool that ranked setups usefully (keep-minus-reject +3.1pp total excess vs SPY/BTC, CI +0.8..+5.3; per-date RankIC +0.16, t 3.4).
+Kronos / Chronos-2 / TimesFM: NOT used.
+
+How to compute (do NOT reimplement):
+  python3 /workspace/swing_scan.py                       # US universe; momentum columns merged into scan_raw.csv
+      env: SCAN_EXTRA_TICKERS=NAVN,MDLN  (add names)   SCAN_ASOF=2026-10-11T06:00Z (reproduce a past run)
+      outputs: /workspace/scan-runs/<YYYY-MM-DD_HHMM>/scan_raw.csv + scan_detail.txt (dated, never overwrite)
+  python3 /workspace/scanner_momentum.py --stocks AAA,BBB --crypto BTC,ETH,SOL [--out file.csv]   # any list, incl. crypto
+  python3 /workspace/scanner_momentum.py --features <scan features.csv> --ticker-col t           # merge into another scan CSV
+  The module calls scanner-tool-eval's Momentum121 / LowVol60 / pit.history unchanged; bars are cut at the scan moment
+  (US: last bar whose 16:00 ET close is before the scan; crypto: last full hour).
+
+Scoring (section 9 order of calculation, step 1):
+  weighted components = 0.90 x (v2.8 components, summing to 100) + 10 x momentum_score/100
+  momentum_score = percentile of momentum_12_1 inside the scan, per asset class (stocks+ETFs / crypto). LONG uses momentum_score,
+  SHORT uses momentum_score_short (= 100 - momentum_score). Then bonuses, penalties, macro modifier, 0-100 cap as before.
+  Helper: scanner_momentum.combine_score(base_weighted, momentum_score, bonuses, penalties, macro_modifier).
+  Missing history (< ~13 months: stocks <253 daily bars, crypto no candle at t-365d): momentum_score = 50 (neutral, 5 points) and
+  flag 'חסרה היסטוריה'. NEVER drop the name for this. Do not use a >=210/252-bar filter to pre-screen the universe.
+  Low volatility 60d (lowvol_60d, lowvol_score): EXPERIMENTAL, weight 0, log it only; it is measured forward on new setups.
+  The $1.5B market-cap floor still applies to US stocks (excluded_reason='MCAP<1.5B').
+
+Output: add to the Hebrew table / tracker for every setup: momentum_12_1, momentum_score (direction-adjusted), missing_history_flag
+('חסרה היסטוריה' when relevant). Tracker builder for new rows: /workspace/tracker/build7.py (schema_new_rows_2026-10-08.json).

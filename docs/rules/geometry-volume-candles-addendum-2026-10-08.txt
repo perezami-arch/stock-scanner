@@ -1,0 +1,87 @@
+ADDENDUM 08.10.2026 - Fibonacci spiral, Gann box/angles, volume profile, candle patterns, liquidity zones
+STATUS: EXPERIMENTAL. LOGGED ONLY, WEIGHT 0 in the score. Never changes the active stops/targets (v2: 4xATR chandelier
++ 1/2 at Fib 1.618 for stock longs; crypto long 3xATR fixed; crypto shorts frozen). To be backtested point-in-time by the
+researcher on the 846 setups before any column gets weight. Requested by Ilan 08.10 ("ספירלת פיבונאצ'י, גאן בוקס,
+ווליום פרופייל ותצורת נרות בודדים או קבוצה").
+
+CODE
+  /workspace/scanner_geometry.py - standalone, import-safe, pure functions on an OHLCV DataFrame + cutoff:
+    pit_cut, swing_anchor, fib_spiral, gann_box, volume_profile (+ intraday_profile), candle_frame, candle_columns,
+    liquidity, fractal_pivots,
+    geometry_columns(df, cutoff, asset, direction, intraday=False, symbol=None) -> dict of ~158 columns (for the 846 setups).
+  Wired into /workspace/swing_scan.py (block after news/macro; env SCAN_GEOM_INTRADAY=0 disables the 1-min profile,
+    SCAN_GEOM_INTRADAY_BUDGET_S caps its time, default 300 s) and into /workspace/tracker/build7.py cols 78-102 +
+    schema_new_rows_2026-10-08.json (row_keys 78-124 + section geometry_experimental). build7 cols 78-124.
+  Backups: *.bak-2026-10-08-pre-geometry. Tests: /workspace/scan-runs/geometry-test-2026-10-08/.
+
+POINT IN TIME
+  stock bar D visible only when D 16:00 ET <= cutoff (alert before 16:00 ET -> previous close);
+  crypto bar visible when its start + 24h <= cutoff (alert minute, or 00:00 UTC if only the date is known).
+  Swing = the SAME leg as the Fib/Elliott columns: 2xATR14 zigzag (iaf/sim_fib.py exec'd unchanged), only pivots confirmed
+  on/before the last visible bar; LONG view: last confirmed swing high H1 + the pivot before it (L0). SHORT mirrored.
+  Look-ahead check: 88 historical cutoffs on NVDA/SBUX/JPM/BTC/ETH (intra-session cutoffs) -> ~158 columns identical
+  when computed on the full series, on the series truncated at the cutoff, and with all post-cutoff bars replaced by
+  random garbage. 1-min profile window ends at the end of the last visible daily bar (checked).
+
+DEFINITIONS
+1. Fib spiral (exp_spiral_*): plane x = bars, y = price/u, u = ATR14 at the bar that CONFIRMED H1 ("1 bar = 1 ATR";
+   spirals are scale-dependent, this is a fixed convention, not optimised). Center H1, start L0, golden spiral
+   r = r0*phi^(quarter turns), sweeping from L0 through the retracement side (below H1 for longs) into the future, 3 turns.
+   Columns: arc above/below the close on the last bar, distance to nearest arc (ATR), near_arc (<=0.5 ATR), next quarter-turn
+   node after the last bar (date, price, bars), next date the spiral crosses the current close.
+   Note: golden spirals grow fast (x6.85 per turn), so nodes are often far away in price - that is the method, not a bug.
+2. Gann (exp_gann_*): box = L0 -> H1 (range R, D bars). Price levels inside the box at 1/8 steps + 1/3, 2/3; boxes +/-2
+   around it at 0,1/4,1/3,1/2,2/3,3/4. Time divisions D*(m+f) forward; a fraction is used only if its step is >= 1 bar.
+   Angles 1x1 / 1x2 / 2x1 from L0 (up) and from H1 (down), swing-based scale 1x1 = R/D per bar (exp_gann_scale_atr shows
+   that slope in ATRs). Columns: nearest level and angle above/below the close, next time division date, next whole box.
+3. Volume profile (vp60_, vp120_, vpanc_ from L0, vp20m_): daily volume spread uniformly over High-Low into 50 bins;
+   POC, value area 70% (grown from the POC), HVN/LVN = local max/min of the [1,2,1]-smoothed profile (>= mean / <= 0.6 mean),
+   distances in ATR14, position vs value area. vp20m = Alpaca 1-min bars over the last 20 visible daily bars (stocks
+   regular session, split-adjusted, SIP feed; crypto 24h), typical price, 100 bins; ~2-4 s per ticker, cached in
+   /workspace/scanner-geometry-cache/alpaca_1min/. Daily profiles use Yahoo adjusted prices; vp20m uses traded prices.
+4. Candles (candle_*): own vectorised pandas (TA-Lib not installed). Rules in scanner_geometry.CANDLE_RULES:
+   doji body<=10% range; dragonfly/gravestone; hammer/hanging man (lower shadow >= 2x body, upper <= 25% range, body
+   10-35%), inverted hammer/shooting star; marubozu body>=90% range; spinning top; engulfing; harami; piercing; dark cloud;
+   morning/evening star; three white soldiers/black crows; tweezer top/bottom (+/-0.1 ATR); inside/outside bar.
+   Context: 10-bar least-squares slope of Close before the pattern x9/ATR14: <=-1 downtrend, >=+1 uptrend.
+   Volume confirmation: last-bar volume / mean of 20 prior bars >= 1.2. Frequencies on 2,687 real bars: inside bar 16%,
+   doji 12%, engulfing ~1.8% each, morning star 0.45% (candle_pattern_frequency.csv).
+
+5. LIQUIDITY ZONES (liq_*, added 08.10 13:55 at Ilan's request) - objective rules in scanner_geometry.liquidity():
+   Swings = 3-bar fractals (High above the 3 bars on each side, Low mirror), CONFIRMED 3 bars later, last 120 bars.
+   Pools: untaken confirmed swing highs above the close = buy-side (liq_bsl_*), swing lows below = sell-side (liq_ssl_*).
+     Adjacent levels within 0.25 ATR14 (cluster span <= 0.5 ATR) form one pool = equal highs/lows (touches >= 2).
+     A swing is "taken" once a later High exceeds it by > 0.25 ATR (the same tolerance), so a hair-thin wick does not
+     erase equal highs. Output: level, touches, age in bars, distance in ATR, nearest pool + strongest pool within 5 ATR.
+   Standard levels: prior bar (day) high/low, prior complete week and month high/low before the alert week/month.
+   Sweeps (last 3 CLOSED bars): High above a pool known the bar before (or above the prior bar high) and Close back below
+     = bearish sweep (buy-side liquidity taken); mirror = bullish sweep. Date, level and kind are logged.
+   Fair value gaps: bullish when Low[k] - High[k-2] >= 0.1 ATR (zone High[k-2]..Low[k]), bearish mirror; zone shrinks with
+     partial fills and disappears when filled; nearest open gap above/below the close (last 120 bars).
+   Order blocks: displacement bar with body >= 1.5 x ATR14 that closes beyond the last confirmed swing high (bull) / low
+     (bear) = break of structure; OB = last opposite-colour candle within the 5 bars before it (zone = its Low..High);
+     unmitigated = price never traded back into the zone after the displacement; nearest above/below (last 250 bars).
+   Volume-profile link: liq_*_vp_node = HVN/LVN of the 60/120-bar daily profile within max(0.25 ATR, 1 bin) of the pool;
+     liq_*_hvn = True when it is an HVN.
+
+CONFIRMATION DATES (the researcher's rule - every object counts only from the close of the bar that confirms it)
+   exp_anchor_origin_confirmed_at / exp_anchor_end_confirmed_at: bar on which the 2xATR zigzag confirmed each anchor pivot
+     (spiral, Gann box/angles and the anchored volume profile). Example NVDA: swing end 04.09, confirmed 10.09.
+   Pools: liq_*_first_confirmed_at (first swing confirmed), liq_*_equal_confirmed_at (SECOND swing confirmed = equal
+     highs/lows exist from here), liq_*_confirmed_at (last member confirmed = current touch count); same for *_strong_*.
+   Sweep: liq_sweep_confirmed_at = the closed sweep bar. FVG: liq_fvg_*_confirmed_at = close of the 3rd bar.
+   Order block: liq_ob_*_confirmed_at = close of the displacement (break-of-structure) bar.
+   Prior day/week/month: liq_pd/pw/pm_confirmed_at = close of the last bar of that period.
+   Tests: every confirmed_at <= last visible bar; equal highs dated at 2nd swing + 3 bars, FVG at the 3rd bar, OB at the
+     displacement bar (synthetic checks), and the 88-cutoff look-ahead check covers all ~158 columns.
+
+LIMITATIONS
+  - Only the LONG view is wired in swing_scan (as for Fib/Elliott); direction='SHORT' works in the module.
+  - When no confirmed 2xATR swing exists, spiral/Gann/anchored profile are blank with geo_flag.
+  - Small swings (3-6 bars) give tight Gann time grids; spiral/Gann are conventions with no evidence yet.
+  - Crypto is not in swing_scan; geometry_columns works on crypto frames (tested BTC/ETH) for the researcher/annotate.
+  - US names below $1.5B (or unverified mcap) are not computed in the scan.
+  - Liquidity is built from daily bars only (no intraday swings, no order-book data). Crypto liquidation heatmaps
+    (Coinglass and similar) are NOT included - a possible paid data source for later, needs approval and a key.
+  - SMC concepts (pools, sweeps, FVG, OB) have many competing definitions; ours are fixed objective versions, untested.
+  - The 1-min profile costs ~3 s per new ticker (cached after); the scan caps it at 300 s (SCAN_GEOM_INTRADAY_BUDGET_S).

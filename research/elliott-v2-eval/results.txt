@@ -1,0 +1,117 @@
+base N=439 days=27 LONG=246 SHORT=193
+PIT leak check: identical                         1.000000 | tentative_in_confirmed            0.000000 | tentative_confirmed_later_info    0.325153
+
+COVERAGE (trade-direction view): v1 valid 191/439 = 43.5%; v2 any count 324/439 = 73.8%
+v2 state:
+ev2_state
+impulse_provisional    161
+none                   115
+abc_provisional         72
+abc_confirmed           67
+impulse_confirmed       24
+v2 label type:
+ev2_type
+none                                                           115
+W2 in progress                                                  71
+W3 in progress                                                  68
+W2 correction zigzag [prov]                                     58
+W2 correction zigzag: B done, C in progress / beyond target     28
+W3 done                                                         23
+W3 in progress /beyond                                          18
+W2 correction zigzag: C done -> W3 may start                    15
+W2 correction zigzag: B done, C in progress                      9
+W2 correction expanded flat: C done -> W3 may start              8
+W2 correction expanded flat [prov]                               5
+W2 correction flat [prov]                                        5
+W2 correction regular flat: C done -> W3 may start               3
+W4 in progress                                                   2
+W4 correction zigzag [prov]                                      2
+W2 correction flat: B done, C in progress                        2
+W5 done                                                          1
+W4 correction zigzag: B done, C in progress / beyond target      1
+W5 in progress /beyond                                           1
+W5 in progress                                                   1
+post-W5 correction zigzag                                        1
+post-W5 correction expanded flat [prov]                          1
+W2 correction regular flat [prov]                                1
+v1 valid x v2 state:
+ev2_state  abc_confirmed  abc_provisional  impulse_confirmed  impulse_provisional  none
+v1_valid                                                                               
+v1 none               67               19                  0                   47   115
+v1 valid               0               53                 24                  114     0
+v1 Fib leg stale (v2 re-anchored): stale 231, re-anchored 189 of 439
+tentative pivot present: 439 of 439
+
+OUTCOMES by v2 state (x20 = day-20 excess return; ch4 = sim_chand chand4_c):
+                       N  days  x20_mean  ch4_stop  ch4_ret
+ev2_state                                                  
+abc_confirmed         67    17    0.0528    0.0615   0.0242
+abc_provisional       72    16   -0.0241    0.1884   0.0180
+impulse_confirmed     24    14    0.0239    0.1739  -0.0071
+impulse_provisional  161    23    0.0866    0.1195   0.0080
+none                 115    24    0.0474    0.2389   0.0261
+
+OUTCOMES by v2 label type (x20 = day-20 excess return; ch4 = sim_chand chand4_c):
+                                                               N  days  x20_mean  ch4_stop  ch4_ret
+ev2_type                                                                                           
+W2 correction expanded flat [prov]                             5     4    0.1591    0.2500   0.4957
+W2 correction expanded flat: C done -> W3 may start            8     4   -0.1780    0.2500   0.0032
+W2 correction flat [prov]                                      5     4       NaN    0.0000   0.1325
+W2 correction flat: B done, C in progress                      2     1       NaN    0.0000  -0.0288
+W2 correction regular flat [prov]                              1     1   -0.0204    1.0000  -0.0461
+W2 correction regular flat: C done -> W3 may start             3     2    0.0828    0.0000   0.0779
+W2 correction zigzag [prov]                                   58    16   -0.0532    0.1930  -0.0269
+W2 correction zigzag: B done, C in progress                    9     6    0.1113    0.1111  -0.0015
+W2 correction zigzag: B done, C in progress / beyond target   28    13    0.0502    0.0000   0.0236
+W2 correction zigzag: C done -> W3 may start                  15     8    0.1182    0.0000   0.0624
+W2 in progress                                                71    17    0.0929    0.1739   0.0196
+W3 done                                                       23    13    0.0275    0.1818  -0.0087
+W3 in progress                                                68    17    0.0878    0.0882   0.0002
+W3 in progress /beyond                                        18     8   -0.0075    0.0556   0.0065
+W4 correction zigzag [prov]                                    2     2       NaN    0.0000   0.1680
+W4 correction zigzag: B done, C in progress / beyond target    1     1       NaN    1.0000  -0.1656
+W4 in progress                                                 2     2       NaN    0.0000  -0.0083
+W5 done                                                        1     1   -0.0052    0.0000   0.0275
+W5 in progress                                                 1     1       NaN    0.0000  -0.0311
+W5 in progress /beyond                                         1     1       NaN    0.0000  -0.1554
+none                                                         115    24    0.0474    0.2389   0.0261
+post-W5 correction expanded flat [prov]                        1     1       NaN    0.0000   0.0100
+post-W5 correction zigzag                                      1     1       NaN    0.0000   0.0002
+
+OUTCOMES by v1 validity (x20 = day-20 excess return; ch4 = sim_chand chand4_c):
+              N  days  x20_mean  ch4_stop  ch4_ret
+v1_valid_s                                        
+v1 none     248    27    0.0630    0.1983   0.0185
+v1 valid    191    24    0.0185    0.1016   0.0128
+
+TESTS (state vs rest, day-clustered bootstrap, no FDR):
+  ev2_state=abc_provisional x20: yes N=23 (3d) mean=-0.0241 | rest N=116 mean=0.0607 | p=0.008
+  ev2_state=abc_provisional ch4_stop: yes N=69 (15d) mean=0.1884 | rest N=360 mean=0.1500 | p=0.659
+  ev2_state=impulse_confirmed ch4_stop: yes N=23 (13d) mean=0.1739 | rest N=406 mean=0.1552 | p=0.889
+  ev2_state=impulse_provisional x20: yes N=43 (10d) mean=0.0866 | rest N=96 mean=0.0288 | p=0.165
+  ev2_state=impulse_provisional ch4_stop: yes N=159 (22d) mean=0.1195 | rest N=270 mean=0.1778 | p=0.326
+  ev2_state=none x20: yes N=51 (12d) mean=0.0474 | rest N=88 mean=0.0463 | p=0.921
+  ev2_state=none ch4_stop: yes N=113 (23d) mean=0.2389 | rest N=316 mean=0.1266 | p=0.120
+  ev2_state=abc_confirmed x20: yes N=13 (6d) mean=0.0528 | rest N=126 mean=0.0460 | p=0.806
+  ev2_state=abc_confirmed ch4_stop: yes N=65 (16d) mean=0.0615 | rest N=364 mean=0.1731 | p=0.091
+  v1_valid_s=v1 valid x20: yes N=51 (11d) mean=0.0185 | rest N=88 mean=0.0630 | p=0.272
+  v1_valid_s=v1 valid ch4_stop: yes N=187 (23d) mean=0.1016 | rest N=242 mean=0.1983 | p=0.132
+  ev2_beyond_target=True ch4_stop: yes N=46 (14d) mean=0.0435 | rest N=383 mean=0.1697 | p=0.026
+
+WAVES: old any-reason signal vs new >=2-families signal
+  old wave_end (any reason): fires 392/439 = 89.3%
+     x20: on N=129 (14d) 0.0488 vs off N=10 0.0196 p=0.577
+     ch4_stop: on N=382 (26d) 0.1623 vs off N=47 0.1064 p=0.406
+  new wave_end_signal (>=2 families): fires 172/439 = 39.2%
+     x20: on N=58 (10d) 0.0470 vs off N=81 0.0464 p=0.916
+     ch4_stop: on N=167 (22d) 0.1497 vs off N=262 0.1603 p=0.865
+  new wave_start_signal (>=2 families): fires 208/439 = 47.4%
+     x20: on N=54 (10d) 0.0052 vs off N=85 0.0730 p=0.028
+     ch4_stop: on N=206 (22d) 0.1456 vs off N=223 0.1659 p=0.709
+  wave_end_n distribution:
+wave_end_n
+0     47
+1    220
+2    122
+3     46
+4      4

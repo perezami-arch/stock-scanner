@@ -1,0 +1,46 @@
+NEWS + RATES + AAII ADDENDUM (2026-10-08, Ilan in group chat: "document the stock's news; in macro, bonds' impact on the stock or sector, plus AAII")
+STATUS: LOGGED ONLY - experimental, weight 0 in the score. Must be backtested point-in-time before any weighting.
+
+FILES
+- /workspace/scanner_news.py  - standalone, import-safe (no side effects on import). fetch_news_pit(symbol, cutoff_utc, lookback_days=7, market=None, use_cache=True)
+    -> list (NewsResult) of {id, headline, summary, source, created_at_utc, symbols, url}, newest first, ONLY created_at in [cutoff-lookback, cutoff).
+    .flag = None or reason for an empty-by-construction result ("TASE: no Alpaca coverage", "index: no news", "no keys", "api error ...").
+    Symbols: Yahoo style (BRK-B -> BRK.B); crypto BTC-USD / BTC/USD -> BTCUSD; *.TA or market="TASE" -> [] + flag. Naive cutoff = UTC.
+    Cache /workspace/news-cache/<SYM>/<YYYY-MM-DD>.json = all articles of a COMPLETE UTC day (cached only 6h after the day ends; partial days refetched).
+    Keys from env ALPACA_API_KEY_ID / ALPACA_API_SECRET_KEY (never printed/cached). Throttle <=180 req/min (Alpaca free = 200).
+    Reuse for the 846 historical setups: call fetch_news_pit(ticker, <PIT cutoff of that setup>) - same cutoff rules as the backtest.
+- /workspace/scanner_newsmacro.py - stock_cutoff / crypto_cutoff, news_columns, rate_beta, fred_vintage, aaii_pit, macro_snapshot,
+    enrich(tickers, asof, outdir, ...) for a scan, annotate(setups_df) for routine setups (stock/crypto/TASE).
+- /workspace/swing_scan.py wired (backup swing_scan.py.bak-2026-10-08-pre-news); block is try/except, can never break the scan.
+- /workspace/tracker/build7.py cols 67-77 (backup build7.py.bak-2026-10-08-pre-news); schema_new_rows_2026-10-08.json updated (backup .bak-pre-news).
+- per run: scan-runs/<run>/scan_raw.csv (new columns), news_alpaca.json (all articles per ticker; after_cutoff=true = published between
+  cutoff and scan), macro_regime_pit.json (yields + AAII at the cutoff).
+- AAII cache refreshed: /workspace/tracker/rules/aaii_weekly_2026-10-08.csv (week 7.10: bull 40.3 / bear 39.0 = +1.3). aaii.com blocks scripts:
+  refresh weekly (Thursday) via WebFetch of https://www.aaii.com/sentimentsurvey/sent_results into a new aaii_weekly_<date>.csv.
+
+POINT-IN-TIME CUTOFF (same as backtest)
+- US stocks: alert before 16:00 ET -> previous session close 16:00 ET; at/after 16:00 ET on a session day -> that day 16:00 ET. Sessions = SPY bars.
+- Crypto: the alert minute, or 00:00 UTC when only the date is known.
+
+COLUMNS (tracker cols 67-77, header suffix "(נרשם בלבד)")
+ 67 news_count_7d        articles tagging the ticker, created in the 7 days before the cutoff
+ 68 news_headlines_top3  "headline | source | DD.MM.YYYY HH:MM IL" x3 (' || '); rank: ticker/company named in headline > tags<=3 symbols > rest
+ 69 news_last_ts         newest pre-cutoff article (Asia/Jerusalem)
+ 70 sector_etf           Yahoo sector -> XLK/XLF/XLE/XLV/XLI/XLY/XLP/XLU/XLB/XLRE/XLC (SMH->XLK, XBI->XLV); cache scanner-momentum-cache/sector_map.json
+ 71 rate_beta_ticker_60d OLS slope of daily % return on daily 10Y (^TNX) change in bp, x10 = "% move per +10bp", last 60 common days <= cutoff (min 40)
+ 72 rate_beta_sector_60d same for sector_etf
+ 73 us10y_level          ^TNX last close <= cutoff
+ 74 us10y_chg_20d_bp     ^TNX change over 20 sessions, bp
+ 75 us2y10y_spread       FRED DGS10-DGS2, ALFRED vintage as of the cutoff date, obs date < cutoff date (fallback Yahoo ^TNX-2YY=F, flagged)
+ 76 aaii_bull_bear       bull% - bear% of the latest AAII week released by the cutoff (week ends Wed, counted available Thu 12:00 ET)
+ 77 news_cutoff_utc      the cutoff used
+ scan_raw only: news_count_7d_focused, news_count_cutoff_to_scan, news_flag, rate_corr_ticker_60d, rate_corr_sector_60d, rate_n_obs, us2y10y_src, aaii_date
+ $1.5B floor: names failing mcap_ok are not queried for news (news_flag "skipped (MCAP<1.5B)").
+
+LIMITATIONS
+- Alpaca news = Benzinga feed. History reaches ~2015 but is thin early (NVDA 1-9.1.2016: 5 articles; SBUX 1-8.1.2024: 3) -> counts are not
+  comparable across years; fine for the 2026 setups. Filter is on created_at; later headline edits (updated_at) are not undone.
+- Counts include multi-ticker roundups (use news_count_7d_focused). ETF news is mostly roundups.
+- Crypto: BTCUSD/ETHUSD covered (99 / 38 articles in 7d on 8.10); small alts likely sparse. TASE: none (flag) - needs another source.
+- 60d rate beta is noisy (|corr| often <0.2 for single stocks); the 8.10 window had +44bp in 20d, so signs reflect this regime (e.g. banks negative).
+- AAII needs a manual weekly cache refresh; aaii_pit marks stale when the latest week is >8 days old (macro_regime_pit.json).

@@ -1,0 +1,21 @@
+Out-of-sample rule (agreed in the scanner group, 8.10.2026)
+- Every experimental column (Fib/Elliott extra levels, Fib spiral, Gann box, volume profile, candle patterns, liquidity zones, news, rate betas, AAII, 2R->2ATR tightening alt column) stays logged-only with ZERO score weight.
+- A column may get weight only if it ALSO works on new setups from 12.10.2026 onward (not seen when the rules were built), with ~30 closed trades minimum, not just on the 846 historical setups.
+- Every table should state how many comparisons were run on the same 846 setups (multiple-testing caution).
+- Structure objects (order blocks, equal highs/lows, FVGs, sweeps, spiral/Gann anchors) count only from their confirmed_at bar.
+- Test rows in /workspace/tradingview-alerts/alerts.csv with ticker starting RELAYTEST or signal relay_test must be skipped.
+
+--- עדכון 8.10.2026 14:15 (הסכמה בחדר) - דגל watch_short_below_va120 ---
+מדד ראשי: תשואת השורט מעל SPY בדיוק 20 ימי מסחר אחרי הכניסה (טווח קבוע, לא תלוי בסגירת סטופ). עסקה נספרת רק כשעברו 20 ימי מסחר.
+קצב צפוי: ~10 שורטים מסומנים בחודש => 15 תוצאות בעוד ~חודשיים, 30 בעוד ~4 חודשים.
+בדיקת ביניים ב-15 תוצאות: רק לוודא שהכיוון לא התהפך (מסומנים מול לא מסומנים). אין משקל.
+משקל בציון רק אם: (1) 30 תוצאות של 20 יום עם יתרון למסומנים, וגם (2) העסקאות שנסגרו בפועל בסטופ 4xATR לא סותרות את הכיוון.
+בכל דוח: מספר המסומנים, מספר הלא מסומנים, ומספר ההשוואות.
+- watch_short_below_va120 is the only geometry item being tracked on new setups from 12.10 (needs ~30 closed trades / day-20 results). All other geometry/volume/candle/liquidity columns stay logged-only at weight 0.
+
+--- עדכון 8.10.2026 14:27 (הסכמה בחדר) - ספירה תלויה ---
+- בדיקות 15/30 מדווחות גם את מספר ימי הכניסה השונים; אין מסקנה (גם לא בדיקת ביניים) לפני 8-10 ימי כניסה שונים.
+- ניתוח ראשי ברמת יום כניסה: ממוצע התוצאות של כל יום כניסה הוא תצפית אחת (מסומנים מול לא מסומנים באותו יום), כדי שיום אחד עם 10 שורטים מתואמים לא ישלוט בתוצאה.
+- מניות ותעודות סל (GLD, TLT, XLRE וכד') מוצגות בנפרד. מניות הן הניתוח הראשי.
+- כפילויות: אם אותו טיקר מסומן שוב כשהשורט הקודם שלו עדיין פתוח (או בתוך 20 ימי המסחר של המדידה), זו לא עסקה חדשה ולא נספרת שוב.
+- לוח זמנים משוער: 8-10 ימי כניסה = 4-5 שבועות של סריקות שני/רביעי, ועוד 20 ימי מסחר => תוצאה ראשונה בערך אמצע דצמבר 2026.

@@ -1,0 +1,32 @@
+# secrets
+.env
+.env.*
+*.key
+*.pem
+.relay_secret
+set_routine_env.sh
+.vercel/
+# data / runtime
+*.log
+*.csv
+*.xlsx
+*.xls
+*.pkl
+*.pickle
+*.parquet
+*.zip
+*.lock
+*.pid
+scan-runs/
+openbb-snapshots/
+research-models/
+data/
+out/
+pred_*.csv
+*.bak*
+# python / node
+__pycache__/
+*.pyc
+venv*/
+.venv/
+node_modules/

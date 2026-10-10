@@ -1,0 +1,37 @@
+Short data / squeeze + OpenBB daily snapshot addendum (08.10.2026) - EXPERIMENTAL, score weight 0
+Request (Ilan, 08.10): short squeezes + OpenBB daily point-in-time snapshot. Weight 0 under out-of-sample-rule-2026-10-08.txt.
+
+Code
+- /workspace/scanner_short.py - FINRA short interest (api.finra.org consolidatedShortInterest, no key), Reg SHO daily short
+  volume (cdn.finra.org CNMSshvol*.txt, cached /workspace/short-data/regsho), Yahoo float (cached 7d), NYSE calendar.
+- /workspace/swing_scan.py - try/except block "SHORT DATA" after the fundamentals block (backup .bak-2026-10-08-pre-short);
+  adds short_* columns to scan_raw.csv for US names over the $1.5B floor. Never breaks the scan.
+- /workspace/tracker/short/short_backtest.py -> /workspace/tracker/short_pit_lookup.csv (428 tracker stock setups, PIT),
+  short/short_backtest_in_sample.csv, short/universe_si_latest.csv. Not in build7 (tracker layout untouched); feed it to
+  tool_stats.py with --extra tracker/short_pit_lookup.csv (tool_stats now includes short_si_pct/si_dtc/si_chg/svr_/comp_/
+  squeeze/ib_fee/ib_avail, category short_data; backup tool_stats.py.bak-2026-10-08-pre-short).
+- /workspace/openbb_snapshot.py - daily PIT snapshot to /workspace/openbb-snapshots/<last completed NYSE session>/.
+
+PIT rules
+- FINRA SI: a report is usable only if its estimated PUBLICATION date (settlement + 7 NYSE business days) < alert date.
+  Never keyed to the settlement date.
+- Reg SHO: files for trade dates < alert date. Only the CHANGE is used: short_svr_z20/z60 = z-score of the last-5-session mean
+  short-volume ratio vs the stock's own prior 20/60 sessions (excluding those 5); short_svr_trend = r5 - 20d mean. The absolute
+  ratio is not a column (includes market-maker hedging).
+- Price components from bars complete before the alert: short_comp_trend = close > SMA50 and 5d avg vol > 20d avg vol;
+  short_comp_breakout = close > max High of the prior 20 sessions.
+- short_comp_si = SI % float >= 15 or DTC20 (SI / 20d avg volume) >= 5. short_squeeze_candidate = comp_si and (trend or breakout).
+- Borrow fee / utilization: paid-only (Ortex, S3) -> short_borrow_fee_paid always null. IBKR public short-stock FTP
+  (ftp3.interactivebrokers.com, user shortstock, usa.txt) is attempted every snapshot (short_ib_fee, short_ib_rebate,
+  short_ib_available, short_ib_fee_chg, short_ib_avail_drop_pct, short_comp_borrow = fee +1pp or availability -30% vs the
+  previous snapshot) - FORWARD ONLY. On 08.10 port 21 timed out from the box, so these are null (meta.json ibkr_status).
+- OpenBB consensus / targets / options / earnings calendar are FORWARD ONLY (today's values, never backfilled). Dark pool keyed
+  to FINRA initial publication date.
+
+Snapshot command (idempotent; exits 0 'already done' when the folder is complete; --force re-runs):
+  /workspace/venv-openbb/bin/python /workspace/openbb_snapshot.py
+Schedule ~08:00 Israel Tue-Sat (after the prior US session). Running during the US session makes CBOE volume/IV/skew refer to
+the current session -> meta.json options_intraday_warning=true (the 08.10 first run was at 16:42 Israel = 09:42 ET, flagged).
+
+In-sample results 08.10 (tracker, descriptive only, 12 comparisons, no significance claimed) - see the parent report.
+Note: the $1.5B floor excludes most classic squeeze names; among the 88 live-list names only 1 meets the SI thresholds.

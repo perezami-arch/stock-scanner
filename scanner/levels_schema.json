@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "/workspace/levels_schema.json",
+  "title": "Scanner per-ticker levels file (<run_dir>/levels/<TICKER>.json)",
+  "description": "Single source of truth for everything drawn on a setup chart. scanner_charts.render_from_levels() draws ONLY these numbers (no level is recomputed); bars_df supplies candles/volume only and is cut at data.last_bar. Dates are ISO 'YYYY-MM-DD' daily bar dates (stock = session date ET). Prices are floats (adjusted like the bars). null = not available. Every weight-0 block carries 'version'. Reference producer: scanner_charts.build_levels().",
+  "type": "object",
+  "required": ["schema_version", "symbol", "asset", "direction", "data", "trade", "pivots", "elliott", "fib"],
+  "properties": {
+    "schema_version": {"const": "levels-1.0"},
+    "symbol": {"type": "string"},
+    "asset": {"enum": ["stock", "crypto"]},
+    "direction": {"enum": ["LONG", "SHORT"]},
+    "scan_type": {"enum": ["SWING", "LONG_TERM", "INTRADAY"], "default": "SWING"},
+    "run_id": {"type": ["string", "null"], "description": "e.g. 2026-10-08_1515_trial"},
+    "generated_by": {"type": ["string", "null"], "description": "producer name + version"},
+    "data": {
+      "type": "object",
+      "required": ["source", "cutoff_utc", "last_bar"],
+      "properties": {
+        "source": {"type": "string", "description": "e.g. 'yahoo daily (auto_adjust) via scanner-momentum-cache pit.history'"},
+        "px_dir": {"type": ["string", "null"]},
+        "cutoff_utc": {"type": "string", "description": "ISO timestamp, e.g. 2026-10-08T12:15:00+00:00"},
+        "last_bar": {"type": "string", "description": "last bar visible at the cutoff; the renderer drops later bars"},
+        "n_bars": {"type": ["integer", "null"]},
+        "atr14": {"type": ["number", "null"], "description": "Wilder ATR14 at last_bar"}
+      }
+    },
+    "score": {"type": ["object", "null"], "properties": {"value": {"type": ["number", "null"]}, "basis": {"type": ["string", "null"]}}},
+    "trade": {
+      "type": "object",
+      "required": ["entry", "stop", "target"],
+      "properties": {
+        "entry": {"type": ["number", "null"]}, "entry_ref": {"type": ["string", "null"], "description": "last_close | trigger"},
+        "stop": {"type": ["number", "null"]}, "stop_rule": {"type": ["string", "null"], "description": "e.g. chandelier_close 4xATR14"},
+        "target": {"type": ["number", "null"]}, "target_rule": {"type": ["string", "null"], "description": "e.g. 1/2 at Fib 1.618 | none (chandelier)"},
+        "target_note": {"type": ["string", "null"]}
+      }
+    },
+    "pivots": {
+      "type": "object",
+      "required": ["zigzag_atr_mult", "confirmed"],
+      "properties": {
+        "zigzag_atr_mult": {"type": "number"},
+        "confirmed": {"type": "array", "items": {"$ref": "#/$defs/pivot"}, "description": "all confirmed zigzag pivots, oldest first (confirmed_at <= last_bar)"},
+        "tentative": {"oneOf": [{"type": "null"}, {"type": "object", "required": ["kind", "price", "date"],
+          "properties": {"kind": {"enum": ["H", "L"]}, "price": {"type": "number"}, "date": {"type": "string"},
+                         "move_atr": {"type": ["number", "null"]}, "back_atr": {"type": ["number", "null"]}}}]}
+      }
+    },
+    "elliott": {
+      "type": "object",
+      "required": ["v1", "v2"],
+      "properties": {
+        "v1": {"type": "object", "required": ["version", "view", "valid", "label", "pivots"],
+          "properties": {"version": {"const": "v1"}, "view": {"enum": ["LONG", "SHORT"]}, "valid": {"type": "boolean"},
+                         "label": {"type": "string"}, "deviations": {"type": ["integer", "null"]}, "n_valid_counts": {"type": ["integer", "null"]},
+                         "pivots": {"type": "array", "items": {"$ref": "#/$defs/wave_point"}},
+                         "target_w3": {"type": ["number", "null"]}, "target_w5": {"type": ["number", "null"]}}},
+        "v2": {"type": "object", "required": ["version", "primary_view", "views"],
+          "properties": {"version": {"const": "v2"}, "primary_view": {"enum": ["LONG", "SHORT"]},
+                         "views": {"type": "object", "properties": {"LONG": {"$ref": "#/$defs/v2_view"}, "SHORT": {"$ref": "#/$defs/v2_view"}}}}}
+      }
+    },
+    "fib": {
+      "type": "object",
+      "required": ["v1", "v2"],
+      "properties": {"v1": {"$ref": "#/$defs/fib"}, "v2": {"$ref": "#/$defs/fib"}}
+    },
+    "volume_profile": {"type": ["object", "null"], "properties": {"version": {"type": "string"}, "window": {"type": "integer"},
+      "poc": {"type": ["number", "null"]}, "vah": {"type": ["number", "null"]}, "val": {"type": ["number", "null"]}}},
+    "sr": {"type": ["object", "null"], "properties": {"version": {"type": "string"}, "scan_type": {"type": "string"},
+      "levels": {"type": "array", "items": {"type": "object", "required": ["price", "side", "tf", "strength"],
+        "properties": {"price": {"type": "number"}, "side": {"enum": ["support", "resistance"]}, "tf": {"enum": ["5m", "1H", "D", "W", "M"]},
+                       "strength": {"type": "number"}, "touches": {"type": ["integer", "null"]}, "flip_dir": {"type": ["string", "null"]},
+                       "src": {"type": ["string", "null"]}, "confirmed_at": {"type": ["string", "null"]}}}},
+      "nearest": {"type": ["object", "null"], "description": "scanner_levels summary columns (sr_support, sr_support_dist_atr, sr_support_tf, sr_support_strength, sr_support_flip, sr_resistance, ...)"}}},
+    "waves": {"type": ["object", "null"], "properties": {
+      "version": {"type": "string"}, "rev_pct": {"type": ["number", "null"]},
+      "zigzag": {"type": "array", "items": {"$ref": "#/$defs/wave"}},
+      "weis": {"type": "array", "items": {"$ref": "#/$defs/wave"}},
+      "divergences": {"type": "array", "items": {"type": "object", "required": ["indicator", "type", "p1", "p2"],
+        "properties": {"indicator": {"enum": ["rsi14", "cci20"]}, "type": {"enum": ["regular_bearish", "hidden_bearish", "regular_bullish", "hidden_bullish"]},
+                       "p1": {"$ref": "#/$defs/div_point"}, "p2": {"$ref": "#/$defs/div_point"}, "confirmed_at": {"type": ["string", "null"]}}}},
+      "signals": {"type": ["object", "null"], "description": "wave_end_signal, wave_end_n, wave_end_families, wave_end_reasons, wave_start_signal, wave_start_n, wave_start_families, wave_start_reasons"},
+      "series": {"type": ["object", "null"], "description": "indicator panels; arrays aligned with 'dates'. Missing -> panels not drawn (never recomputed)",
+        "properties": {"dates": {"type": "array", "items": {"type": "string"}}, "rsi14": {"type": "array"}, "cci20": {"type": "array"}, "crsi": {"type": "array"}}}
+    }}
+  },
+  "$defs": {
+    "pivot": {"type": "object", "required": ["kind", "price", "date", "confirmed_at"],
+      "properties": {"kind": {"enum": ["H", "L"]}, "price": {"type": "number"}, "date": {"type": "string"}, "confirmed_at": {"type": "string"}}},
+    "wave_point": {"type": "object", "required": ["label", "kind", "price", "date"],
+      "properties": {"label": {"type": "string", "description": "0-5 for impulse points (0 = wave-1 origin), A/B/C for corrections"},
+                     "kind": {"enum": ["H", "L"]}, "price": {"type": "number"}, "date": {"type": "string"},
+                     "confirmed_at": {"type": ["string", "null"], "description": "null for the tentative point"},
+                     "provisional": {"type": "boolean", "default": false}}},
+    "v2_view": {"type": "object", "required": ["label", "state", "pivots"],
+      "properties": {"label": {"type": "string"}, "state": {"enum": ["impulse_confirmed", "impulse_provisional", "abc_confirmed", "abc_provisional", "none"]},
+                     "kind": {"type": ["string", "null"]}, "provisional": {"type": ["boolean", "null"]}, "beyond_target": {"type": ["boolean", "null"]},
+                     "abc_type": {"type": ["string", "null"]}, "context": {"type": ["string", "null"], "description": "W2 | W4 | post-W5"},
+                     "target": {"type": ["number", "null"]}, "target_name": {"type": ["string", "null"]},
+                     "pivots": {"type": "array", "items": {"$ref": "#/$defs/wave_point"}}}},
+    "fib": {"type": ["object", "null"], "required": ["version"],
+      "properties": {"version": {"enum": ["v1", "v2"]}, "view": {"enum": ["LONG", "SHORT"]},
+                     "origin": {"type": ["object", "null"], "properties": {"price": {"type": "number"}, "date": {"type": "string"}}},
+                     "end": {"type": ["object", "null"], "properties": {"price": {"type": "number"}, "date": {"type": "string"}}},
+                     "stale": {"type": ["boolean", "null"], "description": "v1: price traded beyond the origin after the end"},
+                     "reanchored": {"type": ["boolean", "null"], "description": "v2: anchor differs from v1"},
+                     "levels": {"type": "object", "description": "keys '0.382','0.5','0.618','0.786','1.272','1.618' -> price | null",
+                                "additionalProperties": {"type": ["number", "null"]}}}},
+    "wave": {"type": "object", "required": ["dir", "start_date", "end_date", "volume", "done"],
+      "properties": {"dir": {"enum": ["up", "down"]}, "start_date": {"type": "string"}, "end_date": {"type": "string"},
+                     "start_price": {"type": ["number", "null"]}, "end_price": {"type": ["number", "null"]},
+                     "volume": {"type": "number", "description": "cumulative volume of bars (start_date, end_date]"}, "done": {"type": "boolean"}}},
+    "div_point": {"type": "object", "required": ["date", "price", "value"],
+      "properties": {"date": {"type": "string"}, "price": {"type": "number"}, "value": {"type": "number"}}}
+  }
+}

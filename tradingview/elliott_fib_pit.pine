@@ -1,0 +1,459 @@
+// This Pine Script® code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// Elliott / Fib point-in-time mirror of /workspace/scanner_stops.py (EXPERIMENTAL second opinion; never changes scanner stops)
+//
+// Mirrors (same definitions as the researcher's backtest, iaf/sim_fib.py, sim_struct.py, sim_targets.py):
+//  * ATR14 = Wilder RMA of true range, seeded with the SMA of the first 14 TRs (TR of bar 0 = high-low)  -> ta.atr(14)
+//  * ATR-threshold zigzag: reversal >= 2.0 x ATR14 of the CURRENT bar, state machine starts at bar_index 14,
+//    a pivot exists only from its confirmation bar on (no lookahead). All state updates run on confirmed bars only.
+//  * Fib leg (LONG): last confirmed swing HIGH + the pivot before it (origin LOW). SHORT mirrored.
+//    Retracements end - r*(end-origin), r = .382/.5/.618/.786; extensions origin + r*(end-origin), r = 1.272/1.618/2.618
+//    (extensions <= 0 are reported as null, like the scanner).
+//  * Half-take target (stock LONG rule, sim_targets HY2): 1.618 extension if still above the last close, else 2.618, else none.
+//  * Structural stop (sim_struct variant c): leg origin -/+ 1.0 x ATR14; if the last close is already through it, the nearest
+//    deeper confirmed origin-side pivot -/+ 1 ATR; none -> null.
+//  * Elliott: every impulse count of 3..6 pivots ending on the last confirmed pivot that passes the hard rules; pick the count
+//    with the fewest Fib deviations (ratio > 10% away from every allowed ratio), tie -> largest price span.
+//    wave-3 target = L2 + 1.618*(H1-L0) (in_W3 counts), wave-5 target = L4 + (H1-L0) (in_W5 counts).
+//  * Reference stop: 4 x ATR14 chandelier on closes from an entry date (or "if entered at this close" when no entry date).
+// Values computed on a bar are those the scanner would output after that bar's close. On the open realtime bar the
+// indicator shows the values of the last CLOSED bar.
+//@version=6
+indicator("Elliott/Fib PIT (scanner mirror)", shorttitle = "EF-PIT", overlay = true, max_lines_count = 500, max_labels_count = 500)
+
+// ---------------------------------------------------------------- inputs
+grpCore = "Core (must match scanner_stops.py)"
+dirIn   = input.string("Long", "Direction", options = ["Long", "Short"], group = grpCore,
+     tooltip = "Long: leg = last swing high + origin low, bullish Elliott counts. Short: mirrored.")
+atrLen  = input.int(14, "ATR length (Wilder)", minval = 1, group = grpCore, tooltip = "Scanner value: 14")
+zzMult  = input.float(2.0, "Zigzag reversal (x ATR)", minval = 0.1, step = 0.1, group = grpCore, tooltip = "Scanner value: 2.0")
+
+grpAlert = "Alert / relay"
+secretIn = input.string("", "secret", group = grpAlert,
+     tooltip = "Shared secret checked by the relay. Sent inside the JSON body because TradingView cannot send an Authorization header. Re-create the alert after changing it.")
+
+grpTrail = "Reference stop (active scanner rule)"
+showTrail  = input.bool(true, "Plot reference ATR stop", group = grpTrail)
+trailMode  = input.string("Auto (scanner rule)", "Stop type", options = ["Auto (scanner rule)", "Chandelier (close)", "Fixed (close)"], group = grpTrail,
+     tooltip = "Auto = the approved rules: stocks (long and short) 4 x ATR14 chandelier on closes; crypto longs fixed 3 x ATR14 on the daily close; crypto shorts frozen (no line). Stock shorts are only valid if they pass the scanner short rule (not checked here).")
+trailMult  = input.float(4.0, "Stop ATR multiple (manual types only)", minval = 0.1, step = 0.5, group = grpTrail)
+entryDateIn = input.string("", "Entry date (YYYY-MM-DD, exchange date)", group = grpTrail,
+     tooltip = "Empty = no open trade: the line shows close -/+ multiple x ATR (initial stop if entered at that close).")
+entryPxIn  = input.float(0.0, "Entry price (0 = open of the entry bar)", minval = 0.0, group = grpTrail)
+
+grpDraw = "Drawing"
+showLevels = input.bool(true, "Plot Fib levels / structural stop / targets", group = grpDraw)
+showZig    = input.bool(true, "Draw confirmed zigzag", group = grpDraw)
+showWaves  = input.bool(true, "Label pivots of the selected Elliott count", group = grpDraw)
+showLabels = input.bool(true, "Level labels + info table on the last bar", group = grpDraw)
+
+// ---------------------------------------------------------------- constants
+ZZ_START = 14                     // zigzag state machine starts at bar 14 (hard-coded in sim_fib.zigzag)
+FIB_TOL  = 0.10
+var W2_R = array.from(0.382, 0.5, 0.618, 0.786)
+var W3_X = array.from(1.0, 1.272, 1.618, 2.618)
+var W4_R = array.from(0.236, 0.382, 0.5)
+var W5_X = array.from(0.618, 1.0, 1.618)
+
+int sgn = dirIn == "Long" ? 1 : -1
+bool isCrypto = syminfo.type == "crypto"
+bool isAuto   = trailMode == "Auto (scanner rule)"
+bool stopOff  = isAuto and isCrypto and sgn == -1            // crypto shorts are frozen
+bool useChand = trailMode == "Chandelier (close)" or (isAuto and not isCrypto)
+float kMult   = isAuto ? (isCrypto ? 3.0 : 4.0) : trailMult
+
+// ---------------------------------------------------------------- helpers
+f_dev(float ratio, array<float> allowed) =>
+    float best = na
+    for f in allowed
+        float d = math.abs(ratio - f) / f
+        best := na(best) ? d : math.min(best, d)
+    best <= FIB_TOL ? 0 : 1
+
+f_num(float x) =>
+    na(x) ? "null" : str.tostring(x, "0.##########")   // leading 0 forced: ".5" would be invalid JSON
+
+f_esc(string s) =>
+    str.replace_all(str.replace_all(s, "\\", "\\\\"), "\"", "\\\"")
+
+f_jstr(string s) =>
+    "\"" + f_esc(s) + "\""
+
+f_waveName(int n) =>
+    n == 3 ? "in_W3 (W2 done)" : n == 4 ? "in_W4 (W3 done)" : n == 5 ? "in_W5 (W4 done)" : "W5_done (correction next)"
+
+f_ymd(string s) =>
+    int out = na
+    if str.length(s) == 10
+        parts = str.split(s, "-")
+        if parts.size() == 3
+            float y = str.tonumber(parts.get(0))
+            float m = str.tonumber(parts.get(1))
+            float d = str.tonumber(parts.get(2))
+            if not na(y) and not na(m) and not na(d)
+                out := int(y) * 10000 + int(m) * 100 + int(d)
+    out
+
+// ---------------------------------------------------------------- ATR (computed on every bar, outside conditionals)
+float atrv    = ta.atr(atrLen)
+float atrPrev = atrv[1]
+
+// ---------------------------------------------------------------- zigzag state (confirmed bars only)
+var int   zd   = 0
+var float zhi  = na
+var int   zhiI = na
+var float zlo  = na
+var int   zloI = na
+var pK = array.new<int>()        // +1 = swing HIGH, -1 = swing LOW
+var pP = array.new<float>()      // pivot price
+var pI = array.new<int>()        // pivot bar_index
+var pC = array.new<int>()        // confirmation bar_index
+
+// Elliott count check on the last n confirmed pivots. Returns [valid, deviations, span, w3target, w5target]
+f_count(int n, int s) =>
+    int   sz    = pP.size()
+    bool  ok    = sz >= n
+    int   devs  = 0
+    float span  = na
+    float tw3   = na
+    float tw5   = na
+    if ok
+        int b = sz - n
+        if pK.get(b) == s                                   // a bullish count must start at a low (mirrored for shorts)
+            ok := false
+        if ok
+            float q0 = s * pP.get(b)
+            float q1 = s * pP.get(b + 1)
+            float q2 = s * pP.get(b + 2)
+            float w1 = q1 - q0
+            float w3 = na
+            if w1 <= 0 or q2 <= q0                          // wave 2 never retraces beyond the start of wave 1
+                ok := false
+            else
+                devs += f_dev((q1 - q2) / w1, W2_R)
+            if ok and n >= 4
+                float q3 = s * pP.get(b + 3)
+                w3 := q3 - q2
+                if q3 <= q1                                 // wave 3 must exceed the end of wave 1
+                    ok := false
+                else
+                    devs += f_dev(w3 / w1, W3_X)
+            if ok and n >= 5
+                float q3 = s * pP.get(b + 3)
+                float q4 = s * pP.get(b + 4)
+                if q4 <= q1                                 // wave 4 never overlaps wave 1
+                    ok := false
+                else
+                    devs += f_dev((q3 - q4) / w3, W4_R)
+            if ok and n >= 6
+                float q3 = s * pP.get(b + 3)
+                float q4 = s * pP.get(b + 4)
+                float q5 = s * pP.get(b + 5)
+                float w5 = q5 - q4
+                if q5 <= q3                                 // no truncated 5th
+                    ok := false
+                else if w3 < w1 and w3 < w5                 // wave 3 is never the shortest of 1/3/5
+                    ok := false
+                else
+                    devs += f_dev(w5 / w1, W5_X)
+            if ok
+                float mx = pP.get(b)
+                float mn = pP.get(b)
+                for i = b to sz - 1
+                    mx := math.max(mx, pP.get(i))
+                    mn := math.min(mn, pP.get(i))
+                span := math.abs(mx - mn)
+                float P0 = pP.get(b)
+                float P1 = pP.get(b + 1)
+                float P2 = pP.get(b + 2)
+                if n == 3
+                    tw3 := P2 + 1.618 * (P1 - P0)
+                if n == 5
+                    tw5 := pP.get(b + 4) + (P1 - P0)
+    [ok, devs, span, tw3, tw5]
+
+// ---------------------------------------------------------------- outputs (persist; updated on confirmed bars only)
+var float legO = na
+var float legE = na
+var float r382 = na
+var float r500 = na
+var float r618 = na
+var float r786 = na
+var float x1272 = na
+var float x1618 = na
+var float x2618 = na
+var float structStop = na
+var bool  structFb = false
+var float tpHalf = na
+var string waveLbl = "no ATR (history too short)"
+var int   waveDev = na
+var int   waveN = na
+var int   nValid = 0
+var float ewT3 = na
+var float ewT5 = na
+var string prevWave = "no ATR (history too short)"
+var int   lastNewPiv = 0
+
+// reference stop state
+var int   entryYmd = f_ymd(entryDateIn)
+var int   kBar = na
+var float entryPx = na
+var float extC = na
+var float trailNext = na
+var bool  stopped = false
+
+var zzLines = array.new<line>()
+var wLabels = array.new<label>()
+
+int  newPiv = 0
+bool waveChanged = false
+bool stopEvent = false
+
+if barstate.isconfirmed
+    // ---- zigzag (line-for-line sim_fib.zigzag)
+    if bar_index == ZZ_START
+        zhi  := high
+        zhiI := bar_index
+        zlo  := low
+        zloI := bar_index
+    else if bar_index > ZZ_START
+        float th = zzMult * atrv
+        if zd >= 0
+            if high > zhi
+                zhi  := high
+                zhiI := bar_index
+            if zd == 0 and low < zlo
+                zlo  := low
+                zloI := bar_index
+        if zd <= 0
+            if low < zlo
+                zlo  := low
+                zloI := bar_index
+            if zd == 0 and high > zhi
+                zhi  := high
+                zhiI := bar_index
+        if zd >= 0 and zhi - low >= th and zhiI < bar_index and (zd == 1 or zhiI > zloI)
+            pK.push(1)
+            pP.push(zhi)
+            pI.push(zhiI)
+            pC.push(bar_index)
+            zd   := -1
+            zlo  := low
+            zloI := bar_index
+            newPiv := 1
+        else if zd <= 0 and high - zlo >= th and zloI < bar_index and (zd == -1 or zloI > zhiI)
+            pK.push(-1)
+            pP.push(zlo)
+            pI.push(zloI)
+            pC.push(bar_index)
+            zd   := 1
+            zhi  := high
+            zhiI := bar_index
+            newPiv := -1
+
+    // ---- zigzag drawing (drawn only when the pivot is confirmed)
+    int sz = pP.size()
+    if newPiv != 0 and showZig and sz >= 2
+        zzLines.push(line.new(pI.get(sz - 2), pP.get(sz - 2), pI.get(sz - 1), pP.get(sz - 1), xloc = xloc.bar_index,
+             color = color.new(color.gray, 20), width = 1))
+
+    // ---- Fib / structure / Elliott (fib_elliott + half_at_1618), reference = this bar's close
+    if not na(atrv)
+        float ref = close
+        // fib leg: last end-side pivot (H for long) with a pivot before it
+        int je = -1
+        if sz > 0
+            for i = sz - 1 to 0
+                if pK.get(i) == sgn
+                    je := i
+                    break
+        if je > 0
+            float e_ = pP.get(je)
+            float o  = pP.get(je - 1)
+            float rng = e_ - o
+            legO := o
+            legE := e_
+            r382 := e_ - 0.382 * rng
+            r500 := e_ - 0.5 * rng
+            r618 := e_ - 0.618 * rng
+            r786 := e_ - 0.786 * rng
+            float a1 = o + 1.272 * rng
+            float a2 = o + 1.618 * rng
+            float a3 = o + 2.618 * rng
+            x1272 := a1 > 0 ? a1 : na
+            x1618 := a2 > 0 ? a2 : na
+            x2618 := a3 > 0 ? a3 : na
+            // structural stop: origin -/+ 1 ATR, deeper confirmed origin-side pivot if already through it
+            float lv = o - sgn * atrv
+            bool fb = false
+            if not (sgn * (ref - lv) > 0)
+                fb := true
+                float bestP = na
+                for i = 0 to sz - 1
+                    if pK.get(i) == -sgn
+                        float p = pP.get(i)
+                        if sgn * (ref - (p - sgn * atrv)) > 0
+                            if na(bestP) or (-sgn * p < -sgn * bestP)
+                                bestP := p
+                lv := na(bestP) ? na : bestP - sgn * atrv
+            structStop := lv
+            structFb := fb
+        else
+            legO := na
+            legE := na
+            r382 := na
+            r500 := na
+            r618 := na
+            r786 := na
+            x1272 := na
+            x1618 := na
+            x2618 := na
+            structStop := na
+            structFb := false
+        // half-take target (stock LONG rule only): last swing HIGH H1 + origin L0
+        tpHalf := na
+        if sgn == 1 and je > 0 and not isCrypto
+            float H1 = pP.get(je)
+            float L0 = pP.get(je - 1)
+            float t2 = L0 + 1.618 * (H1 - L0)
+            float t3 = L0 + 2.618 * (H1 - L0)
+            tpHalf := t2 - ref > 0 ? t2 : t3 - ref > 0 ? t3 : na
+        // Elliott: fewest deviations, tie -> largest span (first count kept on a full tie)
+        int   bestN = na
+        int   bestDev = na
+        float bestSpan = na
+        float bT3 = na
+        float bT5 = na
+        int   cnt = 0
+        for n = 3 to 6
+            [ok, dv, sp, t3w, t5w] = f_count(n, sgn)
+            if ok
+                cnt += 1
+                if na(bestN) or dv < bestDev or (dv == bestDev and sp > bestSpan)
+                    bestN := n
+                    bestDev := dv
+                    bestSpan := sp
+                    bT3 := t3w
+                    bT5 := t5w
+        nValid := cnt
+        waveLbl := na(bestN) ? "no valid count" : f_waveName(bestN)
+        waveDev := bestDev
+        waveN := bestN
+        ewT3 := bT3
+        ewT5 := bT5
+        // wave labels on the selected count's pivots (redrawn when a pivot is confirmed)
+        if newPiv != 0
+            for lb in wLabels
+                label.delete(lb)
+            wLabels.clear()
+            if showWaves and not na(bestN)
+                int b0 = sz - bestN
+                for i = b0 to sz - 1
+                    bool isH = pK.get(i) == 1
+                    wLabels.push(label.new(pI.get(i), pP.get(i), str.tostring(i - b0), xloc = xloc.bar_index,
+                         style = isH ? label.style_label_down : label.style_label_up,
+                         color = color.new(color.purple, 10), textcolor = color.white, size = size.small))
+        waveChanged := waveLbl != prevWave
+        prevWave := waveLbl
+
+    // ---- reference ATR stop (scanner_stops.stop_status, close mode)
+    if stopOff
+        trailNext := na
+    else if not na(entryYmd)
+        int barYmd = year(time, syminfo.timezone) * 10000 + month(time, syminfo.timezone) * 100 + dayofmonth(time, syminfo.timezone)
+        if na(kBar)
+            if barYmd >= entryYmd
+                kBar := bar_index
+                entryPx := entryPxIn > 0 ? entryPxIn : open
+                extC := close
+                trailNext := entryPx - sgn * kMult * atrPrev        // initial stop: ATR of the bar before entry
+        else if not stopped
+            if bar_index == kBar + 1                                   // no check on the bar after entry
+                extC := sgn == 1 ? math.max(extC, close) : math.min(extC, close)
+                if useChand
+                    trailNext := extC - sgn * kMult * atrv
+            else
+                if sgn * (close - trailNext) <= 0                     // exit at this close
+                    stopped := true
+                    stopEvent := true
+                else
+                    extC := sgn == 1 ? math.max(extC, close) : math.min(extC, close)
+                    if useChand
+                        trailNext := extC - sgn * kMult * atrv
+    else if not na(atrv)
+        trailNext := close - sgn * kMult * atrv
+
+    // ---- alert: once per bar close, on a newly confirmed pivot or a wave-label change
+    if newPiv != 0 or waveChanged
+        string sig = ""
+        if newPiv == 1
+            sig := "new_pivot_high"
+        else if newPiv == -1
+            sig := "new_pivot_low"
+        if waveChanged
+            sig := sig == "" ? "wave_label_change" : sig + "+wave_label_change"
+        string msg = "{" +
+             "\"ticker\":" + f_jstr(syminfo.ticker) +
+             ",\"exchange\":" + f_jstr(syminfo.prefix) +
+             ",\"timeframe\":" + f_jstr(timeframe.period) +
+             ",\"signal\":" + f_jstr(sig) +
+             ",\"close\":" + f_num(close) +
+             ",\"bar_time\":" + str.tostring(time, "0") +
+             ",\"wave_label\":" + f_jstr(waveLbl) +
+             ",\"fib_0382\":" + f_num(r382) +
+             ",\"fib_05\":" + f_num(r500) +
+             ",\"fib_0618\":" + f_num(r618) +
+             ",\"fib_0786\":" + f_num(r786) +
+             ",\"fib_1272\":" + f_num(x1272) +
+             ",\"fib_1618\":" + f_num(x1618) +
+             ",\"fib_2618\":" + f_num(x2618) +
+             ",\"struct_stop\":" + f_num(structStop) +
+             ",\"elliott_target_w3\":" + f_num(ewT3) +
+             ",\"elliott_target_w5\":" + f_num(ewT5) +
+             ",\"secret\":" + f_jstr(secretIn) +
+             "}"
+        alert(msg, alert.freq_once_per_bar_close)
+
+// ---------------------------------------------------------------- plots (values of the last closed bar)
+plot(showLevels ? r382 : na, "Fib 0.382", color.new(color.teal, 30), style = plot.style_linebr)
+plot(showLevels ? r500 : na, "Fib 0.5", color.new(color.teal, 30), style = plot.style_linebr)
+plot(showLevels ? r618 : na, "Fib 0.618", color.new(color.teal, 0), style = plot.style_linebr, linewidth = 2)
+plot(showLevels ? r786 : na, "Fib 0.786", color.new(color.teal, 30), style = plot.style_linebr)
+plot(showLevels ? x1272 : na, "Ext 1.272", color.new(color.green, 40), style = plot.style_linebr)
+plot(showLevels ? x1618 : na, "Ext 1.618", color.new(color.green, 0), style = plot.style_linebr, linewidth = 2)
+plot(showLevels ? x2618 : na, "Ext 2.618", color.new(color.green, 40), style = plot.style_linebr)
+plot(showLevels ? tpHalf : na, "Half-take target", color.new(color.lime, 0), style = plot.style_circles, linewidth = 2)
+plot(showLevels ? structStop : na, "Structural stop (origin - 1 ATR)", color.new(color.orange, 0), style = plot.style_linebr, linewidth = 2)
+plot(showLevels ? ewT3 : na, "Elliott W3 target", color.new(color.purple, 0), style = plot.style_circles)
+plot(showLevels ? ewT5 : na, "Elliott W5 target", color.new(color.fuchsia, 0), style = plot.style_circles)
+plot(showTrail ? trailNext : na, "Reference ATR stop (next close)", color.new(color.red, 0), style = plot.style_linebr, linewidth = 2)
+plotshape(stopEvent and showTrail, "Stop hit (close)", shape.xcross, location.belowbar, color.red, size = size.small)
+
+// ---------------------------------------------------------------- last-bar labels + info table
+var lvlLabels = array.new<label>()
+var table info = table.new(position.top_right, 2, 6, bgcolor = color.new(color.black, 20), border_width = 1)
+if barstate.islast
+    for lb in lvlLabels
+        label.delete(lb)
+    lvlLabels.clear()
+    if showLabels
+        names = array.from("0.382", "0.5", "0.618", "0.786", "1.272", "1.618", "2.618", "struct stop", "W3 tgt", "W5 tgt", "half-take")
+        vals  = array.from(r382, r500, r618, r786, x1272, x1618, x2618, structStop, ewT3, ewT5, tpHalf)
+        for i = 0 to names.size() - 1
+            float v = vals.get(i)
+            if not na(v)
+                lvlLabels.push(label.new(bar_index + 3, v, names.get(i) + "  " + str.tostring(v, format.mintick), xloc = xloc.bar_index,
+                     style = label.style_label_left, color = color.new(color.black, 100), textcolor = color.gray, size = size.small))
+        table.cell(info, 0, 0, "Wave", text_color = color.white)
+        table.cell(info, 1, 0, waveLbl, text_color = color.white)
+        table.cell(info, 0, 1, "Fib deviations", text_color = color.white)
+        table.cell(info, 1, 1, na(waveDev) ? "-" : str.tostring(waveDev), text_color = color.white)
+        table.cell(info, 0, 2, "Valid counts", text_color = color.white)
+        table.cell(info, 1, 2, str.tostring(nValid), text_color = color.white)
+        table.cell(info, 0, 3, "Leg origin / end", text_color = color.white)
+        table.cell(info, 1, 3, na(legO) ? "-" : str.tostring(legO, format.mintick) + " / " + str.tostring(legE, format.mintick), text_color = color.white)
+        table.cell(info, 0, 4, "Struct stop fallback", text_color = color.white)
+        table.cell(info, 1, 4, structFb ? "yes (deeper pivot)" : "no", text_color = color.white)
+        table.cell(info, 0, 5, "ATR stop (next close)", text_color = color.white)
+        table.cell(info, 1, 5, na(trailNext) ? "-" : str.tostring(trailNext, format.mintick) + (stopped ? " (STOPPED)" : ""), text_color = color.white)
+    else
+        table.clear(info, 0, 0, 1, 5)

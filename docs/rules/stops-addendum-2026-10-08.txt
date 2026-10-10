@@ -1,0 +1,53 @@
+ADDENDUM to work-plan v2.8 — STOP RULES v2 (approved by Ilan 08.10.2026 13:28; applies from the Mon 12.10 09:00 run; routine = Mon/Wed)
+v2 changes vs the first version: stock SHORT trailing is 4xATR14 (was 3x); 'half at Fib 1.618' for stock LONGs is now ACTIVE.
+Read together with momentum-12-1-addendum-2026-10-08.txt. These rules REPLACE the work plan's hard-stop / trailing / target-date
+conventions for the ACTIVE stop. Every number must come from the code output below — never type a stop by hand.
+
+ACTIVE RULES
+1. US stock LONG  : trailing chandelier on CLOSES. Level for day j = highest close since entry (through day j-1) - 4 x ATR14[j-1]
+                    (Wilder ATR, data through the prior day only). Exit at the close that is at/below the level.
+                    Initial stop = entry - 4 x ATR14 (ATR of the last completed bar before the scan).
+                    PARTIAL EXIT (ACTIVE): take 1/2 at the first close >= tp_half_1618, rest stays under the 4xATR chandelier.
+                    tp_half_1618 = L0 + 1.618 x (H1 - L0), H1 = last confirmed swing high of the 2xATR14 zigzag, L0 = its origin low
+                    (pivots confirmed before the scan; sim_targets.py variant HY2). If 1.618 is already behind the entry, the 2.618
+                    extension is used. If there is no confirmed swing, or no extension is left beyond the entry -> FALLBACK: 100% under
+                    the 4xATR chandelier, flagged in partial_exit_rule (tp_half_fallback=True).
+2. US stock SHORT : ONLY if the existing short rule passes (ck_score >= 3 AND close < SMA200 — iaf/prep.py definition).
+                    Mirror: lowest close since entry + 4 x ATR14[j-1]; exit at the close at/above it. Initial = entry + 4 x ATR14.
+                    A short that fails the rule is NOT a setup (short_rule_pass=False, no stop).
+3. Crypto LONG    : FIXED stop = entry - 3 x ATR14, checked on the daily (UTC) close. No trailing. No fixed take-profit target.
+4. Crypto SHORT   : FROZEN. Do not output crypto short setups. Log what would have been produced to
+                    /workspace/scan-runs/frozen_crypto_shorts.csv (scanner_stops.py does it automatically), measurement only.
+$1.5B market-cap floor for US stocks still applies.  Backtest basis: /workspace/trading-frameworks-eval/results.md 3.10-3.12.
+Semantics kept from the backtest: the first stop check is the close of entry-bar+2; until a close after the entry bar exists the
+initial stop applies; the chandelier level is NOT floored at the initial stop (it can sit slightly below it, as in the backtest).
+"A stop counts only after the entry has traded" still applies.
+
+HOW TO PRODUCE THE NUMBERS
+  python3 /workspace/swing_scan.py
+      -> /workspace/scan-runs/<YYYY-MM-DD_HHMM>/scan_raw.csv: atr14_wilder, stop_type, stop_atr_mult, initial_stop, initial_stop_pct
+         (LONG view, reference = last close), tp_half_1618, partial_exit_rule, tp_half_fallback, short_rule_pass, short_ck_score,
+         below_sma200, short_initial_stop (4x), + experimental columns
+  Final setups (after you pick the 10 and their entry triggers):
+  python3 /workspace/scanner_stops.py --setups setups.csv --out final_stops.csv
+      setups.csv columns: ticker,asset(stock|crypto),direction(LONG|SHORT),entry[,entry_date,mcap_b]
+      -> initial stop from the real entry; crypto shorts are removed and logged; with entry_date it also gives live_next_level /
+         live_stopped (+ live_half_taken / live_half_date for stock longs) for open trades (daily update of the trailing level).
+  Table columns: "סטופ לוס קשיח" = initial_stop ; "טריילינג" = stop_type + multiple, e.g. "שנדלייר 4xATR14 על סגירה (ATR=5.61)";
+  stock long TP1 = tp_half_1618 written as "חצי ב-1.618 = X (סגירה), השאר בשנדלייר 4xATR"; if fallback: "אין סווינג מאושר - 100% בשנדלייר 4xATR".
+  crypto long: "סטופ קבוע 3xATR14 על סגירה, ללא יעד". TP1-TP3 for crypto longs: write "ללא יעד (כלל מאושר)".
+
+EXPERIMENTAL COLUMNS (log them; they DO NOT change the active stop or targets; measured forward)
+  Deterministic Fib/Elliott (scanner_stops.fib_elliott): 2 x ATR14 zigzag pivots, each stored with its confirmation date
+  (pivots_confirmed), only pivots confirmed before the scan cutoff. Elliott hard rules in code (W2 never beyond W1 start, W3 beyond
+  W1 end, W4 never overlaps W1, W3 never the shortest, no truncated W5); invalid counts dropped. Selection: fewest Fib-ratio
+  deviations (w2/w1, w3/w1, w4/w3, w5/w1 vs Fib sets, 10% tolerance); tie -> largest price span.
+    fib_stop_struct      = leg origin - 1.0 x ATR14, checked on close (deeper confirmed pivot if entry is already through it)
+    fib_tp_1272/1618/2618 = origin + r x (end - origin) of the last confirmed leg
+    elliott_count_valid, elliott_wave_label (in_W3 / in_W4 / in_W5 / W5_done / no valid count), elliott_fib_deviations,
+    elliott_target_w3 (= L2 + 1.618 x (H1-L0)), elliott_target_w5 (= L4 + (H1-L0)), fib_time_target_date (next Fib time zone)
+    (alt_exit_half_at_1618 is no longer experimental: it became the ACTIVE tp_half_1618 / partial_exit_rule above.)
+  In the Hebrew table, experimental values go in a separate note line, labeled "ניסיוני", never in the stop/target columns.
+
+TRACKER: /workspace/tracker/build7.py writes columns 52-66 for new rows (active: 52-57) (schema_new_rows_2026-10-08.json) and the sheet
+'frozen_crypto_shorts'.

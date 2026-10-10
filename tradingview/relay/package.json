@@ -1,0 +1,11 @@
+{
+  "name": "scanner-tv-relay",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "TradingView webhook -> routine webhook relay (adds Authorization header)",
+  "engines": { "node": "22.x" },
+  "dependencies": {
+    "@vercel/functions": "^2.0.0"
+  }
+}

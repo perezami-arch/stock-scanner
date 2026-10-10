@@ -1,0 +1,77 @@
+PLATFORMS + LEARNING-LOOP ADDENDUM (2026-10-08, Ilan via parent; status: SPEC + entry-scan code. Checkpoint runner NOT built yet)
+Read with out-of-sample-rule-2026-10-08.txt. EVERY platform column = LOGGED ONLY, weight 0, no automatic action.
+
+CODE (entry scan, built 08.10)
+- /workspace/run_unified_scan.py  : runs swing_scan.py unchanged -> renames run folder (+_trial for trials) -> scanner_platforms -> unified_report (Hebrew md+pdf).
+- /workspace/scanner_platforms.py : order per candidate: Grok (xAI x_search, sentiment only) -> Perplexity sonar-pro (catalysts, sources) ->
+    Jev typesafe/jev-1.13 (trusted Alpaca/Benzinga headlines only; relevance/sentiment/catalyst/materiality 0-3 + injection detector, flagged dropped)
+    -> Claude sonnet-4.5 = ANALYST (technical/catalyst/fundamental read, thesis, key risk, conviction 0-100, direction view)
+    -> GPT gpt-5.6-sol = DEVIL'S ADVOCATE vs the combined case (approve/flag/veto, main risk, rebuttal of the analyst).
+    Cross-challenge: Jev-vs-Claude and Jev-vs-GPT headline agreement; Claude conviction vs GPT verdict tag.
+    Credit/quota errors (402; 403/429 with credit/quota text) -> credit_status 'חסר קרדיט - <platform>', no retry, banner at top of report.
+    Budget guard PLATFORM_BUDGET_USD (trial 2.0). Costs per call -> <run>/platform_costs.json (+ per_run_estimate_role_split).
+- /workspace/unified_report.py : Hebrew report.
+- Entry candidates: top 5 LONG (momentum_score; trend filters) + top 5 SHORT (short_rule_pass; ck_score), US stocks, mcap>=1.5B, max 2 per sector ETF.
+  LLMs never set/modify entry/stop/target (bot data only). Handles kept only if the post id is in xAI API citations.
+
+RULE 1 - FRESH RESEARCH AT EVERY DECISION ("everything is based on repeated research at every decision")
+- Decision points: entry scan, day-5 checkpoint, day-10 checkpoint, exit/hold decisions (stop hit, target hit, time stop).
+- At each point every called platform researches FRESH with data available up to that moment (new news, X sentiment, price action,
+  catalysts). A cached prior verdict is NEVER reused as the decision. (Reuse is allowed only to rebuild a report of the SAME scan moment,
+  e.g. trial pass 2/3 on 08.10; such rows are marked reused=True and are not new decisions.)
+- Each (re)research = a NEW dated verdict row linked to the trade: ledger /workspace/scan-runs/platform_verdicts_ledger.csv
+  columns: trade_key (ticker|direction|entry_date), decision_point (entry|day5|day10|exit_check), asof_local, data_cutoff_utc, platform, model,
+  prompt_version, verdict (approve/flag/veto) | conviction (Claude) | checkpoint_action, main_risk, cost_usd, fresh (True/False), skipped_reason, trial.
+  The scoreboard measures every decision row, not only the entry.
+- Checkpoint outputs: checkpoint_action in {hold, tighten, exit} = EXPERIMENTAL column only, weight 0, NO automatic action. Stops stay = approved 4xATR chandelier.
+
+RULE 2 - FREE TECHNICAL RE-RUN AT EVERY CHECKPOINT (always runs, no LLM cost)
+- For each open trade, with daily bars up to that day (same PIT rules as swing_scan): trend vs SMA50/SMA200, Elliott recount (scanner_stops.fib_elliott,
+  confirmed pivots only), Fib levels, VA120 position (scanner_geometry), 4xATR chandelier update (scanner_stops.py --setups ... with entry_date ->
+  live_next_level / live_stopped / live_half_taken), 12-1 momentum (scanner_momentum), candles/volume.
+- This fresh technical snapshot is passed to every LLM platform that is called at that checkpoint (replaces entry facts).
+- Regenerate the trade chart with /workspace/scanner_charts.py if it exists (another worker is building it); skip silently if not.
+
+RULE 3 - COST GATE AT DAY 5 / DAY 10 (only open trades, batched)
+- First Jev screens NEW Alpaca news per open position since the previous decision point (trusted headlines only, never X posts).
+- Call Perplexity / Claude / GPT (and Grok) ONLY if at least one trigger:
+    (a) Jev materiality >= 2 with confidence >= 0.8, or a relevant low-confidence headline;
+    (b) price reached a decision level: within 1 ATR of the current chandelier stop, at/over Fib 1.618 tp_half, or a VA120 break;
+    (c) the technical snapshot changed state vs the previous decision point (lost/regained SMA50 or SMA200, Elliott count invalidated or relabelled,
+        stack flipped, short_rule_pass flipped).
+- Otherwise write ledger rows with skipped_reason='skipped - no material change' (cost 0) so the scoreboard sees the decision was taken.
+- Batch all open trades in one run; same budget guard (per-run cap; separate weekly cap).
+
+RULE 4 - LESSONS FROM CLOSED TRADES ONLY, WEEKLY, VERSIONED PROMPTS
+- Lessons are drawn ONLY from closed trades (realised outcome), never from open ones.
+- Injected into prompts once a WEEK (not per trade): /workspace/prompts/<platform>_vN.txt + /workspace/prompts/CHANGELOG.md
+  (date, version, lessons added, trades they came from). Every ledger row stores prompt_version so we can measure if a lesson helped
+  (compare decisions under vN vs vN+1 on new trades only).
+- Entry-scan code today uses inline prompts = version v1 (to be extracted to prompts/*_v1.txt when the checkpoint runner is built).
+
+RULE 5 - FORWARD-ONLY
+- ALL LLM-platform verdict columns (Jev, Grok, Perplexity, Claude, GPT) are forward-only from 12.10.2026. NO historical backtest of LLM verdicts
+  (models/news search would leak post-hoc knowledge = look-ahead). Weight only after ~30 closed forward results (out-of-sample rule).
+- Every report shows actual cost per run and an estimated weekly cost.
+
+COST (measured 08.10 trial, 10 candidates)
+- See <run>/platform_costs.json per_run_estimate_role_split. Grok x_search dominates (~$0.05-0.17/ticker: $5 per 1k posts fetched + tokens).
+  Weekly estimate = 2 entry scans (Mon/Wed) x full run + checkpoint runs (Jev always ~$0.0005/position; LLMs only on triggered positions).
+
+RULE 6 - ONE RANKING, NO FIXED LONG/SHORT SPLIT (Ilan, 08.10 16:40)
+- Every candidate that passes its rules is ranked on ONE score, longs and shorts together, and the top N (--candidates, default 20) are taken.
+  That can be 20 longs and 0 shorts. No reserved slots per side.
+- The score (unified_score, 0-100, same scale both sides): the 12-1 momentum percentile within the asset class
+  (scanner_momentum.rank, LONG view), FLIPPED for shorts (momentum_score_short = 100 - long percentile). High means the momentum points
+  the trade's way, so a short only outranks a long when its downside momentum is stronger than that long's upside momentum.
+  Crypto uses the same percentile computed over the crypto universe scanned that day (crypto_scan.csv; too small a group for the stock
+  percentile). Raw momentum_12_1 is only a fallback if the percentile could not be computed.
+- Floor: --min-score (default 60). A name below it is not selected even if that leaves fewer than N.
+  Why 60: on the validated sample (scanner-tool-eval, 139 stock setups with a day-20 outcome, 15 distinct entry days) the
+  direction-adjusted own-price return to day 20 had a hit rate of 58.9% at score >= 60 vs 51.8% below it, with essentially the same
+  mean (+2.08% vs +2.06%). The gap is carried by the LONG side; the short side of that sample is small and negative either way.
+  Small sample, so the floor is a flag and is itself measured forward.
+- Unchanged: shorts must pass the approved short rule (ck_score >= 3 and close < SMA200) to be candidates at all; the 2-per-sector cap
+  counts per side ((asset, direction, sector), --sector-cap, 0 = off); the earnings block (5 trading days, strong-catalyst exception).
+- candidates_full.csv lists EVERY rule-passing name with unified_score, score_rank, passes_min_score, selected and selection_note
+  (נבחר / מתחת לסף / תקרת סקטור / נחסם - דוח / מחוץ ל-N הראשונים).

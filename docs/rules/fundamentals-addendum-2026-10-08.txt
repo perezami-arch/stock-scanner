@@ -1,0 +1,78 @@
+Fundamentals addendum (08.10.2026) - LOGGED ONLY, score weight 0
+Request (Ilan, group chat 08.10): "סור גם פן פונדמנטלי פי אי וכל מה שנגזר".
+Weight is ZERO under out-of-sample-rule-2026-10-08.txt: no fundamentals column gets score weight unless it also works on new
+setups from 12.10.2026 (~30 results), and every table states the number of comparisons. TASE and crypto: no EDGAR coverage
+(flag 'no EDGAR coverage'); a TASE source is still needed.
+
+Code
+- /workspace/scanner_fundamentals.py (import-safe). Main entry fundamentals_pit(symbol, cutoff_date, price_at_cutoff, alert_date).
+  enrich_live() for the live scan; add_sector_pctile(); live_extras() for *_live.
+- /workspace/swing_scan.py: try/except block "FUNDAMENTALS PIT (logged only, weight 0)" after the VA120 watch block -> columns
+  in scan_raw.csv. Env SCAN_FUND_LIVE=0 skips the Yahoo live extras.
+- /workspace/tracker/build7.py: 21 columns 127-147 headed '... (נרשם בלבד)' (keys = scanner_fundamentals.TRACKER_KEYS),
+  filled for backtest rows from /workspace/tracker/fundamentals_pit_lookup.csv (built by /workspace/tracker/fund/fund_backtest.py).
+- Look-ahead audit: /workspace/tracker/fund/lookahead_check.py; every fact used: /workspace/tracker/fund/fund_audit.csv.
+- Cache: /workspace/fundamentals-cache/ (companyfacts per CIK as .json.gz, company_tickers.json, splits.json, peer_prices.pkl).
+- Backups: *.bak-2026-10-08-pre-fundamentals (swing_scan.py, build7.py, schema json).
+
+Source
+- SEC EDGAR, free, no key: https://www.sec.gov/files/company_tickers.json (ticker->CIK) and
+  https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json (each fact with start/end/val/form/filed/accn).
+  User-Agent "Ilan Perets scanner perezami@icloud.com", <= 8 requests/s, cached. The 'frames' API is NOT used.
+- Prices: close at the cutoff bar (Yahoo, split-adjusted back to the real quote at that date).
+- Sector: same Yahoo-sector -> SPDR map as news/rates (scanner-momentum-cache/sector_map.json; current sector, not PIT).
+- Live-only extras: Yahoo forwardPE and next earnings date (yfinance). Snapshot of today, NEVER used in the backtest.
+- Predecessor CIK: XOM's ticker now maps to ExxonMobil Holdings Corp (CIK 2115436, 2026 holding reorganisation); the old
+  Exxon Mobil Corp CIK 34088 is merged in (PREDECESSOR_CIK) so TTM/YoY history exists.
+
+Binding PIT rules (research team 08.10.2026; asserted in code and in lookahead_check.py)
+R1 Per fiscal period, use the value with the LATEST 'filed' date STRICTLY BEFORE the alert date (filed < alert_date, never the
+   same day, regardless of the alert time). 10-K/A and 10-Q/A filed before the alert are allowed; anything filed on/after the
+   alert date is forbidden. companyfacts filtered by 'filed'; no frames API. (Live scan: alert date = ET date of the scan.)
+R2 Quarterly values by duration only: 3-month = 80-100 days; never mix 3-month with year-to-date values, never double count.
+   Q4 = FY (10-K, ~365d) - 9M YTD (Q3 10-Q, ~270d), each picked under R1. Cash-flow items exist only as YTD in 10-Qs, so
+   Q2 = H1 - Q1 and Q3 = 9M - H1 the same way. TTM = 4 contiguous discrete quarters ending at the latest period; if there are
+   no quarterly facts (20-F/40-F filers) TTM = the fiscal year (flagged).
+R3 TTM EPS <= 0 -> pe_ttm empty with flag, never negative, and excluded from the sector percentile. Same for EV/EBITDA when
+   EBITDA <= 0 and PEG when EPS growth <= 0 (also P/B when equity <= 0).
+R4 Multiples use the close before the cutoff (stocks: alert before 16:00 ET -> previous close; = setup cutoff_bar_date) and the
+   share count reported in the latest filing satisfying R1 (dei:EntityCommonStockSharesOutstanding, multi-class rows of the
+   same filing summed; else weighted-average diluted shares of the latest quarter/FY). Not today's share count. If a split went
+   ex between that filing and the cutoff (public at the cutoff), shares and EPS are split-adjusted and flagged.
+R5 SEC requests: User-Agent with e-mail, <= 10 req/s (we use 8), cache.
+
+Columns (scan_raw.csv / lookup; tracker keys marked *)
+- fund_alert_date, fund_cutoff_date, fund_period_end* (end of the latest TTM period), fund_last_filed* (latest filed date of any
+  fact used), fund_data_age_days* (cutoff - fund_last_filed), fund_price, fund_shares, fund_shares_src, fund_mcap_b* (price x
+  filed shares), fund_currency, fund_flag* (all data caveats).
+- TTM / balance sheet (USD): eps_ttm* (diluted; basic only if no diluted tag, flagged), revenue_ttm, net_income_ttm,
+  op_income_ttm, gross_profit_ttm (GrossProfit, else revenue - cost of revenue), ebitda_ttm (operating income + D&A),
+  fcf_ttm (operating cash flow - capex), total_debt (LongTermDebt incl. current + short-term borrowings / commercial paper,
+  else noncurrent + current parts), cash (cash & equivalents only), equity (stockholders' equity) - all at the latest
+  balance-sheet date under R1.
+- Ratios: pe_ttm* = price / TTM diluted EPS; ps_ttm* = mcap / TTM revenue; pb* = mcap / equity; ev_ebitda* = (mcap + debt -
+  cash) / TTM EBITDA; fcf_yield* = TTM FCF / mcap; rev_growth_yoy*, eps_growth_yoy* = TTM vs the TTM ending ~1 year earlier
+  (fractions); peg* = pe_ttm / (EPS growth in %); gross_margin*, op_margin* (fractions of TTM revenue); roe* = TTM net income /
+  latest equity; debt_to_equity* = total_debt / equity.
+- Sector: fund_sector_etf, pe_sector_pctile* (0-100, % of same-sector peers with P/E <= this one; peers = positive P/E, mcap
+  >= $1.5B; min 5 peers else empty), pe_sector_n. Live: peers = the scan's US stocks. Backtest: peers = the live scan list +
+  every backtest stock ticker (259 names), each valued at that setup's alert date/cutoff under R1-R4.
+- Live only: forward_pe_live*, next_earnings_date_live* (blank in the backtest by design).
+Known gaps: banks/insurers have no gross profit / operating income tags (EV/EBITDA, margins empty); some companies tag D&A or
+debt only in notes (flagged); 20-F/40-F filers (TSM, ASML, PBR, RYAAY, STNE, PAGS, XP, ...) get no price multiples (ADR ratio
+and currency unknown) and often stale TTM; closed-end funds (GOF, JPC, PDI, PTY) have no XBRL financials. Filed dates are
+dates only (no time), so R1's strict '<' also avoids after-hours filings on the alert day.
+
+Robustness rules added after the first backtest run (08.10, all still R1-R4 compliant)
+- Duration windows widened for 52/53-week and 36-week reporters: Q 80-100d, H1 160-195d, 9M 245-290d, FY 340-380d; derived Q4
+  accepted when FY end - 9M end = 80-120 days. If the 4 discrete quarters are incomplete: TTM = FY + current YTD - prior-year
+  YTD (flagged), else FY.
+- dei shares rejected (-> weighted diluted shares, flagged) when <= 0, older than 400 days at the alert, or outside 0.5x-2x of
+  weighted diluted shares (fixes FOXA=1 share, TAP=0, CMCSA stale 2010 value).
+- No diluted EPS tag for a period -> EPS = TTM net income / diluted shares (flagged 'EPS via NI/shares'; e.g. FCX, LEN).
+- Unit choice: the unit with the latest period end (ties -> USD); non-USD reporters and 20-F/40-F filers get no price multiples.
+- TTM ending > 200 days before the alert is flagged stale.
+- Predecessor CIKs merged: XOM -> ExxonMobil Holdings Corp (2026 holding reorganisation) + Exxon Mobil Corp CIK 34088.
+Checks (08.10): look-ahead 10 random setups / 587 facts: 0 filed >= alert, 0 R1/R2 violations; global audit 488,736 facts, 0
+violations; R3: no non-positive multiple, no percentile on empty P/E. P/E vs Yahoo trailingPE at the 07.10 close: AAPL 38.65/38.61,
+MSFT 29.50/29.51, NVDA 30.02/30.02, JPM 14.11/14.12, XOM 21.09/21.17 (all within 0.4%).
