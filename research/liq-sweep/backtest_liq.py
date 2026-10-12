@@ -1,13 +1,14 @@
 """Backtest of the frozen liquidity-sweep rule (RULE.frozen.md)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, glob, math, json, numpy as np, pandas as pd
 from multiprocessing import Pool
-sys.path.insert(0, '/workspace/fib-spiral'); sys.path.insert(0, '/workspace/liq-sweep')
+sys.path.insert(0, (_SCANNER_ROOT + '/fib-spiral')); sys.path.insert(0, (_SCANNER_ROOT + '/liq-sweep'))
 import common_bt as C, liq_sweep as LS
-OUT = '/workspace/liq-sweep/out'; SEED = 20261010; MH = LS.P['maxhold']
+OUT = (_SCANNER_ROOT + '/liq-sweep/out'); SEED = 20261010; MH = LS.P['maxhold']
 def datasets():
-    return {'crypto_1m': [(s, f'/workspace/liq-sweep/data/crypto_1m/{s}.parquet', 'crypto', True, 60000, 1440) for s in C.CRYPTO if os.path.exists(f'/workspace/liq-sweep/data/crypto_1m/{s}.parquet')],
-            'crypto_15m': [(s, f'/workspace/liq-sweep/data/crypto_15m/{s}.parquet', 'crypto', True, 900000, 960) for s in C.CRYPTO if os.path.exists(f'/workspace/liq-sweep/data/crypto_15m/{s}.parquet')],
-            'stock_1d': [(os.path.basename(p)[:-8], p, 'stock', False, 86400000, 120) for p in sorted(glob.glob('/workspace/fib-spiral/data/stocks/*.parquet')) if not p.endswith('/SPY.parquet')]}
+    return {'crypto_1m': [(s, f'{_SCANNER_ROOT}/liq-sweep/data/crypto_1m/{s}.parquet', 'crypto', True, 60000, 1440) for s in C.CRYPTO if os.path.exists(f'{_SCANNER_ROOT}/liq-sweep/data/crypto_1m/{s}.parquet')],
+            'crypto_15m': [(s, f'{_SCANNER_ROOT}/liq-sweep/data/crypto_15m/{s}.parquet', 'crypto', True, 900000, 960) for s in C.CRYPTO if os.path.exists(f'{_SCANNER_ROOT}/liq-sweep/data/crypto_15m/{s}.parquet')],
+            'stock_1d': [(os.path.basename(p)[:-8], p, 'stock', False, 86400000, 120) for p in sorted(glob.glob((_SCANNER_ROOT + '/fib-spiral/data/stocks/*.parquet'))) if not p.endswith('/SPY.parquet')]}
 
 def fees(asset, sym, maker_in, exit_kind):
     if asset == 'crypto':

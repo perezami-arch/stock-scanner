@@ -1,3 +1,4 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import pandas as pd, numpy as np, ast
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -8,8 +9,8 @@ from stats3 import rows, S, st, SS, TS, H2H, OVL, excl, gk, rows_full, rows_coun
 from dups import fd, srcl, SRCN as SRCD, HEB
 import json, re, os
 # build7 (2026-10-08) = build6 + momentum columns for new rows (48-51). Old rows stay blank: they were not scored at alert time.
-OUTX=os.environ.get('TRACKER_OUT', f"/workspace/scan-tracker-{pd.Timestamp.now(tz='Asia/Jerusalem'):%Y-%m-%d}-mom.xlsx")
-_P='/home/box/agent-data/agents/392ab573-33c2-4c0d-8dc3-6b3991775b0d/attachments/'
+OUTX=os.environ.get('TRACKER_OUT', f"{_SCANNER_ROOT}/scan-tracker-{pd.Timestamp.now(tz='Asia/Jerusalem'):%Y-%m-%d}-mom.xlsx")
+_P=_sr_os.environ.get('SCANNER_ATTACH_DIR', '/home/box/agent-data/agents/392ab573-33c2-4c0d-8dc3-6b3991775b0d/attachments/')
 CH30b={}
 for _l in open('pending_chart_notes.txt').read().splitlines()[1:]:
     _p=_l.split()
@@ -44,7 +45,7 @@ WATCH_KEYS=['watch_short_below_va120','excess_spy_d20']
 WATCH_HEAD=['watch_short_below_va120 (מעקב בלבד)','תשואה מעל SPY ביום 20 (מעקב בלבד)']
 HEAD=HEAD+WATCH_HEAD; NCOL=len(HEAD)   # 124 + 2 = 126
 # 08.10: LOGGED-ONLY PIT fundamentals (scanner_fundamentals.TRACKER_KEYS; SEC EDGAR, filed < alert date; weight 0) - cols 127-147
-import sys as _sys; _sys.path.insert(0,'/workspace'); import scanner_fundamentals as _FUND
+import sys as _sys; _sys.path.insert(0,_SCANNER_ROOT); import scanner_fundamentals as _FUND
 FUND_KEYS=list(_FUND.TRACKER_KEYS); FUND_HEAD=list(_FUND.TRACKER_HEAD); FUND_C0=NCOL+1
 FUND_PCT={'fcf_yield','rev_growth_yoy','eps_growth_yoy','gross_margin','op_margin','roe'}
 HEAD=HEAD+FUND_HEAD; NCOL=len(HEAD)   # 126 + 21 = 147
@@ -55,8 +56,8 @@ HEAD=HEAD+EXDIR_HEAD; NCOL=len(HEAD)   # 147 + 1 = 148
 # 08.10 16:35 hooks (sr-waves-eval/HOOKS.md): EXPERIMENTAL S/R + volume waves + Elliott v2 columns from the PIT lookups (keyed by setup_id),
 #   prefixed exp_, weight 0, appended LAST (no existing column moves). v1 Elliott/Fib columns untouched. wave_end_signal = >=2 families.
 import scanner_levels as _SRL, scanner_waves as _WV, scanner_elliott_v2 as _EV2
-LK_FILES=(('/workspace/tracker/sr_levels_lookup.csv',list(_SRL.TRACKER_KEYS)),('/workspace/tracker/volume_waves_lookup.csv',list(_WV.TRACKER_KEYS)),
-          ('/workspace/tracker/elliott_v2_lookup.csv',list(_EV2.TRACKER_KEYS)))
+LK_FILES=(((_SCANNER_ROOT + '/tracker/sr_levels_lookup.csv'),list(_SRL.TRACKER_KEYS)),((_SCANNER_ROOT + '/tracker/volume_waves_lookup.csv'),list(_WV.TRACKER_KEYS)),
+          ((_SCANNER_ROOT + '/tracker/elliott_v2_lookup.csv'),list(_EV2.TRACKER_KEYS)))
 LK_KEYS=[]
 for _f,_ks in LK_FILES:
     for _k in _ks:
@@ -69,8 +70,8 @@ SHORT_KEYS=list(_SHORT.COLS); SHORT_HEAD=[k+' (נרשם בלבד)' for k in SHOR
 HEAD=HEAD+SHORT_HEAD; NCOL=len(HEAD)   # 219 + 18 = 237
 # 10.10: liquidity sweep (daily, both sides) + fib spiral (SHORT view), researcher modules, weight 0, appended LAST (nothing moves).
 #   Lookups built by /workspace/tracker/build_ls_fs_lookups.py (PIT, same data/cut as ev2_bt.py). Never change entry/stop/target.
-_sys.path.insert(0,'/workspace/liq-sweep'); _sys.path.insert(0,'/workspace/fib-spiral'); import liq_sweep as _LS, fib_spiral as _FS
-LK2_FILES=(('/workspace/tracker/liq_sweep_lookup.csv',list(_LS.TRACKER_KEYS)),('/workspace/tracker/fib_spiral_lookup.csv',list(_FS.TRACKER_KEYS)))
+_sys.path.insert(0,(_SCANNER_ROOT + '/liq-sweep')); _sys.path.insert(0,(_SCANNER_ROOT + '/fib-spiral')); import liq_sweep as _LS, fib_spiral as _FS
+LK2_FILES=(((_SCANNER_ROOT + '/tracker/liq_sweep_lookup.csv'),list(_LS.TRACKER_KEYS)),((_SCANNER_ROOT + '/tracker/fib_spiral_lookup.csv'),list(_FS.TRACKER_KEYS)))
 LK2_KEYS=['exp_'+k for _f,_ks in LK2_FILES for k in _ks]; LK2_HEAD=[k+' (ניסיוני, משקל 0)' for k in LK2_KEYS]; LK2_C0=NCOL+1
 HEAD=HEAD+LK2_HEAD; NCOL=len(HEAD)   # 237 + 22 + 19 = 278
 HF=PatternFill('solid',fgColor='356854'); HFont=Font(name='Arial',bold=True,color='FFFFFF',size=10)
@@ -112,7 +113,7 @@ def _enrich_watch_columns(_rows):
             pass
     _lu = {}
     try:
-        _lk = pd.read_csv('/workspace/tracker/watch_short_below_va120_lookup.csv')
+        _lk = pd.read_csv((_SCANNER_ROOT + '/tracker/watch_short_below_va120_lookup.csv'))
         for _, _row in _lk.iterrows():
             if pd.isna(_row.get('watch_short_below_va120')): continue
             _ad = str(_row.get('alert_date') or '')[:10]
@@ -129,7 +130,7 @@ _enrich_watch_columns(rows)
 # ---- fundamentals enrich (08.10): backtest rows from the PIT lookup (fund/fund_backtest.py; filed < alert date). New-scan rows
 #      that already carry the keys (scan_raw.csv) are kept. Weight 0.
 def _enrich_fund_columns(_rows):
-    try: _lk = pd.read_csv('/workspace/tracker/fundamentals_pit_lookup.csv')
+    try: _lk = pd.read_csv((_SCANNER_ROOT + '/tracker/fundamentals_pit_lookup.csv'))
     except Exception as _e: print(f'fund enrich: lookup missing ({_e.__class__.__name__})'); return
     _lu = {}
     for _row in _lk.to_dict('records'):
@@ -150,11 +151,11 @@ _enrich_fund_columns(rows)
 def _enrich_lookup_columns(_rows, LK_FILES=LK_FILES):
     _br = {}
     try:
-        for _x in pd.read_csv('/workspace/tracker/fundamentals_pit_lookup.csv', usecols=['setup_id','tracker_source','ticker','alert_date','direction']).to_dict('records'):
+        for _x in pd.read_csv((_SCANNER_ROOT + '/tracker/fundamentals_pit_lookup.csv'), usecols=['setup_id','tracker_source','ticker','alert_date','direction']).to_dict('records'):
             _br[('src', _x['tracker_source'], _x['ticker'], str(_x['alert_date'])[:10], _x['direction'])] = _x['setup_id']
     except Exception as _e: print(f'lookup enrich: fundamentals bridge missing ({_e.__class__.__name__})')
     try:
-        _pit = pd.read_excel('/workspace/scan-tracker-2026-10-08-pit.xlsx', sheet_name='זמני התראה', header=1, usecols=['setup_id','model','ticker','direction','alert_date'])
+        _pit = pd.read_excel((_SCANNER_ROOT + '/scan-tracker-2026-10-08-pit.xlsx'), sheet_name='זמני התראה', header=1, usecols=['setup_id','model','ticker','direction','alert_date'])
         for _x in _pit.to_dict('records'):
             _br.setdefault(('model', str(_x['model']), _x['ticker'], str(_x['alert_date'])[:10], _x['direction']), _x['setup_id'])
     except Exception as _e: print(f'lookup enrich: PIT-sheet bridge missing ({_e.__class__.__name__})')
@@ -180,7 +181,7 @@ def _enrich_lookup_columns(_rows, LK_FILES=LK_FILES):
 _enrich_lookup_columns(rows)
 _enrich_lookup_columns(rows, LK2_FILES)
 def _enrich_short_columns(_rows):
-    try: _lk = pd.read_csv('/workspace/tracker/short_pit_lookup.csv')
+    try: _lk = pd.read_csv((_SCANNER_ROOT + '/tracker/short_pit_lookup.csv'))
     except Exception as _e: print(f'short enrich: lookup missing ({_e.__class__.__name__})'); return
     _lu = {}
     for _row in _lk.to_dict('records'):
@@ -264,7 +265,7 @@ ws.freeze_panes='F2'
 dv=DataValidation(type='list',formula1='"LONG,SHORT"',allow_blank=True); ws.add_data_validation(dv); dv.add(f'I2:I{NROWS}')
 ws.auto_filter.ref=f"A1:{L(NCOL)}{NROWS}"
 # frozen crypto shorts (new scans): measurement only, never tracker setups
-_FZ=os.environ.get('FROZEN_CSV','/workspace/scan-runs/frozen_crypto_shorts.csv')
+_FZ=os.environ.get('FROZEN_CSV',(_SCANNER_ROOT + '/scan-runs/frozen_crypto_shorts.csv'))
 if os.path.exists(_FZ):
     _fz=pd.read_csv(_FZ); fzs=wb.create_sheet('frozen_crypto_shorts'); fzs.sheet_view.rightToLeft=True
     fzs.cell(1,1,'שורטים בקריפטו מוקפאים - לא נספרים כסטאפ, נרשמים למדידה בלבד').font=Font(name='Arial',bold=True,size=12,color='356854')

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Daily report (08:24 every day, AFTER the --paper --no-models scan). Hebrew markdown + PDF -> /workspace/scan-runs/daily/<YYYY-MM-DD>/.
+"""Daily report (8:24 weekday routine, AFTER the --paper --no-models scan). Hebrew markdown + PDF -> /workspace/scan-runs/daily/<YYYY-MM-DD>/.
   0. OpenBB snapshot (idempotent): /workspace/venv-openbb/bin/python /workspace/openbb_snapshot.py -> /workspace/openbb-snapshots/<last NYSE session>/
   1. open positions (positions_registry.csv = weekly-scan recommendations only) updated from REAL closes; stop rule / day-20 exits;
   2. day-5 / day-10 checkpoints via run_checkpoints.run(): free technical re-run + chart, Jev gate FIRST, paid models only if triggered;
@@ -7,28 +7,59 @@
   4. tool_stats Hebrew section + per-platform scoreboard;
   5. paper trades: ONE line (count only) - they are never positions and never listed.
 Flags: --asof ISO  --no-models (zero LLM calls incl. Jev)  --budget USD (default 1.0)  --no-openbb  --no-tool-stats  --tracker XLSX"""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, json, argparse, subprocess, glob
-from pathlib import Path
 import pandas as pd
-sys.path.insert(0, '/workspace')
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'modules'))
+sys.path.insert(0, _SCANNER_ROOT)
 import scanner_lessons as SLS, run_checkpoints as RC
-import scanner_research_ledger as RL, scanner_trade_followup as TF
 
 VERD_HE = {'approve': 'אישר', 'flag': 'דגל', 'veto': 'וטו', 'supports': 'תומך', 'opposes': 'מתנגד', 'neutral': 'ניטרלי'}
-PL_HE = {'jev': 'Jev', 'grok': 'Grok סנטימנט', 'grok_analyst': 'Grok אנליסט', 'pplx': 'Perplexity', 'claude': 'Claude אנליסט', 'gpt': 'GPT'}
+PL_HE = {'jev': 'Jev', 'grok': 'Grok', 'pplx': 'Perplexity', 'claude': 'Claude', 'gpt': 'GPT'}
 DIRH = {'LONG': 'לונג', 'SHORT': 'שורט'}
 
 def openbb():
     try:
-        r = subprocess.run(['/workspace/venv-openbb/bin/python', '/workspace/openbb_snapshot.py'], capture_output=True, text=True, timeout=1200)
+        r = subprocess.run([(_SCANNER_ROOT + '/venv-openbb/bin/python'), (_SCANNER_ROOT + '/openbb_snapshot.py')], capture_output=True, text=True, timeout=1200)
         tail = (r.stdout or r.stderr or '').strip().splitlines()[-1:] or ['']
         return r.returncode, tail[0][:200]
     except Exception as e:
         return -1, f'{e.__class__.__name__}: {e}'[:200]
 
+def update_paper(asof, path=None):
+    """paper_trades_ledger.csv from real closes: entry = open of entry_session, stop = the same rule as positions (scanner_stops.stop_status:
+    stock 4xATR chandelier on closes, crypto fixed 3xATR), half at the stock-long target, exit at the stop close or day 20; cum_d1..20 =
+    direction-adjusted close return vs the fill. Paper rows never become positions and never enter the reports beyond one line."""
+    import scanner_stops as ST
+    path = path or os.environ.get('PAPER_LEDGER', (_SCANNER_ROOT + '/scan-runs/paper_trades_ledger.csv'))
+    if not os.path.exists(path): return 0
+    d = pd.read_csv(path, dtype=object); n = 0; cache = {}
+    for i, r in d[d.status.isin(['pending_entry', 'open'])].iterrows():
+        key = (r.ticker, r.asset)
+        if key not in cache:
+            try: cache[key] = RC.get_bars(r.ticker, r.asset, asof, '/tmp/paper_bars')
+            except Exception: cache[key] = None
+        x = cache[key]
+        if x is None or not len(x): continue
+        s = x[x.index >= pd.Timestamp(r.entry_session)]
+        if not len(s): continue
+        fill = float(s.Open.iloc[0]); sgn = 1 if r.direction == 'LONG' else -1
+        tp = float(r.target_level) if (r.asset == 'stock' and r.direction == 'LONG' and pd.notna(r.target_level) and str(r.target_level) not in ('', 'nan')) else None
+        st = ST.stop_status(x, r.asset, r.direction, r.entry_session, fill, tp_half=tp)
+        if st.get('next_level') is None: d.loc[i, 'status'] = 'no active rule'; continue
+        k0 = x.index.searchsorted(pd.Timestamp(r.entry_session)); A = ST.atr14(x.High.values, x.Low.values, x.Close.values)
+        init = fill - sgn * float(r.stop_atr_mult) * float(A[k0 - 1] if k0 > 0 else A[-1])
+        d.loc[i, ['entry_price', 'stop', 'status']] = [round(fill, 6), round(init, 6), 'open']
+        for j in range(min(20, len(s))): d.loc[i, f'cum_d{j + 1}'] = round(sgn * (float(s.Close.iloc[j]) / fill - 1), 6)
+        ex = None
+        if st.get('stopped') and (s.index <= pd.Timestamp(st['stop_date'])).sum() <= 20: ex = (st['stop_date'], st['stop_close'], 'stop')
+        elif len(s) >= 20: ex = (str(s.index[19].date()), float(s.Close.iloc[19]), 'day20')
+        if ex: d.loc[i, ['status', 'exit_date', 'exit_price', 'exit_reason']] = ['closed', ex[0], ex[1], ex[2]]
+        n += 1
+    d.to_csv(path, index=False)
+    return n
+
 def paper_line():
-    f = '/workspace/scan-runs/paper_trades_ledger.csv'
+    f = os.environ.get('PAPER_LEDGER', (_SCANNER_ROOT + '/scan-runs/paper_trades_ledger.csv'))
     if not os.path.exists(f): return 'עסקאות נייר: אין עדיין.'
     d = pd.read_csv(f)
     return (f"עסקאות נייר (לא פוזיציות, למדידת העמודות הניסיוניות בלבד): {len(d)} שורות, {d.alert_date.nunique()} ימי כניסה שונים, "
@@ -42,9 +73,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--asof', default=None); ap.add_argument('--no-models', action='store_true'); ap.add_argument('--budget', type=float, default=1.0)
     ap.add_argument('--no-openbb', action='store_true'); ap.add_argument('--no-tool-stats', action='store_true'); ap.add_argument('--tracker', default=None)
-    ap.add_argument('--registry', default=SLS.REGISTRY); ap.add_argument('--ledger', default=None); ap.add_argument('--out', default='/workspace/scan-runs/daily')
-    ap.add_argument('--scan-root', default='/workspace/scan-runs')
-    ap.add_argument('--research-db', default='/workspace/scan-runs/research/research.sqlite')
+    ap.add_argument('--registry', default=SLS.REGISTRY); ap.add_argument('--ledger', default=None); ap.add_argument('--out', default=(_SCANNER_ROOT + '/scan-runs/daily'))
     a = ap.parse_args()
     import scanner_platforms as SP, run_unified_scan as RU, unified_report as UR
     asof = pd.Timestamp(a.asof) if a.asof else pd.Timestamp.now(tz='Asia/Jerusalem')
@@ -54,27 +83,6 @@ def main():
     ledger = a.ledger or SP.LEDGER
     s = RC.run(asof, a.registry, ledger, f'{out}/checkpoints', budget_usd=a.budget, no_models=a.no_models)
     reg = SLS.load_registry(a.registry)
-    # Every open trade gets prices, technical evidence and news every day.
-    # Closed trades are followed for 5/10/20 sessions AFTER their actual exit.
-    import scanner_news as SN, scanner_levelsfile as LF, scanner_research_score as RS
-    scorer = RS.ResearchScorer()
-    def fetch_news(t, asset, cut, days):
-        return SN.fetch_news_pit(t, cut, lookback_days=days, market='crypto' if asset == 'crypto' else None)
-    def build_levels(trade, cut, directory):
-        c = dict(t=trade['ticker'], asset=trade['asset'], direction=trade['direction'],
-                 entry=None, stop=None, target=None, unified_score=None, rank_basis='daily review: no universe percentile')
-        if c['asset'] == 'crypto':
-            import scanner_crypto as SCR
-            x = SLS.bars(c['t'], c['asset'], cut)
-            os.makedirs(f'{directory}/bars/crypto', exist_ok=True)
-            if x is not None: x.to_csv(SCR.bars_path(str(directory), c['t']))
-        lv, bars = LF.build(c, str(directory), pd.Timestamp(cut), RC.px_dir_for(cut))
-        lv['earnings'] = LF.earnings_gate(c, pd.Timestamp(cut))
-        RU.apply_research(c, lv, bars, scorer)  # components as context; no new rank without today's universe
-        LF.save(lv, str(directory), c)
-        return lv
-    followup, followup_md = TF.run(reg.to_dict('records'), a.research_db, asof, SLS.bars, fetch_news, build_levels, f'{out}/followup')
-    progress, progress_md = RL.daily(a.scan_root, a.research_db, asof, SLS.bars, out)
     L = []; w = L.append
     w(f"# דוח יומי – {asof.tz_convert('Asia/Jerusalem'):%d.%m.%Y %H:%M} (שעון ישראל)\n")
     w(f"- **OpenBB:** {'עודכן' if ob[0] == 0 else 'נכשל' if ob[0] not in (None, 0) else ''} {ob[1]}")
@@ -99,12 +107,6 @@ def main():
           f"Jev: {j.get('n_headlines', '—')} כותרות, {j.get('n_material', '—')} מהותיות ({j.get('sentiment_label') or '—'}) · "
           + (f"טריגרים: {'; '.join(c['triggers'])} → מחקר מחדש: " + ', '.join(f"{PL_HE[p]}={v}" for p, v in c['actions'].items())
              if c['llm_called'] else ('אין שינוי מהותי – המודלים בתשלום לא נקראו' if not c['triggers'] else f"טריגרים: {'; '.join(c['triggers'])} (מעבר לתקרה, לא נקראו)")))
-        for platform, opinion in (c.get('analysts') or {}).items():
-            w(f"  - **{PL_HE.get(platform, platform)}:** {VERD_HE.get(opinion.get('direction_view'), '—')} · ביטחון {opinion.get('conviction')}/100 · "
-              f"תזה: {UR._t(opinion.get('thesis_he'))} · סיכון: {UR._t(opinion.get('key_risk_he'))}")
-        for field, name in [('rebuttal_of_grok_he', 'Grok'), ('rebuttal_of_analyst_he', 'Claude')]:
-            rebuttal = (c.get('gpt_rebuttals') or {}).get(field)
-            if rebuttal: w(f"  - **GPT מול {name}:** {UR._t(rebuttal)}")
     # 3. closures
     w(f"\n## 3. סגירות ({len(s['closed'])})")
     sc = pd.read_csv(f"{s['cp_dir']}/scored_rows.csv") if os.path.exists(f"{s['cp_dir']}/scored_rows.csv") else pd.DataFrame()
@@ -125,9 +127,9 @@ def main():
     if not a.no_tool_stats:
         md, err = RU.tool_stats(a.tracker or RU.latest_tracker())
         w('\n## 5. סטטיסטיקת כלים (tool_stats)\n'); w(md if md else f'_לא זמין: {err}_')
+    try: update_paper(asof)
+    except Exception as e: print('paper update failed:', e)
     w(f'\n## 6. עסקאות נייר\n{paper_line()}')
-    w('\n' + followup_md)
-    w('\n' + progress_md)
     mdp = f'{out}/daily_report_he.md'; open(mdp, 'w').write('\n'.join(L) + '\n')
     try: UR._pdf(open(mdp).read(), f'{out}/daily_report_he.pdf', base=out)
     except Exception as e: print('pdf failed:', e)

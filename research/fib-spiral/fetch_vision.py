@@ -1,4 +1,5 @@
 """Bulk klines from data.binance.vision (public Binance USDT-M dumps; fapi REST became geo-blocked (451) on 10.10)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, io, zipfile, os, requests, pandas as pd, datetime as dt
 from concurrent.futures import ThreadPoolExecutor
 B = 'https://data.binance.vision/data/futures/um'
@@ -31,16 +32,16 @@ def fetch(sym, tf, start, end, path):
 if __name__ == '__main__':
     import json
     job = sys.argv[1]
-    U = json.load(open('/workspace/fib-spiral/data/universe_crypto.json'))['symbols']
-    NC = set(json.load(open('/workspace/fib-spiral/data/noncrypto.json')))
+    U = json.load(open((_SCANNER_ROOT + '/fib-spiral/data/universe_crypto.json')))['symbols']
+    NC = set(json.load(open((_SCANNER_ROOT + '/fib-spiral/data/noncrypto.json'))))
     CR = [s for s in U if s not in NC]
     if job == 'ake':
-        print(fetch('AKEUSDT', '1h', dt.date(2024, 10, 1), dt.date(2026, 10, 7), '/workspace/fib-spiral/data/crypto_1h/AKEUSDT.parquet'))
+        print(fetch('AKEUSDT', '1h', dt.date(2024, 10, 1), dt.date(2026, 10, 7), (_SCANNER_ROOT + '/fib-spiral/data/crypto_1h/AKEUSDT.parquet')))
     if job == '15m':
-        os.makedirs('/workspace/liq-sweep/data/crypto_15m', exist_ok=True)
-        for s in CR: print(s, fetch(s, '15m', dt.date(2025, 10, 1), dt.date(2026, 10, 7), f'/workspace/liq-sweep/data/crypto_15m/{s}.parquet'), flush=True)
+        os.makedirs((_SCANNER_ROOT + '/liq-sweep/data/crypto_15m'), exist_ok=True)
+        for s in CR: print(s, fetch(s, '15m', dt.date(2025, 10, 1), dt.date(2026, 10, 7), f'{_SCANNER_ROOT}/liq-sweep/data/crypto_15m/{s}.parquet'), flush=True)
     if job == '1m':
-        os.makedirs('/workspace/liq-sweep/data/crypto_1m', exist_ok=True)
+        os.makedirs((_SCANNER_ROOT + '/liq-sweep/data/crypto_1m'), exist_ok=True)
         S1 = ['PROMUSDT', 'USELESSUSDT'] + [s for s in CR if s not in ('PROMUSDT', 'USELESSUSDT')][:28]
-        for s in S1: print(s, fetch(s, '1m', dt.date(2026, 7, 1), dt.date(2026, 10, 7), f'/workspace/liq-sweep/data/crypto_1m/{s}.parquet'), flush=True)
+        for s in S1: print(s, fetch(s, '1m', dt.date(2026, 7, 1), dt.date(2026, 10, 7), f'{_SCANNER_ROOT}/liq-sweep/data/crypto_1m/{s}.parquet'), flush=True)
     print('DONE')

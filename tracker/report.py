@@ -1,3 +1,4 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json
 from fpdf import FPDF
 from bidi.algorithm import get_display
@@ -77,4 +78,4 @@ ex=D['excl']; half=(len(ex)+1)//2
 table(['טיקר','מקור','תאריך','סוג','MCAP','','טיקר','מקור','תאריך','סוג','MCAP'],[ (ex[i]+['']+(ex[i+half] if i+half<len(ex) else ['']*5)) for i in range(half)],[18,22,24,34,18,4,18,22,24,34,18],6.5)
 h1('מתודולוגיה ופערים')
 for t in D['METH']: para(t,8.3,color=(70,70,70))
-pdf.output('/workspace/scan-tracker-report-2026-09-30.pdf'); print('pdf ok')
+pdf.output((_SCANNER_ROOT + '/scan-tracker-report-2026-09-30.pdf')); print('pdf ok')

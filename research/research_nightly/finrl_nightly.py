@@ -7,17 +7,18 @@ agent's action for it on D (state = data up to the close of D). FinRL needs ever
 are back-filled with their first price (flat -> no return information; documented impurity of the earlier eval).
 Output: research-models/finrl/pred_<D>.csv (ticker, bar_date, score = action in [-1,1], pct, train_end, label_end, model_id),
         model_<D>.zip (+ vecnorm_<D>.pkl), meta_<D>.json. Written atomically."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, json, time, glob, argparse, numpy as np, pandas as pd, torch
 ap = argparse.ArgumentParser(); ap.add_argument("data_dir"); ap.add_argument("--steps", type=int, default=2048); ap.add_argument("--warm", type=int, default=10)
 ap.add_argument("--threads", type=int, default=2); a = ap.parse_args()
 torch.set_num_threads(a.threads)
 import importlib.util as _u
-_sp = _u.spec_from_file_location("envst", "/workspace/gh-repos-eval/finrl/repo/finrl/meta/env_stock_trading/env_stocktrading.py")
+_sp = _u.spec_from_file_location("envst", (_SCANNER_ROOT + "/gh-repos-eval/finrl/repo/finrl/meta/env_stock_trading/env_stocktrading.py"))
 _m = _u.module_from_spec(_sp); _sp.loader.exec_module(_m); StockTradingEnv = _m.StockTradingEnv
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from stockstats import StockDataFrame
-ROOT = "/workspace/research-models"; D = os.path.basename(a.data_dir.rstrip("/")); T0 = time.time()
+ROOT = (_SCANNER_ROOT + "/research-models"); D = os.path.basename(a.data_dir.rstrip("/")); T0 = time.time()
 IND = ["macd", "rsi_30", "cci_30", "dx_30"]; fr = []
 for f in sorted(glob.glob(f"{a.data_dir}/src_csv/*.csv")):
     x = pd.read_csv(f); x["date"] = pd.to_datetime(x["date"]); x = x[["date", "open", "high", "low", "close", "volume"]].sort_values("date")

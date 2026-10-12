@@ -1,6 +1,7 @@
 """RULE §8: PIT columns (truncated / full+cutoff / truncated+junk) identical, and identical to full-history detection."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, numpy as np, pandas as pd
-sys.path.insert(0, '/workspace/fib-spiral'); sys.path.insert(0, '/workspace/liq-sweep')
+sys.path.insert(0, (_SCANNER_ROOT + '/fib-spiral')); sys.path.insert(0, (_SCANNER_ROOT + '/liq-sweep'))
 import common_bt as C, liq_sweep as LS
 from backtest_liq import datasets
 rng = np.random.default_rng(11); res = []
@@ -24,5 +25,5 @@ for name, nsym, ncut in (('crypto_1m', 3, 8), ('crypto_15m', 8, 12), ('stock_1d'
                 e = [x for x in fe if x['dir'] == a1['ls_dir']][0]
                 match = match and abs(e['stop'] - a1['ls_stop']) < 1e-12 and abs(e['target'] - a1['ls_target']) < 1e-12 and e['level'] == a1['ls_level']
             res.append(dict(dataset=name, symbol=sym, kind=kind, bar=b, identical=same, matches_full_history=match))
-r = pd.DataFrame(res); r.to_csv('/workspace/liq-sweep/out/leak_test.csv', index=False)
+r = pd.DataFrame(res); r.to_csv((_SCANNER_ROOT + '/liq-sweep/out/leak_test.csv'), index=False)
 print(r.groupby(['dataset', 'kind'])[['identical', 'matches_full_history']].agg(['sum', 'count']))

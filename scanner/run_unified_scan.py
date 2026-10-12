@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""Unified scan. Weekly full run (Monday 09:00 Israel, all models, up to 50 candidates) and a daily no-LLM paper mode.
+"""Unified scan (08.10.2026). Weekly full run (Monday 09:00 Israel, all models, 20 candidates) and a daily no-LLM paper mode.
 
 Pipeline (one run folder = one SINGLE SOURCE OF TRUTH, <run_dir>/levels/<T>.json):
  1. swing_scan.py UNCHANGED (subprocess) -> scan_raw.csv (stocks)  [+ scanner_crypto: Alpaca daily bars, LONG only]
  2. full rule pass: every name that passes the rules (stock LONG trend filter, stock SHORT approved short rule, crypto LONG trend filter)
- 3. levels JSON per passing name, then the experimental research overlay (default 30%) before ranking and saving
+ 3. levels JSON per passing name (scanner_levelsfile.build -> scanner_charts.build_levels on the scan's own bars; S/R on the same bars)
  4. earnings gate (ACTIVE, stocks): pre-gate from Yahoo + OpenBB/Nasdaq; post-gate adds Perplexity (earlier date wins) + exception
  5. candidates_full.csv = ALL passing names (rule scores, levels, entry/stop/target, earnings flag)
- 6. selection: top N (--candidates, default 50) with the sector cap (--sector-cap, default 2, 0 = off), blocked names replaced by
+ 6. selection: top N (--candidates, default 20) with the sector cap (--sector-cap, default 2, 0 = off), blocked names replaced by
     the next eligible name (blocked names ranked above the cut are still researched, for the exception check and the ledger)
  7. charts from the levels JSON (scanner_charts.render_from_levels via scanner_levelsfile.render)
- 8. platforms (skipped with --no-models): Grok sentiment + additional analyst -> Perplexity -> Jev -> Claude analyst -> GPT critiques BOTH analysts.
-    Chart input when available; numbers come only from the levels JSON. Weight 0.
+ 8. platforms (skipped with --no-models): Jev -> Grok (free X cache first; chart image) -> Perplexity (chart image) -> Claude analyst
+    (chart image) -> GPT devil's advocate (chart image). Numbers in prompts come only from the levels JSON. Weight 0.
  9. tracker_rows.csv (from the levels JSON), reconciliation (report / tracker / chart index vs levels, 1e-6 rel) -> 'לא תואם' excluded
 10. research_columns.csv (research_columns.py, INTEGRATION.md; SHORT view only for short-rule names), tool_stats.py, Hebrew report.
 Paper mode (--paper --no-models): steps 1-5 + research columns, folder scan-runs/YYYY-MM-DD_paper, every passing name appended to
@@ -23,32 +23,29 @@ Usage:
   python3 run_unified_scan.py --trial                      # same, folder suffix _trial, trial ledger
   python3 run_unified_scan.py --paper --no-models          # daily paper run (08:24 weekday routine), zero LLM calls
   python3 run_unified_scan.py --run-dir DIR [--no-models]  # reuse an existing scan folder
-Flags: --candidates 50  --min-score 60 (unified-score floor)  --sector-cap 2 per side (0=off)  --no-crypto  --budget USD  --tracker XLSX
+Flags: --candidates 20  --min-score 60 (unified-score floor)  --sector-cap 2 per side (0=off)  --no-crypto  --budget USD  --tracker XLSX
 Secrets come only from env; never printed or written.
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, subprocess, argparse, time, json, glob, math
-from pathlib import Path
 import pandas as pd, numpy as np
-sys.path.insert(0, '/workspace')
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'modules'))
-import scanner_research_score as RS
-import scanner_research_ledger as RL
-PAPER_LEDGER = '/workspace/scan-runs/paper_trades_ledger.csv'
+sys.path.insert(0, _SCANNER_ROOT)
+PAPER_LEDGER = os.environ.get('PAPER_LEDGER', (_SCANNER_ROOT + '/scan-runs/paper_trades_ledger.csv'))   # env override for tests only
 
 def log(*a): print('[unified]', *a, flush=True)
 
 def run_scan(suffix, paper=False):
     asof = pd.Timestamp.now(tz='Asia/Jerusalem').floor('min')
     env = dict(os.environ, SCAN_ASOF=asof.strftime('%Y-%m-%dT%H:%M%z'))
-    base = f"/workspace/scan-runs/{asof.strftime('%Y-%m-%d_%H%M')}"
+    base = f"{_SCANNER_ROOT}/scan-runs/{asof.strftime('%Y-%m-%d_%H%M')}"
     log(f'running swing_scan.py, as-of {asof:%Y-%m-%d %H:%M} (Asia/Jerusalem) -> {base}')
     t0 = time.time(); tmp_log = f'/tmp/swing_scan_{asof:%Y%m%d_%H%M}.log'
     with open(tmp_log, 'w') as fh:
-        rc = subprocess.call([sys.executable, '/workspace/swing_scan.py'], stdout=fh, stderr=subprocess.STDOUT, env=env, cwd='/workspace')
+        rc = subprocess.call([sys.executable, (_SCANNER_ROOT + '/swing_scan.py')], stdout=fh, stderr=subprocess.STDOUT, env=env, cwd=_SCANNER_ROOT)
     log(f'swing_scan.py exit {rc} in {time.time()-t0:.0f}s')
     if rc != 0 or not os.path.exists(f'{base}/scan_raw.csv'):
         print(open(tmp_log).read()[-3000:]); raise SystemExit('swing_scan.py failed - no report written')
-    dst = f"/workspace/scan-runs/{asof:%Y-%m-%d}_paper" if paper else base + suffix
+    dst = f"{_SCANNER_ROOT}/scan-runs/{asof:%Y-%m-%d}_paper" if paper else base + suffix
     i = 2; d0 = dst
     while os.path.exists(dst): dst = f'{d0}{i}'; i += 1
     os.rename(base, dst); os.replace(tmp_log, f'{dst}/scan_stdout.log')
@@ -66,8 +63,7 @@ def _num(v):
     except Exception: return None
 
 # ------------------------------------------------------------------ unified score (longs and shorts on ONE scale)
-# BASELINE directional momentum score, before scanner_research_score's configurable overlay:
-# the 12-1 momentum percentile within the asset class, 0-100 (scanner_momentum.rank, LONG view),
+# Directional momentum score: the 12-1 momentum percentile within the asset class, 0-100 (scanner_momentum.rank, LONG view),
 # flipped for shorts (100 - long percentile = scanner_momentum.momentum_score_short). High = the momentum points the trade's way.
 # Both sides use the same number, so a short only ranks above a long when its downside momentum is stronger than that long's
 # upside momentum. Crypto uses the same percentile, computed over the crypto scan itself (too few names for the stock percentile).
@@ -90,29 +86,8 @@ def unified_score(c):
     except Exception: v = None
     return (round(v, 1) if v is not None else None), basis
 
-def apply_research(c, levels, bars, scorer):
-    """Research affects selection, but unavailable research never removes an eligible candidate."""
-    try:
-        return scorer.apply(c, levels, bars)
-    except Exception as exc:
-        result = RS.blend(c.get('baseline_score', c.get('unified_score')), {}, scorer.weight)
-        result.update(status='error', errors=[f'{type(exc).__name__}: {exc}'],
-                      run_id=levels.get('run_id'), ticker=c['t'], asset=c['asset'], direction=c['direction'],
-                      decision_utc=levels['data']['cutoff_utc'], last_bar_date=levels['data']['last_bar'],
-                      config_sha256=scorer.config_sha256)
-        c.setdefault('baseline_score', c.get('unified_score'))
-        c.setdefault('baseline_rank_basis', c.get('rank_basis'))
-        c.update(unified_score=c['baseline_score'], rank_score=c['baseline_score'], rank_basis=c['baseline_rank_basis'],
-                 research_status='error', research_coverage=0.0, research_delta=0.0, research_effective_weight=0.0,
-                 research_score=None, research_version=RS.VERSION)
-        levels.setdefault('score', {}).update(value=c['baseline_score'], basis=c['baseline_rank_basis'], baseline=c['baseline_score'])
-        levels.setdefault('context', {}).update(rank_score=c['baseline_score'], rank_basis=c['baseline_rank_basis'])
-        levels['research_score'] = result
-        log('research unavailable, baseline retained:', c['t'], result['errors'][0])
-        return result
-
 # ------------------------------------------------------------------ one ranking, no fixed long/short split
-def select(ok, n, cap, min_score):
+def select(ok, n, cap, min_score, max_blocked=None):
     """ok: rule-passing cands with levels. ONE list ranked by unified_score (longs, shorts, crypto together), floor min_score,
     sector cap per side ((asset, direction, sector)), earnings-blocked names skipped and back-filled. Sets c['_sel_note'].
     -> (selected, blocked_researched)."""
@@ -125,7 +100,7 @@ def select(ok, n, cap, min_score):
         if sc is None or sc < min_score: c['_sel_note'] = f'מתחת לסף {min_score:g}'; continue
         if (c['t'], c['direction']) in blocked:
             c['_sel_note'] = 'נחסם - דוח בתוך 5 ימי מסחר'
-            if len(blk) < max(2, n // 2): blk.append(c)
+            if len(blk) < (max(2, n // 2) if max_blocked is None or max_blocked < 0 else max_blocked): blk.append(c)
             continue
         if cap > 0 and cnt.get((side, sec), 0) >= cap: c['_sel_note'] = f'תקרת סקטור ({cap} לצד)'; continue
         if len(sel) >= n: c['_sel_note'] = f'מחוץ ל-{n} הראשונים'; continue
@@ -180,6 +155,13 @@ def scan_hooks(run_dir, cut, px_dir):
         import scanner_levels as SRL, scanner_waves as WV, scanner_elliott_v2 as EV2, scanner_stops as ST
     except Exception as e:
         log('scan hooks skipped:', e); return None
+    LSW = FSP = None
+    for p_ in ((_SCANNER_ROOT + '/liq-sweep'), (_SCANNER_ROOT + '/fib-spiral')):
+        if p_ not in sys.path: sys.path.insert(0, p_)
+    try: import liq_sweep as LSW
+    except Exception as e: log('liq_sweep missing:', e)
+    try: import fib_spiral as FSP
+    except Exception as e: log('fib_spiral missing:', e)
     t0 = time.time(); d = pd.read_csv(f'{run_dir}/scan_raw.csv'); out = []
     for t, ok in zip(d['t'], d['mcap_ok'].astype(str).str.lower().eq('true')):
         if str(t).startswith('^') or not ok: continue
@@ -192,6 +174,13 @@ def scan_hooks(run_dir, cut, px_dir):
             rec.update(WV.waves_columns(b, cut, 'stock', 'LONG'))
             rec.update({f'short_{k}': v for k, v in WV.waves_columns(b, cut, 'stock', 'SHORT').items() if k.startswith('wave_')})
             rec.update(EV2.elliott_v2_columns(b, cut, 'stock', 'LONG'))
+            # 10.10 researcher modules, weight 0, prefixed exp_ so tool_stats --extra picks them up (never change entry/stop/target)
+            if LSW is not None:
+                try: rec.update({f'exp_{k}': v for k, v in LSW.liq_sweep_columns(b, None, 'stock', intraday=False).items()})
+                except Exception as e: rec['exp_ls_error'] = e.__class__.__name__
+            if FSP is not None:
+                try: rec.update({f'exp_{k}': v for k, v in FSP.fib_spiral_columns(b, None, 'stock', 'SHORT').items() if k in FSP.TRACKER_KEYS})
+                except Exception as e: rec['exp_fs_error'] = e.__class__.__name__
             out.append(rec)
         except Exception as e:
             out.append({'t': t, 'wv_flag': f'error {e.__class__.__name__}'})
@@ -201,18 +190,19 @@ def scan_hooks(run_dir, cut, px_dir):
 
 def tool_stats(tracker):
     """python3 tool_stats.py <tracker> --extra "scan-runs/*/research_columns.csv" --out research-models/tool_stats -> newest Hebrew md."""
-    out = '/workspace/research-models/tool_stats'
-    if not os.path.exists('/workspace/tool_stats.py'): return None, 'tool_stats.py missing'
+    out = (_SCANNER_ROOT + '/research-models/tool_stats')
+    if not os.path.exists((_SCANNER_ROOT + '/tool_stats.py')): return None, 'tool_stats.py missing'
     if not tracker or not os.path.exists(tracker): return None, f'tracker not found: {tracker}'
     t0 = time.time()
-    r = subprocess.run([sys.executable, '/workspace/tool_stats.py', tracker, '--extra', '/workspace/scan-runs/*/research_columns.csv', '--out', out],
+    r = subprocess.run([sys.executable, (_SCANNER_ROOT + '/tool_stats.py'), tracker, '--extra', (_SCANNER_ROOT + '/scan-runs/*/research_columns.csv'),
+                        (_SCANNER_ROOT + '/scan-runs/*/scan_hooks.csv'), '--out', out],
                        capture_output=True, text=True, timeout=1800)
     mds = [m for m in sorted(glob.glob(f'{out}/tool_stats_*_he.md'), key=os.path.getmtime) if os.path.getmtime(m) >= t0 - 5]
     if r.returncode != 0 or not mds: return None, f'tool_stats exit {r.returncode}: {(r.stderr or r.stdout)[-300:]}'
     return open(mds[-1]).read(), None
 
 def latest_tracker():
-    xs = sorted(glob.glob('/workspace/scan-tracker-*.xlsx'), key=os.path.getmtime)
+    xs = sorted(glob.glob((_SCANNER_ROOT + '/scan-tracker-*.xlsx')), key=os.path.getmtime)
     return xs[-1] if xs else None
 
 # ------------------------------------------------------------------ paper ledger
@@ -253,18 +243,13 @@ def main():
     ap.add_argument('--run-dir'); ap.add_argument('--scan-only', action='store_true')
     ap.add_argument('--no-models', '--no-platforms', dest='no_models', action='store_true')
     ap.add_argument('--paper', action='store_true'); ap.add_argument('--trial', action='store_true'); ap.add_argument('--suffix', default=None)
-    ap.add_argument('--candidates', type=int, default=50); ap.add_argument('--sector-cap', type=int, default=int(os.environ.get('PLATFORM_MAX_PER_SECTOR', '2')))
+    ap.add_argument('--candidates', type=int, default=20); ap.add_argument('--sector-cap', type=int, default=int(os.environ.get('PLATFORM_MAX_PER_SECTOR', '2')))
     ap.add_argument('--min-score', type=float, default=MIN_SCORE_DEFAULT, help='unified-score floor; names below it are not selected (default 60, see addendum)')
     ap.add_argument('--no-crypto', action='store_true')
+    ap.add_argument('--blocked-research', type=int, default=-1, help='earnings-blocked names still researched by the models (-1 = auto max(2, N/2))')
     ap.add_argument('--budget', type=float, default=None); ap.add_argument('--tracker', default=None)
     ap.add_argument('--no-hooks', action='store_true'); ap.add_argument('--no-research-columns', action='store_true'); ap.add_argument('--no-tool-stats', action='store_true')
-    ap.add_argument('--research-weight', type=RS.validate_weight, default=RS.DEFAULT_WEIGHT,
-                    help='experimental research share, fraction 0..1 (default 0.30; 0 restores baseline)')
-    ap.add_argument('--research-calendar', action='append', default=None, metavar='CSV',
-                    help='Jerusalem lunar CSV; repeat for non-overlapping periods; defaults to bundled calendar')
     a = ap.parse_args()
-    if a.candidates < 1: ap.error('--candidates must be positive')
-    scorer = RS.ResearchScorer(a.research_calendar, weight=a.research_weight)
     if a.paper and not a.no_models: raise SystemExit('--paper requires --no-models (paper mode never calls an LLM)')
     suffix = a.suffix if a.suffix is not None else ('_trial' if a.trial else '')
     if a.trial: os.environ['PLATFORM_TRIAL'] = '1'
@@ -274,13 +259,13 @@ def main():
     if a.scan_only: return
     import scanner_platforms as SP, scanner_levelsfile as LF
     if a.budget is not None: SP.BUDGET_USD = a.budget
-    cut = cutoff_of(run_dir); px_dir = f"/workspace/scanner-momentum-cache/{cut.strftime('%Y%m%dT%H%MZ')}"
+    cut = cutoff_of(run_dir); px_dir = f"{_SCANNER_ROOT}/scanner-momentum-cache/{cut.strftime('%Y%m%dT%H%MZ')}"
     meta = json.load(open(f'{run_dir}/run_meta.json')) if os.path.exists(f'{run_dir}/run_meta.json') else {}
     asof = meta.get('scan_asof_local') or str(cut.tz_convert('Asia/Jerusalem'))
     regime = SP.regime_summary(run_dir)
     # 2. full rule pass (no cap, no top-N)
     SP.MAX_PER_SECTOR = 0
-    full = SP.select_candidates(run_dir, n_long=100000, n_short=100000, respect_env=False)
+    full = SP.select_candidates(run_dir, n_long=100000, n_short=100000)
     SP.MAX_PER_SECTOR = a.sector_cap
     for c in full: c['asset'] = 'stock'
     crypto = []
@@ -311,7 +296,6 @@ def main():
         c['_regime'] = regime
         try:
             L, x = LF.build(c, run_dir, cut, px_dir)
-            apply_research(c, L, x, scorer)
             g = LF.earnings_gate(c, cut); L['earnings'] = dict(g, stage='pre (Yahoo + OpenBB; Perplexity not yet asked)')
             LF.save(L, run_dir, c); LF.apply_trade(c, L); c['earnings_gate'] = g['status']; c['_eg'] = g
             built[(c['t'], c['direction'])] = (c, L, x)
@@ -319,13 +303,7 @@ def main():
             c['levels_error'] = f'{e.__class__.__name__}: {e}'[:200]; log('levels failed', c['t'], c['levels_error'])
     # 5. selection (pure) + candidates_full.csv - every rule-passing name with its score, rank and why it was / was not picked
     ok = [c for c in allc if (c['t'], c['direction']) in built]
-    with open(f'{run_dir}/research_scores.json', 'w', encoding='utf-8') as fh:
-        json.dump([built[(c['t'], c['direction'])][1]['research_score'] for c in ok], fh, ensure_ascii=False, indent=2, allow_nan=False)
-    with open(f'{run_dir}/research_score_manifest.json', 'w', encoding='utf-8') as fh:
-        json.dump(scorer.manifest(), fh, ensure_ascii=False, indent=2, allow_nan=False)
-    base_sel, _ = select([dict(c, unified_score=c.get('baseline_score')) for c in ok], a.candidates, a.sector_cap, a.min_score)
-    base_selected = {(c['t'], c['direction']) for c in base_sel}
-    sel, blk = select(ok, a.candidates, a.sector_cap, a.min_score)
+    sel, blk = select(ok, a.candidates, a.sector_cap, a.min_score, a.blocked_research)
     rows = []
     for c in allc:
         L = (built.get((c['t'], c['direction'])) or (None, None))[1]
@@ -334,11 +312,6 @@ def main():
                      'passes_min_score': (c.get('unified_score') is not None and c['unified_score'] >= a.min_score), 'min_score': a.min_score,
                      ('would_select' if a.paper else 'selected'): any(c is x for x in sel), 'selection_note': c.get('_sel_note', c.get('levels_error')),
                      'rank_basis': c.get('rank_basis'),
-                     'baseline_score': c.get('baseline_score'), 'baseline_rank_basis': c.get('baseline_rank_basis'),
-                     'baseline_would_select': (c['t'], c['direction']) in base_selected,
-                     'research_score': c.get('research_score'), 'research_delta': c.get('research_delta'),
-                     'research_coverage': c.get('research_coverage'), 'research_effective_weight': c.get('research_effective_weight'),
-                     'research_status': c.get('research_status'), 'research_version': c.get('research_version'),
                      'momentum_score': c.get('momentum_score'), 'momentum_12_1': c.get('momentum_12_1'), 'short_ck_score': c.get('short_ck_score'),
                      'short_rule_pass': c.get('short_rule_pass'), 'sector_etf': c.get('sector_etf'), 'mcap_b': c.get('mcap_b'),
                      'entry': c.get('entry'), 'stop': c.get('stop'), 'target': c.get('target'), 'stop_rule': (f.get('trade') or {}).get('stop_rule'),
@@ -358,16 +331,6 @@ def main():
     df['score_rank'] = df['unified_score'].rank(ascending=False, method='min').astype('Int64')
     df.to_csv(f'{run_dir}/candidates_full.csv', index=False, encoding='utf-8-sig')
     log(f'candidates_full.csv: {len(rows)} names')
-    # Freeze the rankings, full research evidence and entry convention now.
-    # If a manual scan occurs after the open, its research entry cannot be that past open.
-    stock_cut = cut.tz_convert('America/New_York')
-    if (stock_cut.hour, stock_cut.minute) >= (9, 30):
-        stock_cut = stock_cut.normalize() + pd.DateOffset(days=1)
-    entries = {'stock': str(LF.entry_session(stock_cut).date()),
-               'crypto': str((cut.tz_convert('UTC').normalize() + pd.Timedelta(days=1)).date())}
-    snapshot = RL.freeze_run(run_dir, str(cut), 'trial' if a.trial or meta.get('trial') else 'paper' if a.paper else 'weekly',
-                            rows, {k: v[1] for k, v in built.items()}, scorer.manifest(), entries,
-                            dict(candidates=a.candidates, sector_cap=a.sector_cap, min_score=a.min_score))
     if not a.no_hooks: scan_hooks(run_dir, cut, px_dir)
     if a.paper:
         n = append_paper(run_dir, [(c, built[(c['t'], c['direction'])][1]) for c in ok], cut, asof)
@@ -375,7 +338,7 @@ def main():
         if not a.no_research_columns: research_columns(run_dir, cut, px_dir)
         json.dump({'mode': 'paper', 'n_full': len(rows), 'n_paper_appended': n}, open(f'{run_dir}/paper_summary.json', 'w'), indent=1)
         return
-    # 6. selection (computed above): one ranking, no fixed long/short split; may have fewer than N
+    # 6. selection (computed above): one ranking, no fixed long/short split; may be 20 longs and 0 shorts, or fewer than N
     cands = sel + blk
     ids = {id(c) for c in sel}
     for c in cands: c['_selected'] = id(c) in ids
@@ -425,23 +388,21 @@ def main():
     log('reconciliation:', sum(not v for v in rec.values()), 'תואם /', sum(bool(v) for v in rec.values()), 'לא תואם')
     sel = [f"{c['t']}|{c['direction']}" for c in cands if not rec.get((c['t'], c['direction']))
            and not (c.get('_eg') or {}).get('blocked') and (c.get('_selected') or (c.get('_eg') or {}).get('exception'))]
-    sel = sel[:a.candidates]  # post-gate exceptions must not exceed the requested output size
     json.dump(sel, open(f'{run_dir}/selected.json', 'w'), indent=1)     # = the report's recommendations (positions registry input)
-    RL.immutable_json(Path(run_dir) / 'research_final_selection.json',
-                      dict(cohort_id=snapshot['cohort_id'], snapshot_sha256=RL.digest(snapshot), selected=sel,
-                           stage='post-model earnings gate and reconciliation'))
+    if not a.no_models and suffix == '' and not a.paper:     # real weekly run only -> open positions for the checkpoint runner
+        try:
+            import scanner_lessons as SLS
+            log('positions registry: +', SLS.register_run(run_dir), 'new open positions')
+        except Exception as e:
+            log('positions registry failed:', e)
     # 10. research columns + tool_stats + report
     rcs = None if a.no_research_columns else research_columns(run_dir, cut, px_dir)
     ts_md, ts_err = (None, 'skipped') if a.no_tool_stats else tool_stats(a.tracker or latest_tracker())
     res.update(earnings=eg, recon=rec, tool_stats_md=ts_md, tool_stats_err=ts_err, research_status=rcs, n_full=len(rows),
-               candidates_n=a.candidates, min_score=a.min_score, sector_cap=a.sector_cap, research_weight=scorer.weight,
-               research_version=RS.VERSION, run_kind='trial' if suffix == '_trial' else 'weekly', cutoff=str(cut))
+               candidates_n=a.candidates, min_score=a.min_score, sector_cap=a.sector_cap, run_kind='trial' if suffix == '_trial' else 'weekly', cutoff=str(cut))
     import unified_report as UR
     paths = UR.write_report(run_dir, res)
     log('report:', paths)
-    if not a.trial and not meta.get('trial') and suffix != '_trial':
-        import scanner_lessons as SLS
-        log('weekly positions registered:', SLS.register_run(run_dir))
 
 def _ledger_gate(path, run_dir, cands):
     """write the final earnings-gate status into this run's ledger rows (rows were written before the post-gate)."""

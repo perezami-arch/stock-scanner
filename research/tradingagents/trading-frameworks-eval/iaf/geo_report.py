@@ -1,6 +1,7 @@
 """Writes iaf/geometry_table.md (every comparison) and the §3.14 block (geo_section.md) from geometry_table.csv."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import numpy as np, pandas as pd
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 A=pd.read_csv(OUT+'geometry_table.csv'); M=int(A.n_comparisons.iloc[0])
 LC=pd.read_csv(OUT+'geo_leakcheck.csv'); LM=pd.read_csv(OUT+'geo_leakcheck_mismatches.csv') if open(OUT+'geo_leakcheck_mismatches.csv').read().strip() else pd.DataFrame()
 def f1(x): return '' if pd.isna(x) else f'{x:+.1f}'

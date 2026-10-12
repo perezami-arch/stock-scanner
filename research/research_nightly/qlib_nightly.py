@@ -7,11 +7,12 @@ POINT-IN-TIME for bar D (= last bar of research-models/data/<D>, already cut by 
   * the score is the prediction on the Alpha158 features of D (backward-looking only; leak check 0/161,476 cells earlier).
 Output: research-models/qlib/pred_<D>.csv (ticker, bar_date, score, pct 0-100 cross-sectional, train_end, label_end, model_id)
         research-models/qlib/model_<D>.pkl, meta_<D>.json. Written atomically (tmp + rename)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, json, time, glob, shutil, pickle, subprocess, argparse
 import numpy as np, pandas as pd
 os.environ.setdefault("MLFLOW_ALLOW_FILE_STORE", "true")          # qlib's recorder writes ./mlruns (file store)
 H = 20
-ROOT = "/workspace/research-models"; REPO = "/workspace/gh-repos-eval/qlib/repo"
+ROOT = (_SCANNER_ROOT + "/research-models"); REPO = (_SCANNER_ROOT + "/gh-repos-eval/qlib/repo")
 ap = argparse.ArgumentParser(); ap.add_argument("data_dir"); ap.add_argument("--threads", type=int, default=2); ap.add_argument("--rounds", type=int, default=200)
 a = ap.parse_args()
 os.makedirs(f"{ROOT}/qlib", exist_ok=True); os.chdir(f"{ROOT}/qlib")

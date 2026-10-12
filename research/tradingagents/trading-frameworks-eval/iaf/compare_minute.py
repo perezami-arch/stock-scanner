@@ -1,5 +1,6 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import pandas as pd, numpy as np
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 R=pd.read_csv(OUT+'sim_minute_trades.csv'); S=pd.read_csv(OUT+'sim_trades_enriched.csv',low_memory=False)
 S=S[S.in_main.astype(bool) & ~S.dup.astype(bool)]
 meta=S[S.policy=='hold'][['setup_id','ticker','group','source','asset','direction','entry_date']].rename(columns={'entry_date':'d_entry_date'})

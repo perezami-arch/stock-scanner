@@ -29,6 +29,26 @@ def alpaca_daily(sym, cutoff_utc, days=600):
     x = x[(x.index + pd.Timedelta(days=1)) <= cut.tz_localize(None)]           # PIT: UTC day complete
     return x[~x.index.duplicated(keep='last')]
 
+def alpaca_hourly(sym, cutoff_utc, days=30):
+    """Alpaca crypto 1Hour bars (UTC timestamps), only bars COMPLETE at the cutoff (bar start + 1h <= cutoff). Our crypto source
+    (Binance/Bybit return 451 from the box). Used by the weight-0 liquidity-sweep view (liq_sweep intraday=True)."""
+    cut = pd.Timestamp(cutoff_utc).tz_convert('UTC')
+    h = {'APCA-API-KEY-ID': os.environ.get('ALPACA_API_KEY_ID', ''), 'APCA-API-SECRET-KEY': os.environ.get('ALPACA_API_SECRET_KEY', '')}
+    p = {'symbols': f'{sym}/USD', 'timeframe': '1Hour', 'start': (cut - pd.Timedelta(days=days)).strftime('%Y-%m-%dT%H:00:00Z'),
+         'end': cut.strftime('%Y-%m-%dT%H:%M:%SZ'), 'limit': 10000, 'sort': 'asc'}
+    rows = []
+    for _ in range(10):
+        r = requests.get(URL, headers=h, params=p, timeout=30)
+        if r.status_code != 200: raise RuntimeError(f'alpaca crypto 1h bars HTTP {r.status_code}')
+        d = r.json(); rows += (d.get('bars') or {}).get(f'{sym}/USD') or []
+        if not d.get('next_page_token'): break
+        p['page_token'] = d['next_page_token']
+    if not rows: return None
+    x = pd.DataFrame(rows); x['ts'] = pd.to_datetime(x['t']).dt.tz_convert('UTC').dt.tz_localize(None)
+    x = x.rename(columns={'o': 'Open', 'h': 'High', 'l': 'Low', 'c': 'Close', 'v': 'Volume'}).set_index('ts')[['Open', 'High', 'Low', 'Close', 'Volume']]
+    x = x[(x.index + pd.Timedelta(hours=1)) <= cut.tz_localize(None)]
+    return x[~x.index.duplicated(keep='last')]
+
 def bars_path(run_dir, sym): return f'{run_dir}/bars/crypto/{sym}.csv'
 
 def load_bars(run_dir, sym):

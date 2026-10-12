@@ -1,3 +1,4 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import pandas as pd, numpy as np, ast
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -207,4 +208,4 @@ for r in sorted(gk,key=lambda r:(r['alert_date'],CATO[r['cat']],r['rank'])):
             if j==1: c.number_format=DATE
         k+=1
 for j,wd in enumerate([12,12,6,8,8,18,30,90],1): gp.column_dimensions[L(j)].width=wd
-wb.save('/workspace/scan-tracker-since-2026-09-07.xlsx'); print('saved',len(rows))
+wb.save((_SCANNER_ROOT + '/scan-tracker-since-2026-09-07.xlsx')); print('saved',len(rows))

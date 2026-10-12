@@ -11,13 +11,14 @@ Per open position in /workspace/scan-runs/positions_registry.csv (weekly-scan re
   5. right/wrong scoring of closed positions + per-platform scoreboard; weekly lessons (closed trades only) -> prompts/<p>_vN.txt.
 Flags: --asof ISO (default now) --no-models (zero LLM calls; Jev too) --budget USD (default 1.0) --max-llm-positions N --lessons
        --sim-from-run RUN --sim-cutoff ISO  (dry-run plumbing test: builds a SIMULATED registry/ledger/prompts in --out, never the real files)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, json, argparse, math, shutil, datetime as dt
 import numpy as np, pandas as pd
-sys.path.insert(0, '/workspace')
+sys.path.insert(0, _SCANNER_ROOT)
 import scanner_lessons as SLS, scanner_levelsfile as LF, scanner_stops as ST
 
 SKIP = 'skipped - no material change'
-PLATS = ('jev', 'grok', 'grok_analyst', 'pplx', 'claude', 'gpt')
+PLATS = ('jev', 'grok', 'pplx', 'claude', 'gpt')
 
 def log(*a): print('[checkpoints]', *a, flush=True)
 
@@ -25,7 +26,7 @@ def _f(v):
     try: v = float(v); return v if math.isfinite(v) else None
     except Exception: return None
 
-def px_dir_for(asof): return f"/workspace/scanner-momentum-cache/{pd.Timestamp(asof).tz_convert('UTC').strftime('%Y%m%dT%H%MZ')}"
+def px_dir_for(asof): return f"{_SCANNER_ROOT}/scanner-momentum-cache/{pd.Timestamp(asof).tz_convert('UTC').strftime('%Y%m%dT%H%MZ')}"
 
 def get_bars(t, asset, asof, cp_dir):
     """same sources as the scan: Yahoo cache (stocks) / Alpaca daily (crypto, saved under <cp_dir>/bars/crypto for the levels JSON)."""
@@ -62,13 +63,13 @@ def ledger_rows(T, dp, asof_local, cut, cp_dir, models, outs, costs, trig, skipp
                 verdict = o.get('sentiment_label'); risk = o.get('top_catalyst')
             elif p == 'grok': verdict, conv, risk = o.get('verdict'), o.get('sentiment'), o.get('reason_he')
             elif p == 'pplx': verdict, risk = o.get('verdict'), o.get('reason_he')
-            elif p in ('claude', 'grok_analyst'): verdict, conv, risk = o.get('direction_view'), o.get('conviction'), o.get('key_risk_he')
+            elif p == 'claude': verdict, conv, risk = o.get('direction_view'), o.get('conviction'), o.get('key_risk_he')
             elif p == 'gpt': verdict, risk = o.get('verdict'), o.get('main_risk_he')
             act = o.get('checkpoint_action')
         cd = (o or {}).get('chart_count_disagree') if isinstance(o, dict) else None
         rows.append({'trade_key': T['trade_key'], 'ticker': T['ticker'], 'asset': T['asset'], 'direction': T['direction'], 'decision_point': dp,
-                     'asof_local': asof_local, 'data_cutoff_utc': str(cut), 'run_dir': cp_dir, 'platform': p, 'model': models.get('grok' if p == 'grok_analyst' else p),
-                     'role': {'claude': 'analyst', 'grok_analyst': 'analyst', 'gpt': 'devils_advocate'}.get(p, 'checker'), 'prompt_version': prompt_version(p)[0],
+                     'asof_local': asof_local, 'data_cutoff_utc': str(cut), 'run_dir': cp_dir, 'platform': p, 'model': models.get(p),
+                     'role': {'claude': 'analyst', 'gpt': 'devils_advocate'}.get(p, 'checker'), 'prompt_version': prompt_version(p)[0],
                      'verdict': verdict, 'conviction_or_sentiment': conv, 'main_risk_or_reason': risk, 'checkpoint_action': act,
                      'cost_usd_this_pass': round(costs.get(p, 0.0), 5), 'fresh': o is not None,
                      'skipped_reason': (SKIP if (skipped and p != 'jev') else err), 'trigger': ' ; '.join(trig) or None,
@@ -150,7 +151,6 @@ def run(asof, registry, ledger, out_dir, budget_usd=1.0, no_models=False, max_ll
                 a, outs['claude_err'] = SP.analyst(c, facts, g, p, budget, heads=heads, trusted=trusted)
                 v, outs['gpt_err'] = SP.advocate(c, facts, g, p, a, budget, heads=heads, trusted=trusted)
                 outs.update(grok=g, pplx=p, claude=a, gpt=v)
-                outs.update(grok_analyst=SP.grok_analysis(g), grok_analyst_err=SP.grok_analyst_error(g, outs.get('grok_err')))
             for xlog in budget.log:
                 if xlog.get('ticker') == t and not xlog.get('_counted'):
                     pl = 'grok' if xlog['platform'] == 'grok_cache' else xlog['platform']
@@ -162,9 +162,7 @@ def run(asof, registry, ledger, out_dir, budget_usd=1.0, no_models=False, max_ll
             summary['checkpoints'].append({'ticker': t, 'direction': d, 'day': day, 'triggers': trig, 'llm_called': call,
                                            'jev': None if not jv else {k: jv.get(k) for k in ('n_headlines', 'n_material', 'sentiment_label')},
                                            'unrealized_dir_pct': None if unreal is None else round(100 * unreal, 2), 'stop': st_d.get('next_level'),
-                                           'analysts': {p: {k: outs[p].get(k) for k in SP.ANALYST_FIELDS} for p in ('grok_analyst', 'claude') if outs.get(p)},
-                                           'gpt_rebuttals': {k: (outs.get('gpt') or {}).get(k) for k in ('rebuttal_of_grok_he', 'rebuttal_of_analyst_he')},
-                                           'actions': {p: (outs.get(p) or {}).get('checkpoint_action') for p in ('grok', 'grok_analyst', 'pplx', 'claude', 'gpt') if outs.get(p)}})
+                                           'actions': {p: (outs.get(p) or {}).get('checkpoint_action') for p in ('grok', 'pplx', 'claude', 'gpt') if outs.get(p)}})
         # --- registry update
         lc = _f(x.Close.iloc[-1])
         reg.at[i, 'checkpoints_done'] = ','.join(sorted(done)); reg.at[i, 'last_state'] = json.dumps(prev, default=str)
@@ -215,7 +213,7 @@ def build_sim(run_dir, sim_cut, out_dir):
     elif 'selected' in full: full = full[full.selected.astype(str).str.lower() == 'true']
     full = full.head(12)
     sim_dir = f'{out_dir}/sim_entry'; os.makedirs(sim_dir, exist_ok=True)
-    tl = pd.read_csv('/workspace/scan-runs/platform_verdicts_ledger_trial.csv')
+    tl = pd.read_csv((_SCANNER_ROOT + '/scan-runs/platform_verdicts_ledger_trial.csv'))
     rows, led = [], []
     for _, r in full.iterrows():
         asset = r.get('asset') if isinstance(r.get('asset'), str) else 'stock'
@@ -250,13 +248,13 @@ def main():
     ap.add_argument('--asof', default=None); ap.add_argument('--no-models', action='store_true'); ap.add_argument('--budget', type=float, default=1.0)
     ap.add_argument('--max-llm-positions', type=int, default=99); ap.add_argument('--lessons', action='store_true')
     ap.add_argument('--registry', default=SLS.REGISTRY); ap.add_argument('--ledger', default=None)
-    ap.add_argument('--out', default='/workspace/scan-runs/checkpoints')
+    ap.add_argument('--out', default=(_SCANNER_ROOT + '/scan-runs/checkpoints'))
     ap.add_argument('--sim-from-run'); ap.add_argument('--sim-cutoff'); ap.add_argument('--sim-asof', nargs='*')
     a = ap.parse_args()
     if a.sim_from_run:
-        out = a.out if a.out != '/workspace/scan-runs/checkpoints' else '/workspace/scan-runs/checkpoints_SIM'
+        out = a.out if a.out != (_SCANNER_ROOT + '/scan-runs/checkpoints') else (_SCANNER_ROOT + '/scan-runs/checkpoints_SIM')
         if os.path.exists(f'{out}/prompts'): shutil.rmtree(f'{out}/prompts')
-        shutil.copytree('/workspace/prompts', f'{out}/prompts'); SLS.PROMPTS = f'{out}/prompts'   # never touch the real prompt versions
+        shutil.copytree((_SCANNER_ROOT + '/prompts'), f'{out}/prompts'); SLS.PROMPTS = f'{out}/prompts'   # never touch the real prompt versions
         reg_p, led_p = build_sim(a.sim_from_run, a.sim_cutoff, out)
         log('SIM registry', reg_p, 'ledger', led_p)
         res = []

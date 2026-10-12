@@ -2,8 +2,9 @@
 the first tradable minute >= decision time (stocks: regular session only), +slippage. Exit machinery identical to sim.py
 (daily closes, stop checks from close of entry-day+2, trailing high-water from entry-day close, hold = 2026-10-07 close).
 Benchmarks: SPY / sector ETF / BTC / ETH entered at the SAME minute (Alpaca 1-min open), exited at the same daily close."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, requests, numpy as np, pandas as pd, time
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 D=pd.read_pickle(OUT+'setups_prepared.pkl'); F=pd.read_pickle(OUT+'frames.pkl'); B=pd.read_pickle(OUT+'bench_yf.pkl')
 M=pd.read_csv(OUT+'minute_entries.csv'); M=M[M.minute_open.notna()]
 COST={'stock':dict(fee=0.02, slip=0.05), 'crypto':dict(fee=0.10, slip=0.10)}

@@ -1,6 +1,7 @@
 """Fetch Binance USDT-M perp 1h OHLCV + funding history via ccxt public endpoints (no keys)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import ccxt, pandas as pd, time, os, sys, json
-OUT = '/workspace/fib-spiral/data'
+OUT = (_SCANNER_ROOT + '/fib-spiral/data')
 ex = ccxt.binanceusdm({'enableRateLimit': True, 'timeout': 30000})
 mk = ex.load_markets()
 START = ex.parse8601('2024-10-01T00:00:00Z')

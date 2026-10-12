@@ -7,8 +7,9 @@ Level policy (Ilan: never invent numbers):
  - well-defined references on daily data -> computed from Yahoo at the alert date: 52wL (52-week low), sma200, mid52 ((52wH+52wL)/2).
  - qualitative ('local high', 'resistance', 'NAV discount', 'MA20 / trendline' alternatives...) -> blank.
  - stats rule: if after this either the stop or TP1 is missing, both are dropped for outcome purposes (row counts in returns only)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import csv, re, json
-D='/workspace/perplexity-outputs/'
+D=(_SCANNER_ROOT + '/perplexity-outputs/')
 def num(s):
     if s is None: return None
     s=str(s).replace(',','').replace('$','')
@@ -126,4 +127,4 @@ if __name__=='__main__':
     o,s=parse_all()
     for r in o: print(r['run'],r['rank'],r['source'],r['ticker'],r['dir'],r.get('cur'),r['entry'],r['sl'],r['tps'],r['score'],r.get('spec',{}).get('sl'),r.get('spec',{}).get('tp1'),r['gaps'])
     print(len(o),'skipped',len(s))
-    json.dump(dict(rows=o,skipped=s),open('/workspace/tracker/pplx/pplx_parsed.json','w'),ensure_ascii=False,indent=1)
+    json.dump(dict(rows=o,skipped=s),open((_SCANNER_ROOT + '/tracker/pplx/pplx_parsed.json'),'w'),ensure_ascii=False,indent=1)

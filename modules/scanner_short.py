@@ -22,10 +22,11 @@ Columns (prefix short_ so tool_stats picks them up)
   short_comp_borrow (IBKR fee up / availability down, live only, else null), short_squeeze_candidate = comp_si and (trend or
   breakout), short_borrow_fee_paid (null: paid-only data), short_flag (caveats).
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, io, json, time, datetime as dt
 import numpy as np, pandas as pd
 
-ROOT = '/workspace/short-data'
+ROOT = (_SCANNER_ROOT + '/short-data')
 SI_URL = 'https://api.finra.org/data/group/otcMarket/name/consolidatedShortInterest'
 REGSHO_URL = 'https://cdn.finra.org/equity/regsho/daily/CNMSshvol{d}.txt'
 UA = 'Ilan Perets scanner perezami@icloud.com'

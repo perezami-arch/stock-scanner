@@ -1,3 +1,4 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import pandas as pd, numpy as np, ast
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -7,8 +8,8 @@ from openpyxl.worksheet.formula import ArrayFormula
 from stats3 import rows, S, st, SS, TS, H2H, OVL, excl, gk, rows_full, rows_counted, GROUPS, DUPS, PAIRS, CONFS, BA, REP_T, NPAIRS, AFTER, AU
 from dups import fd, srcl, SRCN as SRCD, HEB
 import json, re
-OUTX='/workspace/scan-tracker-2026-10-04.xlsx'
-_P='/home/box/agent-data/agents/392ab573-33c2-4c0d-8dc3-6b3991775b0d/attachments/'
+OUTX=(_SCANNER_ROOT + '/scan-tracker-2026-10-04.xlsx')
+_P=_sr_os.environ.get('SCANNER_ATTACH_DIR', '/home/box/agent-data/agents/392ab573-33c2-4c0d-8dc3-6b3991775b0d/attachments/')
 CH30b={}
 for _l in open('pending_chart_notes.txt').read().splitlines()[1:]:
     _p=_l.split()

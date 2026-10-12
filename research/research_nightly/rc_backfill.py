@@ -2,13 +2,14 @@
 Setups: tracker/setups-point-in-time-2026-10-08.csv (cutoff_minute_utc = the PIT cutoff of each alert; read-only).
 Bars: iaf/frames.pkl (daily, through 2026-10-07; research_columns cuts each frame at the cutoff itself).
 Output: research-models/backfill/rc_backfill_setups.csv keyed by (ticker, alert_date, direction) -> usable as tool_stats --extra."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, os, time, pandas as pd
-sys.path.insert(0, '/workspace')
+sys.path.insert(0, _SCANNER_ROOT)
 import research_columns as RC
-OUT = '/workspace/research-models/backfill'; os.makedirs(OUT, exist_ok=True)
-S = pd.read_csv('/workspace/tracker/setups-point-in-time-2026-10-08.csv')
+OUT = (_SCANNER_ROOT + '/research-models/backfill'); os.makedirs(OUT, exist_ok=True)
+S = pd.read_csv((_SCANNER_ROOT + '/tracker/setups-point-in-time-2026-10-08.csv'))
 S = S[S.direction.isin(['LONG', 'SHORT']) & (S.cutoff_minute_utc.notna() | S.cutoff_bar_date.notna())].drop_duplicates(['ticker', 'alert_date', 'direction'])
-F = pd.read_pickle('/workspace/trading-frameworks-eval/iaf/frames.pkl')
+F = pd.read_pickle((_SCANNER_ROOT + '/trading-frameworks-eval/iaf/frames.pkl'))
 tools = [t for t in RC.REGISTRY if t not in ('qlib', 'finrl')]
 items = []
 for r in S.itertuples():

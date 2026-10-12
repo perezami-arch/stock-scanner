@@ -2,10 +2,11 @@
 Leak test: for each tool, values at cutoff C computed on (F) the full frame (bars after C present) with cutoff=C,
 (T) the frame physically truncated at the last visible bar, (J) every bar after C replaced by random junk + 30 junk bars.
 Any F!=T or J!=T is a leak / repaint."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, time, json, numpy as np, pandas as pd
-sys.path.insert(0, '/workspace'); sys.path.insert(0, '/workspace/research_nightly')
+sys.path.insert(0, _SCANNER_ROOT); sys.path.insert(0, (_SCANNER_ROOT + '/research_nightly'))
 import rc_test_util as U, research_columns as RC, scanner_geometry as GEO
-OUT = '/workspace/research-models/tests'; import os; os.makedirs(OUT, exist_ok=True)
+OUT = (_SCANNER_ROOT + '/research-models/tests'); import os; os.makedirs(OUT, exist_ok=True)
 asof, D = U.trial_asof()
 TK = [t for t in D.t if not t.startswith('^')]
 mode = sys.argv[1] if len(sys.argv) > 1 else 'all'

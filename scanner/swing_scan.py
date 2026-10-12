@@ -1,10 +1,11 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import yfinance as yf
 import pandas as pd
 import numpy as np
 import os, sys
 from datetime import datetime, timedelta
 # 2026-10-08: 12-1 momentum score component (validated code from /workspace/scanner-tool-eval, see scanner_momentum.py)
-sys.path.insert(0, '/workspace')
+sys.path.insert(0, _SCANNER_ROOT)
 import scanner_momentum as SM
 import scanner_stops as ST   # 2026-10-08: approved active stops + experimental Fib/Elliott columns
 import scanner_newsmacro as NM   # 2026-10-08: LOGGED-ONLY news (Alpaca) + 10Y-rate betas + AAII/yields, weight 0
@@ -36,7 +37,7 @@ _seen=set(); tickers=[x for x in tickers if not (x in _seen or _seen.add(x))]
 SCAN_ASOF = pd.Timestamp(os.environ['SCAN_ASOF']) if os.environ.get('SCAN_ASOF') else pd.Timestamp.now(tz='UTC')
 if SCAN_ASOF.tzinfo is None: SCAN_ASOF = SCAN_ASOF.tz_localize('Asia/Jerusalem')
 SCAN_ASOF = SCAN_ASOF.tz_convert('UTC')
-OUTDIR = f"/workspace/scan-runs/{SCAN_ASOF.tz_convert('Asia/Jerusalem').strftime('%Y-%m-%d_%H%M')}"   # dated: old outputs are never overwritten
+OUTDIR = f"{_SCANNER_ROOT}/scan-runs/{SCAN_ASOF.tz_convert('Asia/Jerusalem').strftime('%Y-%m-%d_%H%M')}"   # dated: old outputs are never overwritten
 os.makedirs(OUTDIR, exist_ok=True)
 end = datetime(SCAN_ASOF.year, SCAN_ASOF.month, SCAN_ASOF.day) + timedelta(days=1)   # yfinance end is exclusive
 start = end - timedelta(days=420)

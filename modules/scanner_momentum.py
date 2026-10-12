@@ -22,12 +22,13 @@ CLI:
   python scanner_momentum.py --stocks NVDA,LNG --crypto BTC,ETH [--asof 2026-10-11T06:00Z] [--out file.csv]
   python scanner_momentum.py --features /path/features.csv [--ticker-col t]  (merge columns into an existing scan CSV)
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, json, argparse, warnings
 import numpy as np, pandas as pd
 warnings.filterwarnings("ignore")
 
-EVAL_DIR = "/workspace/scanner-tool-eval"
-CACHE_ROOT = "/workspace/scanner-momentum-cache"
+EVAL_DIR = (_SCANNER_ROOT + "/scanner-tool-eval")
+CACHE_ROOT = (_SCANNER_ROOT + "/scanner-momentum-cache")
 MOMENTUM_WEIGHT = 10            # points out of 100
 BASE_SCALE = (100 - MOMENTUM_WEIGHT) / 100.0
 LOWVOL_WEIGHT = 0               # experimental: logged only

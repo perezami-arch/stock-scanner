@@ -11,6 +11,7 @@ Prints JSON with current values of:
   and the v2.8 MACRO SCORE (VIX+S5FI+F&G+AAII+breadth divergence+yield score) with long/short modifiers.
 --history writes a daily breadth series (for backtests).
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, io, os, glob, json, argparse, datetime as dt
 import pandas as pd, numpy as np, requests, yfinance as yf
 UA={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36','Referer':'https://edition.cnn.com/','Origin':'https://edition.cnn.com'}
@@ -20,7 +21,7 @@ def sp500():
         h=requests.get('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies',headers=UA,timeout=30).text
         return [s.replace('.','-') for s in pd.read_html(io.StringIO(h))[0]['Symbol']],'wikipedia live'
     except Exception as e:
-        c=pd.read_csv('/workspace/tracker/rules/sp500_constituents.csv'); return [s.replace('.','-') for s in c['Symbol']],f'cache ({e.__class__.__name__})'
+        c=pd.read_csv((_SCANNER_ROOT + '/tracker/rules/sp500_constituents.csv')); return [s.replace('.','-') for s in c['Symbol']],f'cache ({e.__class__.__name__})'
 def breadth(start):
     T,src=sp500(); d=yf.download(T,start=start,group_by='ticker',auto_adjust=False,progress=False,threads=True)  # raw closes match official $S5xx better
     C=pd.concat({t:d[t]['Close'] for t in T if t in d.columns.get_level_values(0)},axis=1).dropna(how='all')
@@ -43,7 +44,7 @@ def aaii():
         b,n_,br=[float(str(r[k]).strip('%')) for k in ('Bullish','Neutral','Bearish')]
         return dict(src='aaii.com live',date=str(r.iloc[0]),bullish=b,neutral=n_,bearish=br,bull_bear_spread=round(b-br,1))
     except Exception as e:
-        fs=sorted(glob.glob('/workspace/tracker/rules/aaii_weekly*.csv'))
+        fs=sorted(glob.glob((_SCANNER_ROOT + '/tracker/rules/aaii_weekly*.csv')))
         c=pd.concat([pd.read_csv(f) for f in fs]).drop_duplicates('reported_date').sort_values('reported_date').iloc[-1]
         age=(dt.date.today()-dt.date.fromisoformat(c.reported_date)).days
         return dict(src=f'cache (live blocked: {e.__class__.__name__}); refresh via WebFetch of aaii.com/sentimentsurvey/sent_results',date=c.reported_date,age_days=age,stale=age>8,bullish=c.bullish,neutral=c.neutral,bearish=c.bearish,bull_bear_spread=round(c.bullish-c.bearish,1))

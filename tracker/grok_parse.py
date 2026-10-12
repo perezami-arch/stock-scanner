@@ -1,3 +1,4 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import re, glob, os, json
 CAT={'near-low':'שפל שנתי','prebreakout':'לפני פריצה','momentum':'מומנטום'}
 NUM=r'\d[\d,]*(?:\.\d+)?'
@@ -15,7 +16,7 @@ def colidx(hdr,keys):
     return None
 def parse():
     out=[]; gaps=[]
-    for p in sorted(glob.glob('/workspace/grok-outputs/grok-*.md')):
+    for p in sorted(glob.glob((_SCANNER_ROOT + '/grok-outputs/grok-*.md'))):
         fn=os.path.basename(p); m=re.match(r'grok-(\d{4}-\d{2}-\d{2})-(.+)\.md',fn); date,cat=m.group(1),m.group(2)
         tl=[l for l in open(p,encoding='utf-8') if l.startswith('|')]
         hdr=[x.strip() for x in tl[0].strip().strip('|').split('|')]

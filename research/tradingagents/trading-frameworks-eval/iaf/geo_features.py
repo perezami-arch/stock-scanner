@@ -6,11 +6,12 @@ Cutoff = the same information cutoff every other sim uses (setups_prepared.info_
   crypto -> alert minute (Perplexity ui_log: -70 min) => last visible bar = UTC day before the cutoff day.
 Direction view = the setup's direction. Also stores the full lists of untaken liquidity pools (all, not only the nearest)
 and the HVN lists of the 60/120-bar daily profiles, for the level tests (built with the module's own functions)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, numpy as np, pandas as pd
 from multiprocessing import Pool
-sys.path.insert(0,'/workspace')
+sys.path.insert(0,_SCANNER_ROOT)
 import scanner_geometry as G
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 D=pd.read_pickle(OUT+'setups_prepared.pkl'); F=pd.read_pickle(OUT+'frames.pkl')
 S=D[D.has_data & D.direction.isin(['LONG','SHORT']) & D.decision_utc.notna()].copy()
 def extras(df,cutoff,asset):

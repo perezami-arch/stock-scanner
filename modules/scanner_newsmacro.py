@@ -13,13 +13,14 @@ Point-in-time: US stocks - alert before 16:00 ET cuts at the previous session cl
 day -> that day's close. Crypto - the alert minute (or 00:00 UTC when only the date is known).
 Import-safe (no side effects on import).
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, json, glob
 import numpy as np, pandas as pd
 
 ET, IL = "America/New_York", "Asia/Jerusalem"
-SECTOR_MAP_FILE = "/workspace/scanner-momentum-cache/sector_map.json"
-NAME_MAP_FILE = "/workspace/scanner-momentum-cache/name_map.json"      # Yahoo shortName, used only to rank headlines
-AAII_GLOB = "/workspace/tracker/rules/aaii_weekly*.csv"          # same cache market_regime.py falls back to
+SECTOR_MAP_FILE = (_SCANNER_ROOT + "/scanner-momentum-cache/sector_map.json")
+NAME_MAP_FILE = (_SCANNER_ROOT + "/scanner-momentum-cache/name_map.json")      # Yahoo shortName, used only to rank headlines
+AAII_GLOB = (_SCANNER_ROOT + "/tracker/rules/aaii_weekly*.csv")          # same cache market_regime.py falls back to
 YAHOO_SECTOR_ETF = {"Technology": "XLK", "Financial Services": "XLF", "Energy": "XLE", "Healthcare": "XLV",
                     "Industrials": "XLI", "Consumer Cyclical": "XLY", "Consumer Defensive": "XLP", "Utilities": "XLU",
                     "Basic Materials": "XLB", "Real Estate": "XLRE", "Communication Services": "XLC"}
@@ -252,7 +253,7 @@ def annotate(setups, asof=None, outdir=None):
     """For routine setups (DataFrame with ticker, asset 'stock'|'crypto', optional market='TASE'): returns setups + logged-only columns."""
     asof = pd.Timestamp.now(tz="UTC") if asof is None else pd.Timestamp(asof)
     if asof.tzinfo is None: asof = asof.tz_localize(IL)
-    outdir = outdir or f"/workspace/scan-runs/{asof.tz_convert(IL):%Y-%m-%d_%H%M}"
+    outdir = outdir or f"{_SCANNER_ROOT}/scan-runs/{asof.tz_convert(IL):%Y-%m-%d_%H%M}"
     parts = []
     for asset, g in setups.groupby(setups["asset"].astype(str).str.lower().map(lambda a: "crypto" if a == "crypto" else "stock")):
         tase = g.get("market", pd.Series(index=g.index, dtype=object)).astype(str).str.upper().eq("TASE") | g["ticker"].astype(str).str.upper().str.endswith(".TA")

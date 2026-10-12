@@ -10,7 +10,7 @@ CG=json.load(open('auto/cg_mcap.json')) if os.path.exists('auto/cg_mcap.json') e
 OV=json.load(open('overrides.json')) if os.path.exists('overrides.json') else {}
 OVA=json.load(open('overrides_auto.json')) if os.path.exists('overrides_auto.json') else {}
 OV={**OVA,**OV}  # manual overrides win
-_P='/home/box/agent-data/agents/392ab573-33c2-4c0d-8dc3-6b3991775b0d/attachments/'
+_P=_sr_os.environ.get('SCANNER_ATTACH_DIR', '/home/box/agent-data/agents/392ab573-33c2-4c0d-8dc3-6b3991775b0d/attachments/')
 CHART30={'PANW':f"גרף אימות מאילן (צילום 30.09.2026, לא התראה חדשה): מחיר 388.41, ATR 18.16 (4.67%), מעל ממוצע 150, דוח בעוד 43 ימים. קובץ: {_P}bb12fd67e20dc92b353ddc7325fbfe39ecdf9df49e3c2afae094b7e67a44744c.png",
  'XOM':f"גרף אימות מאילן (צילום 30.09.2026, לא התראה חדשה): מחיר 161.35, ATR 3.63 (2.25%), מעל ממוצע 150, דוח בעוד 23 ימים. קובץ: {_P}5d75397622380e47c005a13fee6789553c4ca651b114b3baa66f5692c879a2e1.png",
  'AMC':f"גרף אימות מאילן (צילום 30.09.2026, לא התראה חדשה): מחיר 3.08, MCAP 2.75B. קובץ: {_P}c7daba98e8e9f634240295e3bdf28a7a167a0501164a1e9807c89820f9df13e7.png",

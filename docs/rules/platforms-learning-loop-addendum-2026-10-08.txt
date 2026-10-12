@@ -75,3 +75,20 @@ RULE 6 - ONE RANKING, NO FIXED LONG/SHORT SPLIT (Ilan, 08.10 16:40)
   counts per side ((asset, direction, sector), --sector-cap, 0 = off); the earnings block (5 trading days, strong-catalyst exception).
 - candidates_full.csv lists EVERY rule-passing name with unified_score, score_rank, passes_min_score, selected and selection_note
   (נבחר / מתחת לסף / תקרת סקטור / נחסם - דוח / מחוץ ל-N הראשונים).
+
+RULE 7 - RESEARCHER MODULES, WEIGHT 0 (10.10)
+- liq-sweep (/workspace/liq-sweep/liq_sweep.py v1.0, ls_* columns) and fib-spiral (/workspace/fib-spiral/fib_spiral.py v1.0, fs_* columns,
+  SHORT view) are logged only. They NEVER change entry, stop or target; active rules unchanged (shorts: 4xATR trailing, no fixed target).
+- Scan: <run_dir>/scan_hooks.csv carries exp_ls_* (stocks, daily bars, intraday=False) and exp_fs_* for every mcap_ok stock;
+  the levels JSON of each candidate has reference.liq_sweep (crypto: Alpaca 1Hour UTC bars, intraday=True) and reference.fib_spiral.
+- Tracker: build7 appends exp_ls_* (22) + exp_fs_* (19) LAST (cols 238-278) from /workspace/tracker/liq_sweep_lookup.csv and
+  fib_spiral_lookup.csv (PIT, built by /workspace/tracker/build_ls_fs_lookups.py). tool_stats: tracker + --extra scan-runs/*/scan_hooks.csv.
+- Report: liquidity-sweep flag per name; fib-spiral T1/T2 per SHORT as reference only. Only the stock-LONG close-entry (E1) variant
+  carries "עבר בדיקה, שביר, משקל 0" (RESULTS.md: +0.15R, fat-tailed, fragile). Short charts draw T1/T2 as thin dashed reference lines
+  taken from levels JSON reference_lines.
+
+RULE 3 UPDATE - COST GATE TIGHTENED (10.10)
+- In the 08.10 dry run the gate fired on 22 of 23 checkpoints (any low-confidence headline, any provisional Elliott relabel).
+  Now a low-confidence headline triggers only if it is manipulation-flagged, or still material (>= 2) and relevant (>= 0.6); an Elliott
+  change triggers only when the new count is not provisional. SMA50/200, VA120, near-stop, target and v1-invalidated triggers unchanged.
+- Positions registry: filled automatically by a real weekly run (models on, no _trial/_paper suffix) from selected.json.

@@ -1,7 +1,8 @@
-import sys; sys.path.insert(0,'/workspace/tracker')
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
+import sys; sys.path.insert(0,(_SCANNER_ROOT + '/tracker'))
 import pandas as pd, numpy as np, json
 from stats3 import rows_counted
-H=pd.read_pickle('/workspace/tracker/rules/hist.pkl'); M=json.load(open('/workspace/tracker/rules/meta.json'))
+H=pd.read_pickle((_SCANNER_ROOT + '/tracker/rules/hist.pkl')); M=json.load(open((_SCANNER_ROOT + '/tracker/rules/meta.json')))
 def ser(t):
     df=H[t].dropna(subset=['Close']).copy(); df.index=pd.to_datetime(df.index); return df
 def rsi(c,n=14):
@@ -69,6 +70,6 @@ for r in rows_counted:
         f['stop_wrong_side']=int((r['dir']=='LONG' and s_>=e) or (r['dir']=='SHORT' and s_<=e))
     if e: f['entry_vs_asof_close']=e/C-1
     out.append(f)
-F=pd.DataFrame(out); F.to_pickle('/workspace/tracker/rules/features.pkl')
+F=pd.DataFrame(out); F.to_pickle((_SCANNER_ROOT + '/tracker/rules/features.pkl'))
 print(F.shape); print(F.groupby(['strategy','dir','status']).size())
 print(F[['pct_from_52w_low','rsi14','vol_vs20','rr_tp1','stop_atr','days_to_earn']].describe().T)

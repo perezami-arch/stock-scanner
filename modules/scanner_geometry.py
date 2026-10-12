@@ -65,11 +65,12 @@ CONFIRMATION DATES (for the backtest to enforce; every object exists only from t
    sweep = the closed sweep bar; FVG = close of the 3rd bar; order block = close of the displacement (BOS) bar;
    pd/pw/pm = close of the last bar of that day/week/month. All objects are built only from bars <= the last visible bar.
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, math, json, warnings
 import numpy as np, pandas as pd
 warnings.filterwarnings("ignore")
 
-IAF = "/workspace/trading-frameworks-eval/iaf/"
+IAF = (_SCANNER_ROOT + "/trading-frameworks-eval/iaf/")
 try:                                                   # same atr14/zigzag the stops + Fib/Elliott code and backtest use
     _s = open(IAF + "sim_fib.py").read(); exec(_s[_s.index("def atr14"):_s.index("def clock")])
     ATR_SOURCE = "iaf/sim_fib.py (exec'd unchanged)"
@@ -102,7 +103,7 @@ except Exception:                                      # identical fallback copy
 ZZ = 2.0
 PHI = (1 + 5 ** 0.5) / 2
 NY = "America/New_York"
-CACHE = "/workspace/scanner-geometry-cache"
+CACHE = (_SCANNER_ROOT + "/scanner-geometry-cache")
 SPIRAL_TURNS = 3; SPIRAL_STEPS_PER_QUARTER = 360; SPIRAL_NEAR_ATR = 0.5; SPIRAL_MAX_AHEAD = 400
 GANN_FRACS = sorted(set([k / 8 for k in range(8)] + [1 / 3, 2 / 3]))
 GANN_MAJOR = [0, 1 / 4, 1 / 3, 1 / 2, 2 / 3, 3 / 4]
@@ -278,9 +279,6 @@ def gann_box(df, cutoff=None, asset="stock", direction="LONG", anchor=None):
     tb = tb if tb >= n + 1 else tb + D
     r.update(exp_gann_next_box_date=_future_date(x.index[-1], tb - n, asset), exp_gann_next_box_bars=int(math.ceil(tb - n)))
     r.update(exp_gann_box_bars=int(D), exp_gann_box_range=_r(abs(R)), exp_gann_scale_per_bar=_r(s), exp_gann_scale_atr=_r(s / A, 3))
-    # Research H3: asset clock from pivots already confirmed in this cut frame.
-    # These are completed-bar counts, not calendar days or astronomical degrees.
-    r.update(exp_gann_origin_age_bars=int(n - i0), exp_gann_end_age_bars=int(n - i1))
     return r
 
 # ------------------------------------------------------------------ 3. volume profile
@@ -457,18 +455,10 @@ def candle_columns(df, cutoff=None, asset="stock", recent=3):
     nb = sum(p in BULL for p in on); ns = sum(p in BEAR for p in on)
     bias = "none" if not on else ("bullish" if nb > ns else ("bearish" if ns > nb else ("mixed" if nb else "neutral")))
     tv = last["trend10_atr"]; vr = last["vol_ratio20"]
-    x = pit_cut(df, cutoff, asset)
-    prior_volume = x.Volume.iloc[-21:-1].astype(float)
-    median_volume = float(prior_volume.median())
-    current_volume = float(x.Volume.iloc[-1])
-    rv_median = (current_volume / median_volume if len(prior_volume) == 20 and
-                 np.isfinite(prior_volume).all() and (prior_volume >= 0).all() and median_volume > 0 and
-                 np.isfinite(current_volume) and current_volume >= 0 else None)
     r = dict(candle_last_bar=str(f.index[-1].date()), candle_patterns_last=",".join(on) or None, candle_bias_last=bias,
              candle_score_last=nb - ns, candle_trend10_atr=_r(tv, 2),
              candle_context=None if pd.isna(tv) else ("downtrend" if tv <= -TREND_ATR else ("uptrend" if tv >= TREND_ATR else "sideways")),
              candle_vol_ratio20=_r(vr, 2),
-             candle_vol_ratio20_median=_r(rv_median, 6),
              candle_vol_confirmed=bool(bias in ("bullish", "bearish") and pd.notna(vr) and vr >= VOL_CONFIRM))
     rec = []
     for i in range(1, min(recent, len(f))):

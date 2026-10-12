@@ -15,13 +15,14 @@ PIT keys: known-at = snapshot_utc. Short interest keyed to PUBLICATION (settleme
   initial_published_date. EPS surprises have no announcement timestamp (known-at = snapshot only).
 No secrets: only free no-key sources (CBOE, Nasdaq, FINRA, IBKR public FTP).
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, json, time, argparse, threading, ast, re, glob, gzip, io, datetime as dt
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import numpy as np, pandas as pd
-sys.path.insert(0, '/workspace')
+sys.path.insert(0, _SCANNER_ROOT)
 import scanner_short as SH
 
-ROOT = '/workspace/openbb-snapshots'
+ROOT = (_SCANNER_ROOT + '/openbb-snapshots')
 MCAP_FLOOR_B = 1.5
 ET = 'America/New_York'
 CALL_TIMEOUT = 45
@@ -33,7 +34,7 @@ def last_session(now_utc):
     return str((d - SH.nyse_bday()).date())
 
 def scanner_universe():
-    src = open('/workspace/swing_scan.py').read()
+    src = open((_SCANNER_ROOT + '/swing_scan.py')).read()
     T = ast.literal_eval(re.search(r"tickers = (\[.*?\])\n", src, re.S).group(1))
     etf = ast.literal_eval(re.search(r"ETF_LIKE = (\{.*?\})\n", src, re.S).group(1))
     T += [x.strip().upper() for x in os.environ.get('SCAN_EXTRA_TICKERS', '').split(',') if x.strip()]
@@ -45,7 +46,7 @@ def scanner_universe():
 
 def mcap_lookup(tickers):
     m = {}
-    for f in sorted(glob.glob('/workspace/scan-runs/*/scan_raw.csv'), reverse=True)[:5]:
+    for f in sorted(glob.glob((_SCANNER_ROOT + '/scan-runs/*/scan_raw.csv')), reverse=True)[:5]:
         try:
             d = pd.read_csv(f, usecols=['t', 'mcap_b'])
             for t, v in zip(d['t'], d['mcap_b']):

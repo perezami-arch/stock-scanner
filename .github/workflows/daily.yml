@@ -1,0 +1,40 @@
+# daily scan - weekdays 08:24 Israel time. Two UTC crons (summer UTC+3 / winter UTC+2); ops/gate.py keeps exactly one.
+# SCHEDULE IS DISABLED until Ilan's go-ahead: uncomment the 'schedule' block to enable.
+name: daily
+on:
+  # schedule:
+  #   - cron: '24 5 * * 1-5'   # Israel summer time (UTC+3)
+  #   - cron: '24 6 * * 1-5'   # Israel winter time (UTC+2)
+  workflow_dispatch:
+    inputs:
+      dry:
+        description: 'Dry run: paper scan, no LLM calls, no commits (artifact only)'
+        type: boolean
+        default: true
+  pull_request:          # dry run on PRs that touch the pipeline (never commits)
+    paths: ['.github/workflows/**', 'ops/**', 'scanner/**', 'modules/**', 'requirements*.txt']
+concurrency:
+  group: stock-scanner-state     # weekly + daily share state: never run in parallel
+  cancel-in-progress: false
+permissions:
+  contents: write
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.g.outputs.run }}
+      il_date: ${{ steps.g.outputs.il_date }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {sparse-checkout: ops}
+      - id: g
+        run: python3 ops/gate.py 8 "${{ github.event.schedule }}"
+  scan:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    uses: ./.github/workflows/_scan.yml
+    with:
+      kind: daily
+      dry: ${{ github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.dry) }}
+      il_date: ${{ needs.gate.outputs.il_date }}
+    secrets: inherit

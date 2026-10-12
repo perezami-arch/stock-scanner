@@ -8,9 +8,10 @@ Bars: stocks = the scan's Yahoo cache (scanner_stops.daily_bars, scanner-momentu
 frame saved by scanner_crypto under <run_dir>/bars/crypto (the crypto leg's single source).
 reconcile(): report / tracker / chart-index numbers vs the levels JSON, tolerance 1e-6 relative -> 'לא תואם' + excluded.
 Earnings gate (Ilan 08.10 16:15, ACTIVE for new stock entries): see earnings_gate()."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, json, glob, hashlib, math
 import numpy as np, pandas as pd
-sys.path.insert(0, '/workspace')
+sys.path.insert(0, _SCANNER_ROOT)
 TOL = 1e-6
 SCHEMA_EXTRA = 'levelsfile-1.0'
 NYSE_HOLIDAYS = {'2026-01-01', '2026-01-19', '2026-02-16', '2026-04-03', '2026-05-25', '2026-06-19', '2026-07-03', '2026-09-07', '2026-11-26',
@@ -79,7 +80,53 @@ def build(c, run_dir, cut, px_dir):
     L['context'] = {k: (None if isinstance(c.get(k), float) and not math.isfinite(c.get(k)) else c.get(k)) for k in keys if k in c}
     L['context']['market_regime'] = c.get('_regime')
     L['levelsfile'] = {'version': SCHEMA_EXTRA, 'producer': 'scanner_levelsfile.build -> scanner_charts.build_levels (+ S/R on the same bars)'}
+    L['reference'] = research_refs(c, x, cut)
+    fs = (L['reference'] or {}).get('fib_spiral') or {}
+    if c['direction'] == 'SHORT':      # thin reference lines on SHORT charts only, drawn from THIS file (never a trade level)
+        L['reference_lines'] = [{'price': fs.get(k), 'label': lab, 'color': '#8e24aa', 'source': f'reference.fib_spiral.{k}'}
+                                for k, lab in (('fs_target_t1', 'FS T1 (ref)'), ('fs_target_t2', 'FS T2 (ref)')) if _f(fs.get(k)) is not None]
     return L, x
+
+def research_refs(c, x, cut):
+    """Weight-0 researcher modules (10.10). Reference only: they NEVER change entry / stop / target.
+    liq_sweep: stocks on the scan's daily bars (intraday=False); crypto on Alpaca 1Hour bars (UTC, intraday=True), daily fallback.
+    fib_spiral: SHORT view on the scan's daily bars (T1/T2 shown for shorts as reference)."""
+    import sys as _s
+    for p_ in ((_SCANNER_ROOT + '/liq-sweep'), (_SCANNER_ROOT + '/fib-spiral')):
+        if p_ not in _s.path: _s.path.insert(0, p_)
+    out = {'weight': 0, 'note': 'reference only - never changes entry/stop/target'}
+    try:
+        import liq_sweep as LSW
+        asset = c.get('asset', 'stock'); src = 'scan daily bars (intraday=False)'
+        if asset == 'crypto':
+            try:
+                import scanner_crypto as SCR
+                hx = SCR.alpaca_hourly(c['t'], cut, days=30)
+                ls = LSW.liq_sweep_columns(hx, None, 'crypto', intraday=True); src = 'alpaca crypto 1Hour UTC (intraday=True)'
+            except Exception as e:
+                ls = LSW.liq_sweep_columns(x, None, 'crypto', intraday=False); src = f'daily fallback ({e.__class__.__name__})'
+        else:
+            ls = LSW.liq_sweep_columns(x, None, 'stock', intraday=False)
+        out['liq_sweep'] = dict({k: _jsonable(v) for k, v in ls.items()}, source=src,
+                                validated_variant=(asset == 'stock' and c['direction'] == 'LONG'))
+    except Exception as e:
+        out['liq_sweep'] = {'error': f'{e.__class__.__name__}: {e}'[:160]}
+    try:
+        import fib_spiral as FSP
+        fs = FSP.fib_spiral_columns(x, None, c.get('asset', 'stock'), 'SHORT')
+        out['fib_spiral'] = {k: _jsonable(fs.get(k)) for k in FSP.TRACKER_KEYS}
+    except Exception as e:
+        out['fib_spiral'] = {'error': f'{e.__class__.__name__}: {e}'[:160]}
+    return out
+
+def _jsonable(v):
+    import numpy as _np
+    if isinstance(v, _np.bool_): return bool(v)
+    if isinstance(v, (_np.integer,)): return int(v)
+    if isinstance(v, (_np.floating, float)): return None if not _np.isfinite(v) else float(v)
+    if isinstance(v, (pd.Timestamp,)): return str(v)
+    if isinstance(v, (list, tuple)): return [_jsonable(z) for z in v]
+    return v
 
 def _jd(o):
     """JSON default: numpy scalars -> native (np.bool_ must stay boolean for levels_schema.json), else str."""
@@ -130,7 +177,6 @@ def facts_for_prompt(L):
                             'bar_hash': L['data'].get('bar_hash'), 'source': L['data']['source']},
             'trade': {k: L['trade'].get(k) for k in ('entry', 'stop', 'stop_rule', 'target', 'target_rule', 'target_note')},
             'technical': L.get('technical'),
-            'research_score': L.get('research_score'),
             'elliott_v1': {k: e1.get(k) for k in ('label', 'valid', 'deviations', 'target_w3', 'target_w5')},
             'elliott_v2': {k: e2.get(k) for k in ('label', 'state', 'kind', 'provisional', 'beyond_target', 'target', 'target_name')},
             'fib_v1': {'origin': (f1.get('origin') or {}).get('price'), 'end': (f1.get('end') or {}).get('price'), 'levels': f1.get('levels'), 'stale': f1.get('stale')},
@@ -163,7 +209,7 @@ def entry_session(cut):
     return d
 
 def openbb_earnings(t, cut):
-    root = '/workspace/openbb-snapshots'; best = None
+    root = (_SCANNER_ROOT + '/openbb-snapshots'); best = None
     for d in sorted(glob.glob(f'{root}/2*/earnings_calendar.csv')):
         day = os.path.basename(os.path.dirname(d))[:10]
         try:
@@ -214,17 +260,11 @@ def earnings_gate(c, cut, pplx=None, claude=None, gpt=None):
 # ------------------------------------------------------------------ tracker rows (from the levels JSON only)
 TRACKER_FIELDS = ['setup_id', 'ticker', 'asset', 'direction', 'alert_date', 'cutoff_utc', 'entry', 'stop', 'target', 'stop_rule', 'target_rule',
                   'elliott_v1', 'elliott_v2', 'fib_v1_1618', 'fib_v2_x1618', 'vp120_poc', 'vp120_vah', 'vp120_val', 'sr_support', 'sr_resistance',
-                  'earnings_status', 'bar_hash', 'levels_hash', 'recon_status', 'unified_score', 'baseline_score',
-                  'research_score', 'research_delta', 'research_coverage', 'research_effective_weight', 'research_status', 'research_version']
+                  'earnings_status', 'bar_hash', 'levels_hash', 'recon_status']
 
 def tracker_row(L, setup_id, alert_date):
     f = facts_for_prompt(L)
     return {'setup_id': setup_id, 'ticker': L['symbol'], 'asset': L['asset'], 'direction': L['direction'], 'alert_date': alert_date,
-            'unified_score': (L.get('score') or {}).get('value'),
-            **{name: (L.get('research_score') or {}).get(key) for name, key in
-               (('baseline_score', 'baseline_score'), ('research_score', 'research_score'), ('research_delta', 'delta_points'),
-                ('research_coverage', 'coverage'), ('research_effective_weight', 'effective_research_weight'),
-                ('research_status', 'status'), ('research_version', 'version'))},
             'cutoff_utc': L['data']['cutoff_utc'], 'entry': L['trade']['entry'], 'stop': L['trade']['stop'], 'target': L['trade']['target'],
             'stop_rule': L['trade'].get('stop_rule'), 'target_rule': L['trade'].get('target_rule'), 'elliott_v1': f['elliott_v1'].get('label'),
             'elliott_v2': f['elliott_v2'].get('label'), 'fib_v1_1618': (f['fib_v1'].get('levels') or {}).get('1.618'),

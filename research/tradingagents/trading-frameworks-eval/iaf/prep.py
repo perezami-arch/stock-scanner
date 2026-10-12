@@ -2,12 +2,13 @@
 Read-only use of /workspace/tracker and /workspace/notes-analysis data.
 Rule features reimplement the team's definitions from /workspace/notes-analysis/analyze.py
 ('20 method' checklist ck_score, SMA200, sector ETF uptrend) computed strictly on bars <= cutoff."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json, numpy as np, pandas as pd
-OUT='/workspace/trading-frameworks-eval/iaf/'
-S=pd.read_csv('/workspace/tracker/setups-point-in-time-2026-10-08.csv')
-P=pd.read_pickle('/workspace/tracker/prices_all.pkl'); E=pd.read_pickle('/workspace/notes-analysis/etf.pkl')
-C=pd.read_pickle('/workspace/notes-analysis/crypto_daily_long.pkl')
-SEC=json.load(open('/workspace/notes-analysis/sectors.json'))
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
+S=pd.read_csv((_SCANNER_ROOT + '/tracker/setups-point-in-time-2026-10-08.csv'))
+P=pd.read_pickle((_SCANNER_ROOT + '/tracker/prices_all.pkl')); E=pd.read_pickle((_SCANNER_ROOT + '/notes-analysis/etf.pkl'))
+C=pd.read_pickle((_SCANNER_ROOT + '/notes-analysis/crypto_daily_long.pkl'))
+SEC=json.load(open((_SCANNER_ROOT + '/notes-analysis/sectors.json')))
 for _t,_s in (('CMCSA','Communication Services'),('FISV','Technology')):
     if not (SEC.get(_t) or {}).get('sector'): SEC[_t]={'sector':_s}  # missing in sectors.json; standard Yahoo sectors
 SECMAP={'Technology':'XLK','Financial Services':'XLF','Energy':'XLE','Healthcare':'XLV','Consumer Cyclical':'XLY','Consumer Defensive':'XLP','Industrials':'XLI','Basic Materials':'XLB','Utilities':'XLU','Real Estate':'XLRE','Communication Services':'XLC'}

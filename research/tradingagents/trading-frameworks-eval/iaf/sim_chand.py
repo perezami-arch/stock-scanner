@@ -5,8 +5,9 @@ and the reference extreme is the highest (long) / lowest (short) CLOSE from the 
 'c' close-based (IAF-consistent): first check at close of k+2; exit if C[j] crosses level_j, fill at C[j].
 'i' intraday: from bar k+1; exit if Low[j]<=level (long) / High[j]>=level (short); fill at the worse of Open[j] and level.
 Open trades are marked to market at the 2026-10-07 close (status 'open@end')."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import numpy as np, pandas as pd
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 s=open(OUT+'sim_fib.py').read(); exec(s[s.index('def atr14'):s.index('def zigzag')])
 D=pd.read_pickle(OUT+'setups_prepared.pkl'); F=pd.read_pickle(OUT+'frames.pkl')
 COST={'stock':dict(fee=0.02, slip=0.05), 'crypto':dict(fee=0.10, slip=0.10)}

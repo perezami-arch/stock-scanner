@@ -6,11 +6,12 @@ For each setup, columns are computed 4 ways and must be IDENTICAL:
   D truncated history, cutoff=None
 Then: every *_confirmed_at and every past-object date (anchor/spiral/vpanc/sweep) must be <= the rule bar; geo_last_bar == rule bar.
 Also checks the extra pool / HVN lists used by the level tests the same way."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, numpy as np, pandas as pd, json
-sys.path.insert(0,'/workspace'); sys.path.insert(0,'/workspace/trading-frameworks-eval/iaf')
+sys.path.insert(0,_SCANNER_ROOT); sys.path.insert(0,(_SCANNER_ROOT + '/trading-frameworks-eval/iaf'))
 import scanner_geometry as G
 from geo_features import extras, D, F
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 RT=pd.read_csv(OUT+'sim_ratchet_trades.csv')
 ids=set(RT.setup_id); S=D[D.setup_id.isin(ids) & D.in_main & ~D.dup]
 samp=S.sample(30,random_state=20261008)

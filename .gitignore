@@ -27,14 +27,8 @@ pred_*.csv
 # python / node
 __pycache__/
 *.pyc
-tests/.tmp/
-*.sqlite
-*.sqlite-*
-scanner-runtime.env
-research/jewish-lunar/ephemeris/
 venv*/
 .venv/
 node_modules/
-# Public astronomical reference fixture for the research overlay (no market/account data).
-!research/jewish-lunar/data/
-!research/jewish-lunar/data/jerusalem-lunar-daily-*.csv
+runtime/
+!requirements*.txt

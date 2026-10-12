@@ -1,6 +1,7 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, numpy as np, pandas as pd
-sys.path.insert(0, '/workspace/fib-spiral'); import common_bt as C
-OUT = '/workspace/fib-spiral/out'
+sys.path.insert(0, (_SCANNER_ROOT + '/fib-spiral')); import common_bt as C
+OUT = (_SCANNER_ROOT + '/fib-spiral/out')
 rows = []; desc = []
 for ds in ('crypto_1h', 'stock_1d', 'crypto_1m'):
     E = pd.read_csv(f'{OUT}/events_{ds}.csv')

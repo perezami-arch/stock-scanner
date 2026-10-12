@@ -50,7 +50,7 @@ def write_report(run_dir, res):
         w('> ## 🔴 חסר קרדיט')
         for x in cr: w(f"> - **{x if str(x).startswith('חסר קרדיט') else 'חסר קרדיט - ' + str(x)}**: העמודות של הפלטפורמה הזו ריקות בדוח. צריך לטעון קרדיט ולהריץ שוב.")
         w('')
-    w('> **חשוב:** עמודות המודלים (Jev, ‏Grok סנטימנט ואנליסט נוסף, ‏Perplexity, ‏Claude אנליסט, ‏GPT פרקליט השטן) הן **לתיעוד בלבד, במשקל 0**. הכניסה, הסטופ והיעד מגיעים רק מכללי הבוט, '
+    w('> **חשוב:** עמודות המודלים (Jev, ‏Grok, ‏Perplexity, ‏Claude אנליסט, ‏GPT פרקליט השטן) הן **לתיעוד בלבד, במשקל 0**. הכניסה, הסטופ והיעד מגיעים רק מכללי הבוט, '
       'דרך קובץ הרמות של הריצה, ואף מודל לא שינה אותם. פסקי הדין נמדדים **רק קדימה, מ-12.10.2026**, בלי בקטסט היסטורי. '
       'כלל הדוחות (אין כניסה חדשה בתוך 5 ימי מסחר לפני דוח) הוא **כלל פעיל**. זה לא ייעוץ השקעות.\n')
     # ---- partition
@@ -59,7 +59,6 @@ def write_report(run_dir, res):
     blocked = [(c, r) for c, r in zip(cands, rows) if (c.get('_eg') or {}).get('blocked')]
     exc = [(c, r) for c, r in zip(cands, rows) if (c.get('_eg') or {}).get('exception')]
     recs = [(c, r) for c, r in zip(cands, rows) if not (c.get('_eg') or {}).get('blocked') and rec_ok(c) and (c.get('_selected') or (c.get('_eg') or {}).get('exception'))]
-    recs = recs[:res.get('candidates_n', 50)]
     stock_recs = [x for x in recs if x[0].get('asset') != 'crypto']; crypto_recs = [x for x in recs if x[0].get('asset') == 'crypto']
     # ---- 1 regime
     w('## 1. מצב השוק')
@@ -77,20 +76,15 @@ def write_report(run_dir, res):
     cap = res.get('sector_cap', 2)
     w('## 2. איך נבחרו המועמדים')
     w(f"- **{res.get('n_full', '—')} שמות עברו את הכללים** (הרשימה המלאה ב-`candidates_full.csv`, עם ציוני הכללים, הרמות מקובץ הרמות, כניסה/סטופ/יעד ודגל הדוח). "
-      f"מתוכם נבחרו עד **{res.get('candidates_n', 50)}** לדוח.")
-    if len(recs) < res.get('candidates_n', 50):
-        w(f"- **חסר לעומת יעד הפלט:** {res.get('candidates_n', 50)-len(recs)}. לא הוקלו סף הציון, סינון הדוחות או תקרת הסקטור כדי למלא את המכסה; סיבת כל סינון ב־candidates_full.csv.")
+      f"מתוכם נבחרו עד **{res.get('candidates_n', 20)}** לדוח.")
     w('- **מניות לונג:** סגירה מעל SMA50 ו-SMA200, שיפוע SMA50 עולה, עד 3 ATR מעל SMA20, שווי ≥ $1.5B, מחזור > $14M, מחיר ≥ $5.')
     w('- **מניות שורט:** רק מי שעובר את כלל השורט המאושר (ck_score≥3 וסגירה מתחת ל-SMA200).')
     w('- **קריפטו (לונג בלבד):** BTC, ‏ETH, ‏SOL ומטבעות גדולים, נרות יומיים של Alpaca. אותו מסנן מגמה, סטופ קבוע 3×ATR14 על סגירה יומית, בלי יעד. שורט קריפטו מוקפא. Grok הוא פלטפורמת הסנטימנט הראשית.')
-    rw = res.get('research_weight', 0)
-    w(f"- **דירוג אחד לכולם:** הבסיס הוא אחוזון מומנטום 12-1, הפוך בשורט. "
-      f"משקל המחקר המוגדר הוא {rw:.0%}, ולבסיס {1-rw:.0%} כאשר כל הנתונים זמינים. "
-      f"המחקר משלב מחזור ירח ויום עברי בירושלים, גאן, פיבו, אליוט, נרות ונפח. "
-      f"חלקו של רכיב חסר חוזר לבסיס. המשקולות ניסיוניות ולא הוכחו כמנבאות תשואה. "
-      f"נבחרים עד {res.get('candidates_n', 50)} בעלי הציון הגבוה ביותר. "
-      f"**סף כניסה: {res.get('min_score', 60):g}** (`--min-score`). הסף הקודם נשמר, אך טרם אומת לציון המשולב. "
-      f"הדירוג המקורי והתרומות זמינים ב-`candidates_full.csv` וב-`research_scores.json`.")
+    w(f"- **דירוג אחד לכולם (אין חלוקה קבועה לונג/שורט):** ציון אחיד 0–100 = אחוזון המומנטום 12-1 בתוך קבוצת הנכס, "
+      f"ובשורט הפוך (100 פחות האחוזון). ככל שהציון גבוה יותר המומנטום מצביע לכיוון העסקה, ושורט מדורג מעל לונג רק כשהמומנטום שלו חזק יותר. "
+      f"נבחרים עד {res.get('candidates_n', 20)} בעלי הציון הגבוה ביותר - יכולים להיות 20 לונג ו-0 שורט. "
+      f"**סף כניסה: {res.get('min_score', 60):g}** (דגל `--min-score`); מתחתיו שם לא נכנס גם אם נשארו פחות מ-{res.get('candidates_n', 20)} מקומות. "
+      f"ברירת המחדל 60 נקבעה לפי מדגם מאומת (139 סטאפי מניות עם תוצאה ליום 20, 15 ימי כניסה שונים): מציון 60 ומעלה שיעור הפגיעה בתשואה מכוונת ליום 20 היה 58.9% מול 51.8% מתחת, בלי יתרון בממוצע. מדגם קטן - הסף עצמו נמדד קדימה.")
     w(f"- **גיוון:** " + (f"לכל היותר {cap} שמות מאותו סקטור בכל צד (דגל `--sector-cap`, 0 מבטל)." if cap else 'מגבלת הסקטור כבויה בריצה הזו.'))
     w('- **כלל הדוחות (פעיל):** אין כניסה חדשה במניה אם הדוח הבא בתוך 5 ימי מסחר מיום הכניסה. מקורות התאריך: לוח Yahoo, ‏OpenBB/Nasdaq ו-Perplexity (רק כשהוא מאשר עם מקור). '
       'אם יש מחלוקת, לוקחים את התאריך **המוקדם**. אין תאריך מאומת: מסומן "תאריך דוח לא מאומת". חריגה רק בקטליזטור חזק מאוד: Perplexity מדרג "חזק" עם מקור מתוארך, '
@@ -102,13 +96,11 @@ def write_report(run_dir, res):
     # ---- 3 summary table
     def table(items, title):
         w(title)
-        hdr = ['#', 'טיקר', 'כיוון', 'כניסה (ייחוס)', 'סטופ', 'יעד', 'דירוג', 'דוח', 'Jev', 'Grok: סנטימנט / אנליסט', 'Perplexity', 'Claude', 'GPT', 'חולקים על הגרף']
+        hdr = ['#', 'טיקר', 'כיוון', 'כניסה (ייחוס)', 'סטופ', 'יעד', 'דירוג', 'דוח', 'Jev', 'Grok', 'Perplexity', 'Claude', 'GPT', 'חולקים על הגרף']
         w('| ' + ' | '.join(hdr) + ' |'); w('|---' * len(hdr) + '|')
         for i, (c, r) in enumerate(items, 1):
             tgt = _nd(c['target']) if c['target'] else ('100% שנדלייר' if c['direction'] == 'LONG' and c.get('asset') != 'crypto' else 'אין')
             gs = f"{VERD[r['grok_verdict']]} (\u200e{r['grok_sentiment']:+d})" if r.get('grok_verdict') else _vd(r, 'grok_verdict')
-            gs += (f" / אנליסט {r['grok_analyst_conviction']}/100 ({DVIEW.get(r.get('grok_analyst_direction_view'), '—')})"
-                   if r.get('grok_analyst_conviction') is not None else ' / אנליסט: לא התקבל')
             cl = f"{r['claude_conviction']} ({DVIEW.get(r.get('claude_direction_view'), '')})" if r.get('claude_conviction') is not None else _vd(r, 'claude_verdict')
             jv = f"{_t(r.get('jev_news_sentiment'))}" if r.get('jev_n_headlines') is not None else '—'
             rk = _n(c.get('rank_score'), 1)
@@ -119,7 +111,7 @@ def write_report(run_dir, res):
                                  _vd(r, 'pplx_verdict'), cl, _vd(r, 'gpt_verdict'), f'{dis}/4' if r.get('image_inputs') else '—']) + ' |')
         w('')
     table(stock_recs, f'## 3. המלצות – מניות ({len(stock_recs)})')
-    w('_דירוג: ציון הבסיס עם שכבת המחקר הזמינה. ציוני המודלים אינם רכיבים בניקוד הטכני. Grok: סנטימנט 2- עד 2+ ולצדו ניתוח נפרד. Grok אנליסט ו-Claude: ביטחון 0–100 ועמדה ביחס לכיוון העסקה; הביטחון אינו הסתברות מכוילת. "חולקים על הגרף": מספר המודלים שחולקים על הספירה או הרמות._\n')
+    w('_דירוג: הציון האחיד 0–100 (אחוזון מומנטום 12-1, הפוך בשורט). Grok בסוגריים: סנטימנט 2- עד 2+. Claude: ביטחון 0–100 ועמדה. "חולקים על הגרף": כמה מודלים אמרו שספירת האליוט/פיבו/תמיכה שצוירו לא נראית נכונה. הכל במשקל 0._\n')
     # ---- 4 crypto
     w(f'## 4. קריפטו – לונג בלבד ({len(crypto_recs)})')
     if crypto_recs:
@@ -155,20 +147,6 @@ def write_report(run_dir, res):
         tag = '' if not (c.get('_eg') or {}).get('blocked') else ' · ⛔ נחסם (דוח)'
         if rec.get(key(c)): tag += ' · ❗ לא תואם'
         w(f"### {i}. {c['t']} – {DIRH[c['direction']]}{' (קריפטו)' if c.get('asset') == 'crypto' else ''} · דירוג {_n(c.get('rank_score'), 1)}{tag}")
-        research = L.get('research_score') or {}
-        if research:
-            w(f"- **שקלול מחקר ניסיוני:** בסיס {_n(research.get('baseline_score'), 2)} · שינוי {_n(research.get('delta_points'), 2)} נקודות · "
-              f"כיסוי {research.get('coverage', 0):.0%} · משקל בפועל {research.get('effective_research_weight', 0):.1%} · מצב {_t(research.get('status'))}.")
-            labels = dict(lunar_calendar='יחס שעוני הירח והנכס', gann='גאן', fibonacci='פיבו וספירלה', elliott='אליוט',
-                          candles='נרות', volume='נפח ודיברגנס', confluence='שילובים')
-            w('- **תרומה בנקודות:** ' + ' · '.join(f"{labels.get(k, k)} {_n(v.get('contribution_points'), 2)}" for k, v in research.get('components', {}).items()))
-            lunar = research.get('lunar') or {}
-            w(f"- **יום המחקר בירושלים:** {_t(lunar.get('lunar_hebrew_date'))} · מופע {_n(lunar.get('lunar_phase_deg'), 1)}° · "
-              f"דגימה {_t(lunar.get('lunar_sample_utc'))} · מצב {_t(lunar.get('lunar_status'))}.")
-            clocks = research.get('clocks') or {}
-            w(f"- **בדיקת שני השעונים (H3):** מצב {_t(clocks.get('status'))} · "
-              f"גיל מהעוגן {_n(clocks.get('bars_since_origin'), 0)} נרות · מחזור הנכס {_n(clocks.get('asset_period_bars'), 0)} נרות · "
-              f"הפרש מופע {_n(clocks.get('phase_difference_deg'), 1)}°. זהו כלל בדיקה שלנו, שטרם אומת למסחר.")
         if r.get('credit_status'): w(f"- **🔴 {r['credit_status']}**")
         T = f.get('trade') or {}; te = f.get('technical') or {}
         w(f"- **רמות (קובץ הרמות, נר אחרון {_t((f.get('levels_file') or {}).get('last_bar'))}, hash {_t((f.get('levels_file') or {}).get('bar_hash'))}):** "
@@ -178,12 +156,22 @@ def write_report(run_dir, res):
         e1, e2 = f.get('elliott_v1') or {}, f.get('elliott_v2') or {}
         f1, f2 = f.get('fib_v1') or {}, f.get('fib_v2') or {}
         vp, sr = f.get('vp120') or {}, f.get('sr_nearest') or {}
-        w(f"- **הקשר טכני (רכיבים משוקללים מפורטים לעיל):** אליוט v2: {_t(e2.get('label'))} · אליוט v1: {_t(e1.get('label'))} · פיבו v2 {_nd(f2.get('origin'))}→{_nd(f2.get('end'))} (1.618={_nd((f2.get('levels') or {}).get('1.618'))}) · "
+        w(f"- **ניסיוני (משקל 0):** אליוט v2: {_t(e2.get('label'))} · אליוט v1: {_t(e1.get('label'))} · פיבו v2 {_nd(f2.get('origin'))}→{_nd(f2.get('end'))} (1.618={_nd((f2.get('levels') or {}).get('1.618'))}) · "
           f"VP120 POC {_nd(vp.get('poc'))} (VAH {_nd(vp.get('vah'))}, VAL {_nd(vp.get('val'))}) · תמיכה {_nd(sr.get('sr_support'))} · התנגדות {_nd(sr.get('sr_resistance'))} · "
           f"סוף גל: {_t((f.get('waves') or {}).get('wave_end_n'))} משפחות ({_t((f.get('waves') or {}).get('wave_end_families'))}) · "
           f"תחילת גל: {_t((f.get('waves') or {}).get('wave_start_n'))} ({_t((f.get('waves') or {}).get('wave_start_families'))})")
         g = c.get('_eg') or {}
         w(f"- **דוח:** {_t(g.get('status'))}" + (f" · מקורות: {_t('; '.join(g.get('sources') or []))}" if g.get('sources') else ''))
+        ref = ((c.get('_levels') or {}).get('reference')) or {}
+        ls_, fs_ = ref.get('liq_sweep') or {}, ref.get('fib_spiral') or {}
+        if ls_:   # reference only, weight 0; never changes entry / stop / target
+            flag = ('כן' if ls_.get('ls_sweep') else 'לא') if not ls_.get('error') else 'שגיאה'
+            side = ' / '.join(n for k, n in (('ls_long_sweep', 'לונג'), ('ls_short_sweep', 'שורט')) if ls_.get(k))
+            w(f"- **סוויפ נזילות (ייחוס בלבד, משקל 0):** {flag}" + (f" ({side}, רמה {_nd(ls_.get('ls_level'))} {_t(ls_.get('ls_level_kind'))})" if ls_.get('ls_sweep') else '')
+              + (' · **עבר בדיקה, שביר, משקל 0**' if ls_.get('validated_variant') else ''))
+        if c['direction'] == 'SHORT' and fs_ and not fs_.get('error'):
+            w(f"- **ספירלת פיבו – יעדי ייחוס בלבד (משקל 0, לא משנה סטופ/יעד; השורט נשאר עם סטופ נגרר 4×ATR בלי יעד):** "
+              f"T1 {_nd(fs_.get('fs_target_t1'))} ({_t(fs_.get('fs_t1_src'))}) · T2 {_nd(fs_.get('fs_target_t2'))} ({_t(fs_.get('fs_t2_src'))}) · מצב: {_t(fs_.get('fs_state'))}")
         if c.get('_chart_png'): w(f"\n![גרף {c['t']}]({os.path.relpath(c['_chart_png'], run_dir)})\n")
         if not res['enabled']: w('- **פלטפורמות:** לא הורצו.\n'); continue
         order = (['grok', 'jev', 'pplx'] if c.get('asset') == 'crypto' else ['jev', 'grok', 'pplx']) + ['claude', 'gpt']
@@ -199,11 +187,6 @@ def write_report(run_dir, res):
                     w(f"- **Grok{' (סנטימנט ראשי לקריפטו)' if c.get('asset') == 'crypto' else ''} ({M['grok']}, {src}):** {VERD[r['grok_verdict']]} · סנטימנט \u200e{r['grok_sentiment']:+d} · "
                       f"ביטחון {_t(r.get('grok_confidence'))} · {_t(r.get('grok_n_posts'))} פוסטים · {_t(r.get('grok_reason'))} · חשבונות מאומתים: {_t(r.get('grok_accounts'))}")
                 else: w(f"- **Grok:** לא התקבל ({_t(r.get('grok_error'))[:160]})")
-                if r.get('grok_analyst_conviction') is not None:
-                    w(f"- **Grok, אנליסט נוסף:** ביטחון **{r['grok_analyst_conviction']}/100** · {DVIEW.get(r.get('grok_analyst_direction_view'), '—')} · סיכון: {_t(r.get('grok_analyst_key_risk'))}")
-                    w(f"  - תזה: {_t(r.get('grok_analyst_thesis'))} · טכני: {_t(r.get('grok_analyst_technical_read'))}")
-                    w(f"  - קטליסטים: {_t(r.get('grok_analyst_catalyst_read'))} · פונדמנטלס: {_t(r.get('grok_analyst_fundamental_read'))}")
-                else: w(f"- **Grok, אנליסט נוסף:** לא התקבל ({_t(r.get('grok_analyst_error') or r.get('grok_error'))[:160]})")
             if p == 'pplx':
                 if r.get('pplx_verdict'):
                     w(f"- **Perplexity ({M['pplx']}):** {VERD[r['pplx_verdict']]} · {_t(r.get('pplx_reason'))} · קטליזטור: {_t(r.get('pplx_catalyst_strength'))}"
@@ -219,12 +202,10 @@ def write_report(run_dir, res):
                 if r.get('gpt_verdict'):
                     w(f"- **GPT, פרקליט השטן ({M.get('gpt')}):** {VERD[r['gpt_verdict']]} · הסיכון הגדול: {_t(r.get('gpt_main_risk'))} · {_t(r.get('gpt_reason'))}")
                     if r.get('gpt_rebuttal_of_analyst'): w(f"  - נגד התזה של Claude: {_t(r['gpt_rebuttal_of_analyst'])}")
-                    if r.get('gpt_rebuttal_of_grok'): w(f"  - נגד התזה של Grok: {_t(r['gpt_rebuttal_of_grok'])}")
                 elif M.get('gpt'): w(f"- **GPT:** לא התקבל ({_t(r.get('gpt_error'))[:160]})")
         dl = [f"{nm}: {_t(r.get(f'{p}_chart_disagree'))}" for p, nm in (('grok', 'Grok'), ('pplx', 'Perplexity'), ('claude', 'Claude'), ('gpt', 'GPT')) if r.get(f'{p}_chart_disagree')]
         if dl: w(f"- **האם הגרף נראה נכון? (ניסיוני):** {' · '.join(dl)} · קלט: {_t(r.get('image_inputs'))}")
         if r.get('cross_challenge'): w(f"- **אתגור הדדי:** {_t(r['cross_challenge'])}")
-        if r.get('analyst_comparison'): w(f"- **השוואת האנליסטים:** {_t(r['analyst_comparison'])}")
         w('')
     # ---- 9 tool stats
     w('## 9. סטטיסטיקת כלים (tool_stats, משקל 0)')
@@ -238,7 +219,7 @@ def write_report(run_dir, res):
         pc = est.get('per_call_avg_usd', {})
         w(f"- **ממוצע למועמד:** כ-${est.get('per_candidate_usd', 0):.3f} (Grok {_n(pc.get('grok'), 3)}, Perplexity {_n(pc.get('pplx'), 3)}, Jev {_n(pc.get('jev_per_ticker'), 4)}, "
           f"Claude {_n(pc.get('claude_analyst'), 3)}, GPT {_n(pc.get('gpt_advocate'), 3)}) · הערכה שבועית: כ-${_n(est.get('weekly_estimate_usd'))}.")
-    for k, lab in [('grok', 'Grok סנטימנט'), ('grok_analyst', 'Grok אנליסט'), ('pplx', 'Perplexity'), ('claude', 'Claude'), ('gpt', 'GPT')]:
+    for k, lab in [('grok', 'Grok'), ('pplx', 'Perplexity'), ('claude', 'Claude'), ('gpt', 'GPT')]:
         if k in st: w(f"- **{lab}:** {st[k]['ok']} מתוך {st[k]['of']} הצליחו")
     w(f"- **עמודות מחקר (research_columns):** {_t(json.dumps(res.get('research_status'), ensure_ascii=False)[:200]) if res.get('research_status') else 'לא רצו'}")
     w('- **קבצים:** `candidates_full.csv`, ‏`levels/`, ‏`charts/` + `chart_index.json`, ‏`tracker_rows.csv`, ‏`reconciliation.json`, ‏`platform_enrichment.csv`, ‏`platform_raw.json`, ‏`research_columns.csv`.')
