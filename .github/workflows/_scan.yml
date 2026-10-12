@@ -57,9 +57,11 @@ jobs:
           mkdir -p "$SCANNER_ROOT/scan-runs/_actions"
           LOG="$SCANNER_ROOT/scan-runs/_actions/${KIND}.log"
           OB=""; [ -x "$SCANNER_ROOT/venv-openbb/bin/python" ] || OB="--no-openbb"
-          if [ "$DRY" = "true" ]; then
+          if [ "$DRY" = "true" ] && [ "$KIND" = "weekly" ]; then
+            python run_unified_scan.py --trial --no-models 2>&1 | tee "$LOG"   # weekly path (selection of 20, report), no LLM calls
+          elif [ "$DRY" = "true" ]; then
             python run_unified_scan.py --paper --no-models 2>&1 | tee "$LOG"
-            [ "$KIND" = "daily" ] && python run_daily_report.py --no-models $OB 2>&1 | tee -a "$LOG"
+            python run_daily_report.py --no-models $OB 2>&1 | tee -a "$LOG"
           elif [ "$KIND" = "weekly" ]; then
             python run_unified_scan.py 2>&1 | tee "$LOG"                       # 20 names by score, all models
           else
