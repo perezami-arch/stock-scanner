@@ -15,7 +15,7 @@ for s in srcs:
         dns[:] = [d for d in dns if d not in SKIP_DIRS]
         for fn in fns:
             p = os.path.join(dp, fn)
-            if not fn.endswith(KEEP) or fn in SKIP_FILES or os.path.getsize(p) > MAX: continue
+            if not fn.endswith(KEEP) or fn in SKIP_FILES or os.path.getsize(p) > (20 * 1024 * 1024 if fn.endswith('.pdf') else MAX): continue
             d = os.path.join(repo, 'reports', day, kind, name, os.path.relpath(p, s))
             os.makedirs(os.path.dirname(d), exist_ok=True); shutil.copy2(p, d); n += 1
 print(f'{n} report files -> reports/{day}/{kind}/ from {len(srcs)} run folder(s)')
