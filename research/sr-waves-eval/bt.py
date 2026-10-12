@@ -2,12 +2,13 @@
 Setups: /workspace/scanner-tool-eval/setups_prepared.csv (canonical tracker, asof_ts = information cutoff).
 Prices: one Yahoo daily download per ticker (auto_adjust, like the scanner); history is PIT-cut at asof_ts with geometry.pit_cut,
 forward bars (after the cutoff bar) only for outcomes. Writes lookups to /workspace/tracker/*_lookup.csv and results.md here."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, json, math, warnings
 import numpy as np, pandas as pd
-warnings.filterwarnings("ignore"); sys.path.insert(0, "/workspace")
+warnings.filterwarnings("ignore"); sys.path.insert(0, _SCANNER_ROOT)
 import scanner_levels as SL, scanner_waves as SW, scanner_geometry as GEO
-OUT = "/workspace/sr-waves-eval"; TODAY = pd.Timestamp("2026-10-08T12:15Z")
-S = pd.read_csv("/workspace/scanner-tool-eval/setups_prepared.csv")
+OUT = (_SCANNER_ROOT + "/sr-waves-eval"); TODAY = pd.Timestamp("2026-10-08T12:15Z")
+S = pd.read_csv((_SCANNER_ROOT + "/scanner-tool-eval/setups_prepared.csv"))
 S = S[(S.asset == "stock") & S.direction.isin(["LONG", "SHORT"]) & S.asof_ts.notna()].copy()
 S["cut"] = pd.to_datetime(S.asof_ts, utc=True)
 tick = sorted(S.ticker.unique())
@@ -33,7 +34,7 @@ FULL = {}
 for t in tick:
     f = f"{SL.CACHE}/yahoo_daily/{t}_{TODAY:%Y%m%d}.csv"
     if os.path.exists(f): FULL[t] = GEO._norm(pd.read_csv(f, parse_dates=["date"]).set_index("date"))
-sim = pd.read_csv("/workspace/trading-frameworks-eval/iaf/sim_chand_trades.csv")
+sim = pd.read_csv((_SCANNER_ROOT + "/trading-frameworks-eval/iaf/sim_chand_trades.csv"))
 ch4 = sim[sim.policy == "chand4_c"].set_index("setup_id")
 rows, srL, wvL = [], [], []
 for _, s in S.iterrows():
@@ -82,6 +83,6 @@ for _, s in S.iterrows():
     r["chand4_ret"] = ch4.loc[s.setup_id, "ret_net"] if s.setup_id in ch4.index else None
     rows.append(r)
 R = pd.DataFrame(rows); R.to_csv(f"{OUT}/bt_rows.csv", index=False)
-pd.DataFrame(srL).to_csv("/workspace/tracker/sr_levels_lookup.csv", index=False, encoding="utf-8-sig")
-pd.DataFrame(wvL).to_csv("/workspace/tracker/volume_waves_lookup.csv", index=False, encoding="utf-8-sig")
+pd.DataFrame(srL).to_csv((_SCANNER_ROOT + "/tracker/sr_levels_lookup.csv"), index=False, encoding="utf-8-sig")
+pd.DataFrame(wvL).to_csv((_SCANNER_ROOT + "/tracker/volume_waves_lookup.csv"), index=False, encoding="utf-8-sig")
 print("rows", len(R), "with data", R.get("err").isna().sum() if "err" in R else len(R))

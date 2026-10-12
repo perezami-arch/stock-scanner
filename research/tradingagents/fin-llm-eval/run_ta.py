@@ -1,3 +1,4 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, time, json, os, traceback
 from tradingagents.default_config import DEFAULT_CONFIG
 from tradingagents.graph.trading_graph import TradingAgentsGraph
@@ -17,8 +18,8 @@ cfg = DEFAULT_CONFIG.copy()
 cfg.update(llm_provider="ollama", backend_url="http://127.0.0.1:11434/v1",
            deep_think_llm=model, quick_think_llm=model, max_debate_rounds=1, max_risk_discuss_rounds=1,
            temperature=0.3, max_tokens=1500, max_tool_rounds=6, news_article_limit=8, global_news_article_limit=5,
-           results_dir="/workspace/fin-llm-eval/results/ta_logs", data_cache_dir="/workspace/fin-llm-eval/results/ta_cache",
-           memory_log_path=f"/workspace/fin-llm-eval/results/ta_memory_{ticker}_{date}.md", output_language="English")
+           results_dir=(_SCANNER_ROOT + "/fin-llm-eval/results/ta_logs"), data_cache_dir=(_SCANNER_ROOT + "/fin-llm-eval/results/ta_cache"),
+           memory_log_path=f"{_SCANNER_ROOT}/fin-llm-eval/results/ta_memory_{ticker}_{date}.md", output_language="English")
 t0 = time.time()
 out = dict(ticker=ticker, date=date, model=model, analysts=list(analysts))
 try:
@@ -33,5 +34,5 @@ try:
 except Exception as e:
     out.update(ok=False, error=repr(e), tb=traceback.format_exc()[-3000:])
 out["runtime_s"] = round(time.time() - t0, 1); out.update(llm_calls=U.calls, prompt_tokens=U.pt, completion_tokens=U.ct)
-json.dump(out, open(f"/workspace/fin-llm-eval/results/ta_{ticker}_{date}.json", "w"), indent=1, default=str)
+json.dump(out, open(f"{_SCANNER_ROOT}/fin-llm-eval/results/ta_{ticker}_{date}.json", "w"), indent=1, default=str)
 print("RESULT", json.dumps({k: out[k] for k in ("ticker","date","ok","runtime_s") }), out.get("decision"), out.get("error"))

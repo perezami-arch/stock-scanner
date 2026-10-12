@@ -5,9 +5,10 @@
     rule bar replaced by garbage must be identical (adapters truncate before calling the repo).
  3. Equivalence: our depth-first enumeration for alessioricco/ElliottWaves vs the repo's own 9-nested-loop ElliottWaveDiscovery on short
     windows (where the brute force is feasible)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, io, contextlib, numpy as np, pandas as pd, warnings
 warnings.filterwarnings('ignore')
-sys.path.insert(0,'/workspace/ta-repos-eval')
+sys.path.insert(0,(_SCANNER_ROOT + '/ta-repos-eval'))
 from common import *
 import ew_libs as E, features_smc as FS
 samp=leak_sample(30)

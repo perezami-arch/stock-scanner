@@ -7,7 +7,7 @@ def bot_alerts():
         for rank,s in enumerate(v['setups'],1):
             t,dirn,entry,sl,tsl,tps,score,hold,trig,trig_txt=s
             out.append(dict(source='bot',model='Chief of Staff bot (v2.8)',alert_date=k,group=f"סריקת בוט {k[8:10]}.{k[5:7]}",ttype='Elliott/Fibonacci swing (v2.8)',ticker=t,dir=dirn,entry=entry,sl=sl,
-              tsl=tsl/100 if tsl is not None else None,tps=tps,hold=hold,score=score,rank=rank,trig=trig,trig_txt=trig_txt,calc_date=v.get('day1') if k in ('2026-10-04','2026-10-07') else None,
+              tsl=tsl/100 if tsl is not None else None,tps=tps,hold=hold,score=score,rank=rank,trig=trig,trig_txt=trig_txt,calc_date=v.get('day1') if k in ('2026-10-04','2026-10-07','2026-10-12') else None,
               pre=[f"#{rank} בסריקה, ציון {score}. טריגר בסריקה: {trig_txt}." if score is not None else f"#{rank} בסריקת בוט v2.8 מ-{k[8:10]}.{k[5:7]} (נתונים מסגירת {v['price_date'][8:10]}.{v['price_date'][5:7]}); כניסה/סטופ/יעדים לפי הסריקה, המחיר אומת מול scan_deep_2026-10-04.json. ציון/החזקה/טריגר לא נמסרו — הושארו ריקים."]))
     return out
 def orig_alerts(path='orig_readonly.xlsx'):

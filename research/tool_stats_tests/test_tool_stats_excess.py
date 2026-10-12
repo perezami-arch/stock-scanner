@@ -1,8 +1,9 @@
 """tool_stats excess metric: prefers the build7 column excess_dir_d20, falls back to sgn x (ret - bench) when it is missing/blank.
 Run: /usr/bin/python3 research-models/tests/test_tool_stats_excess.py   (also pytest-compatible)"""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, os, tempfile
 import numpy as np, pandas as pd
-sys.path.insert(0, "/workspace")
+sys.path.insert(0, _SCANNER_ROOT)
 import tool_stats as TS
 
 def _fake_bench(sym):            # flat 1% per session -> bench_d20 = 1.01**20 - 1 for any alert date

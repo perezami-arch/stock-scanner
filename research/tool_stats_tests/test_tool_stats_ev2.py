@@ -1,9 +1,10 @@
 """tool_stats auto-detects the Elliott v2 columns (scanner_elliott_v2, 08.10): exp_ev2_* from build7 -> tool 'elliott_v2'; price / text /
 tautological ev2 columns are not tested; raw ev2_long_*/ev2_short_* (scan_hooks.csv) -> trade-direction exp_ev2_* (tracker values win).
 Run: /usr/bin/python3 research-models/tests/test_tool_stats_ev2.py   (also pytest-compatible)"""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, os, tempfile
 import numpy as np, pandas as pd
-sys.path.insert(0, "/workspace")
+sys.path.insert(0, _SCANNER_ROOT)
 import tool_stats as TS
 
 def _fake_bench(sym):

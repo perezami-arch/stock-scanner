@@ -1,11 +1,12 @@
 """D. Sensitivity to history start / ATR seeding / price adjustment (what differs on TradingView).
 Runs the Pine port on (1) full Yahoo history, adjusted (TV with 'adjust for dividends' on ~ Yahoo adjusted),
 (2) full history unadjusted for dividends (TV default for stocks), (3) the scanner's 479/700-bar window but starting 100 / 250 bars later."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, json, numpy as np, pandas as pd, warnings, os; warnings.filterwarnings("ignore")
-sys.path.insert(0, "/workspace/tradingview/validation")
+sys.path.insert(0, (_SCANNER_ROOT + "/tradingview/validation"))
 from validate import load, run, cmp_final, OUT, TICK, MAP
 import yfinance as yf
-D = "/workspace/tradingview/validation/yahoo_max"; os.makedirs(D, exist_ok=True)
+D = (_SCANNER_ROOT + "/tradingview/validation/yahoo_max"); os.makedirs(D, exist_ok=True)
 def ymax(sym, adj):
     f = f"{D}/{sym}_{'adj' if adj else 'raw'}.csv"
     if not os.path.exists(f):
@@ -32,7 +33,7 @@ for t, asset, path in TICK:
                          mismatched_fields=len(d), wave=o["wave"], leg=f"{o['leg_o']:.4f}->{o['leg_e']:.4f}",
                          struct=round(o["struct"], 4), tp_half=round(o["tp_half"], 4) if o["tp_half"] == o["tp_half"] else None,
                          detail="; ".join(f"{c}: csv={v} port={pv if not isinstance(pv, float) else round(pv, 4)}" for c, v, pv in d)))
-R = pd.DataFrame(rows); R.to_csv("/workspace/tradingview/validation/history_sensitivity.csv", index=False)
+R = pd.DataFrame(rows); R.to_csv((_SCANNER_ROOT + "/tradingview/validation/history_sensitivity.csv"), index=False)
 with pd.option_context("display.width", 250, "display.max_colwidth", 140):
     print(R.drop(columns=["detail"]).to_string(index=False))
     for _, r in R[R.mismatched_fields > 0].iterrows(): print(f"\n{r.ticker} | {r.variant}: {r.detail}")

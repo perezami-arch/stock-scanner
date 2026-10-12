@@ -3,12 +3,13 @@ Same data/cut as sr-waves-eval/bt.py: Yahoo daily cache, scanner_geometry.pit_cu
 Outcomes are taken from sr-waves-eval/bt_rows.csv (x20, stop_hit20, chand4_c) - not recomputed here.
 Also a PIT leak check: zigzag pivots from the cut frame == pivots of the same frame extended 60 bars into the future with
 confirm_idx <= cutoff bar; tentative pivot never appears among the cut frame's confirmed pivots."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, json, warnings
 import numpy as np, pandas as pd
-warnings.filterwarnings("ignore"); sys.path.insert(0, "/workspace")
+warnings.filterwarnings("ignore"); sys.path.insert(0, _SCANNER_ROOT)
 import scanner_geometry as GEO, scanner_stops as ST, scanner_elliott_v2 as EV2, scanner_waves as SW, scanner_levels as SL
-OUT = "/workspace/elliott-v2-eval"; TODAY = "20261008"
-S = pd.read_csv("/workspace/scanner-tool-eval/setups_prepared.csv")
+OUT = (_SCANNER_ROOT + "/elliott-v2-eval"); TODAY = "20261008"
+S = pd.read_csv((_SCANNER_ROOT + "/scanner-tool-eval/setups_prepared.csv"))
 S = S[(S.asset == "stock") & S.direction.isin(["LONG", "SHORT"]) & S.asof_ts.notna()].copy()
 S["cut"] = pd.to_datetime(S.asof_ts, utc=True)
 FULL = {}
@@ -48,6 +49,6 @@ for _, s in S.iterrows():
     rows.append(r)
 pd.DataFrame(rows).to_csv(f"{OUT}/ev2_rows.csv", index=False)
 pd.DataFrame(leak).to_csv(f"{OUT}/pit_leak_check.csv", index=False)
-pd.DataFrame(look).to_csv("/workspace/tracker/elliott_v2_lookup.csv", index=False, encoding="utf-8-sig")
-wv = pd.read_csv("/workspace/tracker/volume_waves_lookup.csv")
+pd.DataFrame(look).to_csv((_SCANNER_ROOT + "/tracker/elliott_v2_lookup.csv"), index=False, encoding="utf-8-sig")
+wv = pd.read_csv((_SCANNER_ROOT + "/tracker/volume_waves_lookup.csv"))
 print("rows", len(rows), "leak identical", pd.DataFrame(leak).identical.mean(), "tent in confirmed", pd.DataFrame(leak).tentative_in_confirmed.sum())

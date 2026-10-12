@@ -64,6 +64,7 @@ def register_run(run_dir, path=REGISTRY, is_sim=False):
         if tid in set(reg.trade_id): continue
         L = json.load(open(LF.path(run_dir, {'t': r.ticker, 'direction': r.direction})))
         es = LF.entry_session(cut) if r.asset != 'crypto' else (cut.tz_convert('UTC').normalize() + pd.Timedelta(days=1)).tz_localize(None)
+        if os.environ.get('ENTRY_SESSION_OVERRIDE'): es = pd.Timestamp(os.environ['ENTRY_SESSION_OVERRIDE'])   # 12.10: late manual run (cutoff Fri close, entry Tue open)
         new.append({'trade_id': tid, 'trade_key': f"{r.ticker}|{r.direction}|{L['data']['last_bar']}", 'ticker': r.ticker, 'asset': r.asset,
                     'direction': r.direction, 'source_run': run_dir, 'scan_asof_local': meta.get('scan_asof_local'), 'cutoff_utc': str(cut),
                     'entry_session': str(pd.Timestamp(es).date()), 'entry_ref': r.entry, 'stop_initial': r.stop, 'target': r.target,

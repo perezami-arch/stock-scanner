@@ -1,5 +1,6 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import pandas as pd, numpy as np
-O='/workspace/ta-repos-eval/out/'
+O=(_SCANNER_ROOT + '/ta-repos-eval/out/')
 def md(df, fl=2):
     df=df.copy()
     for c in df.columns:

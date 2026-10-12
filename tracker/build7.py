@@ -339,7 +339,7 @@ for k,r in enumerate(il,nx+2):
 nx=nx+2+len(il)+1
 bot=[r for r in rows if r['source']=='bot' and r['cum']]
 tight=[r for r in bot if abs(1-r['sl']/r['entry'])<r['atr']]; wide=[r for r in bot if r not in tight]
-rr1=[abs(r['tps'][0]/r['entry']-1)/abs(1-r['sl']/r['entry']) for r in rows if r['source']=='bot']
+rr1=[abs(r['tps'][0]/r['entry']-1)/abs(1-r['sl']/r['entry']) for r in rows if r['source']=='bot' and r['tps'] and r['tps'][0] is not None and r['sl'] is not None]   # 12.10: weekly shorts/no-target rows
 sb=dict(S)
 TD=dict(TS); SD=dict(SS); g_=SD['GROK automation — סה"כ']; b_=SD['בוט v2.8 — סה"כ']; o_=SD['גיליון מקורי (יולי–אוג׳) — סה"כ']
 nfm=sum(r.get('fixed')=='mismatch' for r in gk); nfx=sum(r.get('fixed')=='missing' for r in gk)

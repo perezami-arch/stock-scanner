@@ -8,13 +8,14 @@ enters a snapshot is recorded in self.audit for the leak check.
 D/E here = total liabilities / equity (Financial Datasets uses debt/equity) - documented deviation.
 """
 from __future__ import annotations
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json, os, time, datetime as dt
 from pathlib import Path
 import requests, pandas as pd
 from hedge_fund.data.models import FinancialMetrics, CompanyFacts
 
-CACHE = Path('/workspace/fin-llm-eval/results/ta_cache/sec_edgar')
-PX = Path('/workspace/fin-llm-eval/aihf_bt/px'); PX.mkdir(parents=True, exist_ok=True)
+CACHE = Path((_SCANNER_ROOT + '/fin-llm-eval/results/ta_cache/sec_edgar'))
+PX = Path((_SCANNER_ROOT + '/fin-llm-eval/aihf_bt/px')); PX.mkdir(parents=True, exist_ok=True)
 UA = os.getenv('SEC_EDGAR_USER_AGENT', 'fin-llm-eval research (contact@example.com)')
 
 def _get(url, name):

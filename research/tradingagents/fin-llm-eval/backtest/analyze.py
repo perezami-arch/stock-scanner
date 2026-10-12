@@ -1,5 +1,6 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json, glob, pandas as pd, numpy as np
-rows=[json.load(open(f)) for f in sorted(glob.glob('/workspace/fin-llm-eval/backtest/runs/*.json'))]
+rows=[json.load(open(f)) for f in sorted(glob.glob((_SCANNER_ROOT + '/fin-llm-eval/backtest/runs/*.json')))]
 d=pd.DataFrame(rows)
 print('runs:',len(d),'ok:',int(d.ok.sum()))
 if 'error' in d: print(d[d.ok!=True][['priority','ticker','error']].to_string())
@@ -25,4 +26,4 @@ dec=d[d.verdict!='flag']
 if len(dec): print('\nhit rate (approve&win or veto&loss) on non-flag:', round(((dec.verdict=='approve')==dec.win).mean(),3), 'n=',len(dec))
 print('base win rate of sample:', round(d.win.mean(),3), 'avg ret', round(d.ret.mean(),2))
 print('\nruntime s: mean',d.runtime_s.mean().round(0),'median',d.runtime_s.median(),' calls mean',d.llm_calls.mean(),' prompt tok mean',d.prompt_tokens.mean().round(0),' compl tok mean',d.completion_tokens.mean().round(0))
-d.drop(columns=[c for c in ['market_report','fundamentals_report','bull','bear','final_trade_decision','trader_plan','investment_plan'] if c in d]).to_csv('/workspace/fin-llm-eval/backtest/backtest_results.csv',index=False)
+d.drop(columns=[c for c in ['market_report','fundamentals_report','bull','bear','final_trade_decision','trader_plan','investment_plan'] if c in d]).to_csv((_SCANNER_ROOT + '/fin-llm-eval/backtest/backtest_results.csv'),index=False)

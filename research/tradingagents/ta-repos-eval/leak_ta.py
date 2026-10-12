@@ -5,9 +5,10 @@ For each sampled setup the library is run 3 ways and the values AT THE CUTOFF BA
   F = full history to 2026-10-07, read at the rule bar (what a vectorised backtest on the whole series would see)
   J = every bar after the rule bar replaced by random garbage (+30 garbage bars), read at the rule bar
 A column whose F or J value differs from T uses bars after the cutoff (look-ahead) or is recomputed/repainted later."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, json, time, numpy as np, pandas as pd, warnings
 warnings.filterwarnings('ignore')
-sys.path.insert(0,'/workspace/ta-repos-eval')
+sys.path.insert(0,(_SCANNER_ROOT + '/ta-repos-eval'))
 from common import *
 import talib
 from talib import abstract

@@ -1,7 +1,8 @@
 """Descriptive follow-up (NOT in the FDR family): do the two short-side survivors add anything to the §3.14 lead (close below the
 120-day value area) and to the existing short rule?"""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import numpy as np, pandas as pd, statsmodels.api as sm, warnings; warnings.filterwarnings('ignore')
-O='out/'; B=pd.read_pickle(O+'analysis_base.pkl'); GF=pd.read_pickle('/workspace/trading-frameworks-eval/iaf/geo_features.pkl')[['setup_id','vp120_va_pos']]
+O='out/'; B=pd.read_pickle(O+'analysis_base.pkl'); GF=pd.read_pickle((_SCANNER_ROOT + '/trading-frameworks-eval/iaf/geo_features.pkl'))[['setup_id','vp120_va_pos']]
 X=B[(B.asset=='stock')&(B.direction=='SHORT')].merge(GF,on='setup_id',how='left')
 X['crsi_al']=-(X.pta_crsi-50); X['sma200_al']=-X.dist_sma200_atr
 X['crsi_q5']=X.crsi_al>=X.crsi_al.quantile(0.8); X['sma200_q5']=X.sma200_al>=X.sma200_al.quantile(0.8); X['va']=X.vp120_va_pos=='below VA'

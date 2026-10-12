@@ -1,10 +1,11 @@
 """Filter + level tests for TA-Lib / pandas-ta / smartmoneyconcepts / Elliott repos, ONE Benjamini-Hochberg family over every executed
 comparison, robustness checks — statistics copied from iaf/geo_analyze.py (§3.14) so results are directly comparable.
 Outcome = active-policy trade (sim_levels base_c == sim_geo base_c == sim_ratchet policy rows), x_mkt = excess vs SPY (stocks) / BTC (crypto)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, numpy as np, pandas as pd, warnings
 import statsmodels.api as sm
 warnings.filterwarnings('ignore')
-IAF='/workspace/trading-frameworks-eval/iaf/'; O='/workspace/ta-repos-eval/out/'
+IAF=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/'); O=(_SCANNER_ROOT + '/ta-repos-eval/out/')
 OUT=IAF
 s=open(IAF+'analyze.py').read(); exec(s[:s.index('# ======================= REPORT')])
 exec(s[s.index('def rulepass_long'):s.index('def table_policies')])
@@ -20,7 +21,7 @@ SEGS=[('All stock LONG',lambda g:(g.asset=='stock')&(g.direction=='LONG')),
       ('All stock SHORT',lambda g:(g.asset=='stock')&(g.direction=='SHORT')),
       ('Crypto LONG',lambda g:(g.asset=='crypto')&(g.direction=='LONG'))]
 TA=pd.read_pickle(O+'ta_features.pkl'); SM=pd.read_pickle(O+'smc_features.pkl'); EWF=pd.read_pickle(O+'ew_features.pkl')
-MOM=pd.read_csv('/workspace/scanner-tool-eval/forecasts/mom121.csv')[['setup_id','f20']].rename(columns={'f20':'mom121'})
+MOM=pd.read_csv((_SCANNER_ROOT + '/scanner-tool-eval/forecasts/mom121.csv'))[['setup_id','f20']].rename(columns={'f20':'mom121'})
 OURS=pd.read_csv(IAF+'elliott_coverage.csv')[['setup_id','ew']].rename(columns={'ew':'ours_ew'})
 B=T[T.policy=='base_c'].merge(TA,on='setup_id',how='left').merge(SM,on='setup_id',how='left').merge(EWF,on='setup_id',how='left').merge(MOM,on='setup_id',how='left').merge(OURS,on='setup_id',how='left')
 B=B.merge(D[['setup_id','vs_sma200']],on='setup_id',how='left')

@@ -1,7 +1,8 @@
 """Elliott-wave state at the cutoff for every setup from 3 GitHub repos (ew_libs.py), fed only bars <= the rule bar."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, time, numpy as np, pandas as pd, warnings
 warnings.filterwarnings('ignore')
-sys.path.insert(0,'/workspace/ta-repos-eval')
+sys.path.insert(0,(_SCANNER_ROOT + '/ta-repos-eval'))
 from common import *
 import ew_libs as E
 from multiprocessing import Pool

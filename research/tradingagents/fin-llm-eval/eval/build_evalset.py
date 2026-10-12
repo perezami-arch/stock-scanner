@@ -1,4 +1,5 @@
 """Builds eval set with programmatically computed ground truth."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json
 T = dict(rev=(4820,5615), cogs=(2940,3312), opex=(1105,1286), ebit=(775,1017), intexp=(62,58),
          pretax=(713,959), tax=(150,201), ni=(563,758), shares=(412,405), cfo=(910,1148), capex=(285,342),
@@ -60,6 +61,6 @@ RISK = """Excerpt from Item 1A (Risk Factors), Northwind Devices Inc.:
 "Approximately 38% of our FY2025 revenue came from two customers, and the loss of either could materially reduce our revenue. Substantially all of our chips are fabricated by a single foundry in Taiwan; geopolitical tensions or natural disasters could disrupt supply. Our $1.32 billion of debt includes a $600 million term loan with a floating rate tied to SOFR, so higher interest rates increase our interest expense. We are subject to export controls that restrict sales of certain products to customers in China, which represented 14% of FY2025 revenue. We are a defendant in a patent-infringement lawsuit seeking $250 million in damages; an adverse outcome could harm our results.\""""
 evals.append(dict(id="risk_summary",type="qual",turns=[RISK+"\n\nSummarize the three most material risks for an equity investor in exactly three bullet points, each under 25 words."],kind="qual"))
 evals.append(dict(id="leverage_view",type="qual",turns=["Using the table, is Northwind's balance-sheet leverage a concern for a long-term investor? Answer in 2-3 sentences and cite at least two specific ratios with their values."],kind="qual",table=True))
-json.dump(dict(table=TABLE,risk=RISK,items=evals),open("/workspace/fin-llm-eval/eval/evalset.json","w"),indent=1,ensure_ascii=False)
+json.dump(dict(table=TABLE,risk=RISK,items=evals),open((_SCANNER_ROOT + "/fin-llm-eval/eval/evalset.json"),"w"),indent=1,ensure_ascii=False)
 for e in evals: print(e['id'], e.get('answer', e.get('answers','')))
 print(len(evals))

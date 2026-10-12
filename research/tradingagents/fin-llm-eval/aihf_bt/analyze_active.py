@@ -3,10 +3,11 @@ Active policy (stocks, close-based, costs 0.02% fee + 0.05% slippage per side, P
 open trades marked at the 2026-10-07 close): LONG = chandelier 4xATR14 + sell 1/2 at Fib 1.618 (sim policy tg_ch_HY2_c);
 SHORT = chandelier 4xATR14 (chand4_c). Excess vs SPY = same entry->exit window (shorts: ret + SPY ret).
 Verdict: approve = agent signal in the setup's direction; veto = opposite; neutral; abstain = no data / error."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json, glob, warnings, numpy as np, pandas as pd
 from scipy.stats import mannwhitneyu, wilcoxon
 warnings.filterwarnings('ignore')
-T = pd.read_csv('/workspace/trading-frameworks-eval/iaf/sim_trades_enriched.csv', low_memory=False)
+T = pd.read_csv((_SCANNER_ROOT + '/trading-frameworks-eval/iaf/sim_trades_enriched.csv'), low_memory=False)
 A = pd.concat([T[(T.policy == 'tg_ch_HY2_c') & (T.direction == 'LONG')], T[(T.policy == 'chand4_c') & (T.direction == 'SHORT')]])
 A = A[A.asset == 'stock'][['setup_id', 'ret_net', 'x_spy', 'status', 'entry_date', 'in_main', 'dup', 'direction', 'ticker']]
 A = A.rename(columns={'direction': 'dir_sim', 'ticker': 'ticker_sim'})
@@ -48,7 +49,7 @@ def verdict_aihf(r):
     return 'approve' if (s == 'bullish') == (r['direction'] == 'LONG') else 'veto'
 secs, V = [], {}
 for p in ['druckenmiller', 'buffett']:
-    d = pd.DataFrame([json.loads(l) for l in open(f'/workspace/fin-llm-eval/aihf_bt/{p}.jsonl')])
+    d = pd.DataFrame([json.loads(l) for l in open(f'{_SCANNER_ROOT}/fin-llm-eval/aihf_bt/{p}.jsonl')])
     d['verdict'] = d.apply(verdict_aihf, axis=1)
     ok = d[d.ok & (d.abstained == False)]
     extra = (f'Leak check: {int(d.leak.sum())} setups used data dated after the cutoff. Median runtime {d.runtime_s.median():.0f}s/setup on the box CPU; '
@@ -68,7 +69,7 @@ for side in ['ALL', 'LONG', 'SHORT']:
     s = U if side == 'ALL' else U[U.dir_sim == side]; rows.append(dict(set=f'all stock setups in the main sheet, {side}', **stats(s)))
 secs.append('### Context: the full stock universe under the same policy (the 60 are the first 60 stock rows of the stratified sample)\n\n' + fmt(rows))
 # TradingAgents
-R = [json.load(open(f)) for f in sorted(glob.glob('/workspace/fin-llm-eval/backtest/runs/*.json'))]
+R = [json.load(open(f)) for f in sorted(glob.glob((_SCANNER_ROOT + '/fin-llm-eval/backtest/runs/*.json')))]
 if R:
     d = pd.DataFrame(R)
     def vt(r):
@@ -81,4 +82,4 @@ if R:
         f'- {r.ticker} {r.direction} ({r.trade_date}): **{r.decision}** -> {r.verdict}; active-policy outcome {r.ret_net*100:+.1f}% (x SPY {r.x_spy*100:+.1f}, {r.status}); '
         f'{r.runtime_s/60:.0f} min, {int(r.llm_calls)} LLM calls, {int(r.prompt_tokens):,} prompt / {int(r.completion_tokens):,} output tokens'
         if r.ok else f'- {r.ticker} {r.direction}: failed ({str(r.error)[:120]})' for r in d.itertuples()))
-open('/workspace/fin-llm-eval/aihf_bt/filter_results_active.md', 'w').write('\n\n'.join(secs) + '\n'); print('\n\n'.join(secs))
+open((_SCANNER_ROOT + '/fin-llm-eval/aihf_bt/filter_results_active.md'), 'w').write('\n\n'.join(secs) + '\n'); print('\n\n'.join(secs))

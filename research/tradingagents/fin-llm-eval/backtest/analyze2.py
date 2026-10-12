@@ -1,6 +1,7 @@
 """TradingAgents sample: decisions vs realized, market-adjusted, robustness. Writes tracker_backtest.md."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json, glob, re, datetime as dt, pandas as pd, numpy as np
-B='/workspace/fin-llm-eval/backtest'
+B=(_SCANNER_ROOT + '/fin-llm-eval/backtest')
 
 def md(df,index=True):
     df=df.reset_index() if index else df
@@ -9,12 +10,12 @@ def md(df,index=True):
     for _,r in df.iterrows():
         lines.append('| '+' | '.join('' if (isinstance(v,float) and np.isnan(v)) else (f'{v:.2f}' if isinstance(v,float) else str(v)) for v in r.values)+' |')
     return '\n'.join(lines)
-P=pd.read_csv('/workspace/scanner-tool-eval/setups_prepared.csv')[['setup_id','rtot','xtot','x5','x20','xeth_tot','ntot']]
+P=pd.read_csv((_SCANNER_ROOT + '/scanner-tool-eval/setups_prepared.csv'))[['setup_id','rtot','xtot','x5','x20','xeth_tot','ntot']]
 rows=[json.load(open(f)) for f in sorted(glob.glob(f'{B}/runs/*.json'))]
 out=[f"# TradingAgents decisions vs realized outcomes — scanner setup sample\n",
      f"_Auto-generated {dt.datetime.now():%Y-%m-%d %H:%M} IL by backtest/analyze2.py. Model: local Qwen2.5-3B-Instruct Q4_K_M via Ollama (7B was OOM-killed on the shared box), all agents; analysts = market (+fundamentals for stocks); 1 debate round, 1 risk round, 500-token cap per call. Sample = backtest/sample_order.csv (stratified by source×direction, wins/losses alternated, crypto and Grok pre-breakout double-weighted), taken in priority order._\n"]
 if not rows:
-    out.append("No finished setups yet."); open('/workspace/fin-llm-eval/tracker_backtest.md','w').write('\n'.join(out)); raise SystemExit
+    out.append("No finished setups yet."); open((_SCANNER_ROOT + '/fin-llm-eval/tracker_backtest.md'),'w').write('\n'.join(out)); raise SystemExit
 d=pd.DataFrame(rows)
 n_all=len(d); fails=d[d.ok!=True]
 d=d[d.ok==True].copy().merge(P,on='setup_id',how='left')
@@ -68,6 +69,6 @@ out.append(f"Setups whose agent text mentions any date after the cutoff: {len(lk
 out.append("\n## Runtime (box CPU, contended)\n")
 out.append(f"Per setup: mean {d.runtime_s.mean()/60:.1f} min, median {d.runtime_s.median()/60:.1f} min; LLM calls mean {d.llm_calls.mean():.1f}; prompt tokens mean {d.prompt_tokens.mean():.0f}; completion tokens mean {d.completion_tokens.mean():.0f}.")
 if len(fails): out.append("\n## Failures\n"+md(fails[['priority','ticker','error']],index=False))
-open('/workspace/fin-llm-eval/tracker_backtest.md','w').write('\n'.join(out))
+open((_SCANNER_ROOT + '/fin-llm-eval/tracker_backtest.md'),'w').write('\n'.join(out))
 d.drop(columns=[c for c in ['market_report','fundamentals_report','bull','bear','final_trade_decision','trader_plan','investment_plan','tb'] if c in d]).to_csv(f'{B}/backtest_results.csv',index=False)
 print('written', len(d))
