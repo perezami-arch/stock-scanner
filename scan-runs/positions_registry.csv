@@ -1,0 +1,1 @@
+trade_id,trade_key,ticker,asset,direction,source_run,scan_asof_local,cutoff_utc,entry_session,entry_ref,entry_price,entry_fill,stop_initial,target,atr14_at_cutoff,levels_file,status,checkpoints_done,last_decision_utc,last_state,last_close,last_close_date,current_stop,unrealized_dir,exit_date,exit_price,exit_reason,ret_dir,bench_ret,excess_dir,half_taken,is_trial,is_sim
