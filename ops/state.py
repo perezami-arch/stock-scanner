@@ -26,7 +26,7 @@ def files(base):
     out = set()
     for g in STATE:
         out.update(p for p in glob.glob(os.path.join(base, g), recursive=True) if os.path.isfile(p))
-    trk = sorted(p for p in out if os.path.basename(p).startswith('scan-tracker-'))
+    trk = sorted((p for p in out if os.path.basename(p).startswith('scan-tracker-')), key=os.path.getmtime)  # same rule as latest_tracker()
     for p in trk[:-1]: out.discard(p)                    # only the newest tracker workbook
     cut = time.time() - X_CACHE_DAYS * 86400
     out = {p for p in out if '/x-cache/' not in p or os.path.getmtime(p) >= cut}
