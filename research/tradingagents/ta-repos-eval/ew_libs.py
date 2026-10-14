@@ -8,8 +8,9 @@ Shorts: prices are mirrored (p' = K - p, which keeps every Fibonacci/length rati
 mapped back. Pivot lags (repaint control, see leak_ew.py): taew pivots need 1 later bar (never on the last bar of truncated data);
 ElliottWaves (argrelextrema order=7, mode 'clip') can mark provisional pivots in the last 7 bars -> dropped; ElliottWaveAnalyzer
 monowaves whose end is the LAST bar (hi()/lo() ran out of data, still extending) are unconfirmed -> treated as 'in progress'."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, io, contextlib, numpy as np, pandas as pd
-sys.path.insert(0,'/workspace/ta-repos-eval/repos/ElliottWaveAnalyzer'); sys.path.insert(0,'/workspace/ta-repos-eval/repos/python-taew')
+sys.path.insert(0,(_SCANNER_ROOT + '/ta-repos-eval/repos/ElliottWaveAnalyzer')); sys.path.insert(0,(_SCANNER_ROOT + '/ta-repos-eval/repos/python-taew'))
 from taew import ew as TAEW
 from models.MonoWave import MonoWaveUp, MonoWaveDown
 from models.WaveRules import Impulse
@@ -17,7 +18,7 @@ from models.WaveOptions import WaveOptionsGenerator5
 from models.WavePattern import WavePattern
 from scipy import signal
 import math
-_src=open('/workspace/ta-repos-eval/repos/ElliottWaves/elliottwaves.py').read()
+_src=open((_SCANNER_ROOT + '/ta-repos-eval/repos/ElliottWaves/elliottwaves.py')).read()
 _AR={'np':np,'pd':pd,'signal':signal,'math':math}
 # only the function definitions (the module itself downloads data and runs a broken demo at import time)
 for name in ('minmaxTwoMeasures','isMin','isMax','distance','isElliottWave','filterWaveSet','line','elliottWaveLinearRegressionError','findBestFitWave'):

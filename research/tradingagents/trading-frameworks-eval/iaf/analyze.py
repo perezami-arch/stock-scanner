@@ -1,5 +1,6 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json, glob, os, numpy as np, pandas as pd
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 D=pd.read_pickle(OUT+'setups_prepared.pkl'); F=pd.read_pickle(OUT+'frames.pkl'); B=pd.read_pickle(OUT+'bench_yf.pkl')
 SECMAP={'Technology':'XLK','Financial Services':'XLF','Energy':'XLE','Healthcare':'XLV','Consumer Cyclical':'XLY','Consumer Defensive':'XLP','Industrials':'XLI','Basic Materials':'XLB','Utilities':'XLU','Real Estate':'XLRE','Communication Services':'XLC'}
 def grp(r):
@@ -11,7 +12,7 @@ def grp(r):
         return {'momentum':'Grok momentum','near-low':'Grok near-low','prebreakout':'Grok prebreakout','x-trends-digest':'Grok x-trends','portfolio-news-scan':'Grok portfolio-news'}.get(a,'Grok other')
     return r.source
 D['group']=D.apply(grp,axis=1)
-D=D.merge(pd.read_csv('/workspace/tracker/setups-point-in-time-2026-10-08.csv')[['setup_id','in_hold_no_stop_csv']],on='setup_id',how='left')
+D=D.merge(pd.read_csv((_SCANNER_ROOT + '/tracker/setups-point-in-time-2026-10-08.csv'))[['setup_id','in_hold_no_stop_csv']],on='setup_id',how='left')
 D['src_asset']=D.source+' '+D.asset
 MAIN=D.in_main & ~D.dup & D.has_data & D.decision_utc.notna()
 # ---- benchmark price series (open/close by date)

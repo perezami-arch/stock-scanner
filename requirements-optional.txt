@@ -1,0 +1,4 @@
+# Weight-0 research columns. Installed with "|| true": if a wheel is missing the scan still runs (tools report NaN/status).
+TA-Lib
+pandas-ta
+smartmoneyconcepts

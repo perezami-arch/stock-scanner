@@ -25,11 +25,12 @@ METHOD (per timeframe TF)
               (INTRADAY 4, SWING 8, LONG_TERM 25); nearest support/resistance among them, distance in
               daily ATR14, strength, tf, touches, flip.
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, math, json, warnings
 import numpy as np, pandas as pd
 warnings.filterwarnings("ignore")
 
-CACHE = "/workspace/scanner-levels-cache"
+CACHE = (_SCANNER_ROOT + "/scanner-levels-cache")
 NY = "America/New_York"
 TF_K = {"5m": 6, "1H": 4, "D": 3, "W": 2, "M": 2}
 TF_WEIGHT = {"5m": 0.5, "1H": 0.75, "D": 1.0, "W": 2.0, "M": 3.0}
@@ -41,7 +42,7 @@ MAX_DIST_ATR = {"INTRADAY": 4.0, "SWING": 8.0, "LONG_TERM": 25.0}   # candidate 
 ROUND_STEPS = [1, 2.5, 5, 10, 25, 50, 100, 250, 500, 1000]
 
 def _geo():
-    import sys; sys.path.insert(0, "/workspace")
+    import sys; sys.path.insert(0, _SCANNER_ROOT)
     import scanner_geometry as GEO
     return GEO
 

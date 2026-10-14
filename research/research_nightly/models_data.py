@@ -6,16 +6,17 @@ Bars: yfinance daily, auto_adjust=True, from 2023-01-01. POINT-IN-TIME: every fr
 kept bar is not D is dropped (stale), so every model sees exactly the same last bar.
 Output: research-models/data/<D>/src_csv/<SYM>.csv (date,symbol,open,high,low,close,volume,vwap,factor) + meta.json.
 Note: auto-adjusted history is rescaled backwards on splits/dividends (a level change only; returns/features are unaffected)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, json, glob, argparse, time
 import pandas as pd, numpy as np
-sys.path.insert(0, "/workspace")
+sys.path.insert(0, _SCANNER_ROOT)
 import scanner_geometry as GEO
-ROOT = "/workspace/research-models/data"
+ROOT = (_SCANNER_ROOT + "/research-models/data")
 def universe():
-    u = set(pd.read_csv("/workspace/gh-repos-eval/qlib/qlib_data/instruments/all.txt", sep="\t", header=None)[0].astype(str))
-    try: u |= set(pd.read_csv("/workspace/scan_universe.csv").t.astype(str))
+    u = set(pd.read_csv((_SCANNER_ROOT + "/gh-repos-eval/qlib/qlib_data/instruments/all.txt"), sep="\t", header=None)[0].astype(str))
+    try: u |= set(pd.read_csv((_SCANNER_ROOT + "/scan_universe.csv")).t.astype(str))
     except Exception: pass
-    runs = sorted(glob.glob("/workspace/scan-runs/20*/scan_raw.csv"))
+    runs = sorted(glob.glob((_SCANNER_ROOT + "/scan-runs/20*/scan_raw.csv")))
     if runs: u |= set(pd.read_csv(runs[-1]).t.astype(str))
     return sorted(t.upper() for t in u if not t.startswith("^"))
 def sym_key(t): return t.upper().replace(".", "_")           # = research_columns lookup key

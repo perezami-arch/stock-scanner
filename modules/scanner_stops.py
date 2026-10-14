@@ -21,13 +21,14 @@ ACTIVE RULES
   4. Crypto SHORT  : FROZEN. Never output as a setup; written to frozen_crypto_shorts (separate CSV) for measurement only.
 EXPERIMENTAL (logged only, never changes the active stop/targets): see fib_elliott().
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, json, argparse, warnings
 import numpy as np, pandas as pd
 warnings.filterwarnings("ignore")
-sys.path.insert(0, "/workspace")
+sys.path.insert(0, _SCANNER_ROOT)
 import scanner_momentum as SM
 
-IAF = "/workspace/trading-frameworks-eval/iaf/"
+IAF = (_SCANNER_ROOT + "/trading-frameworks-eval/iaf/")
 _s = open(IAF + "sim_fib.py").read(); exec(_s[_s.index("def atr14"):_s.index("def clock")])           # atr14, zigzag
 _p = open(IAF + "prep.py").read()
 exec(_p[_p.index("def cci"):_p.index("cache={}")]); exec(_p[_p.index("def feats"):_p.index("rows=[]")])  # cci, feats
@@ -271,7 +272,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--setups", required=True, help="CSV: ticker,asset,direction[,entry,entry_date,mcap_b]")
     ap.add_argument("--asof"); ap.add_argument("--out")
-    ap.add_argument("--frozen-out", default="/workspace/scan-runs/frozen_crypto_shorts.csv")
+    ap.add_argument("--frozen-out", default=(_SCANNER_ROOT + "/scan-runs/frozen_crypto_shorts.csv"))
     a = ap.parse_args()
     A, F = annotate(pd.read_csv(a.setups), a.asof, frozen_out=a.frozen_out)
     if a.out: os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True); A.to_csv(a.out, index=False, encoding="utf-8-sig"); print("wrote", a.out)

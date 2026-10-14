@@ -1,5 +1,6 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json, re, sys, glob, os
-E={i['id']:i for i in json.load(open('/workspace/fin-llm-eval/eval/evalset.json'))['items']}
+E={i['id']:i for i in json.load(open((_SCANNER_ROOT + '/fin-llm-eval/eval/evalset.json')))['items']}
 def strip_think(t):
     t=re.sub(r'<think>.*?</think>','',t,flags=re.S)
     if '<think>' in t: t=''  # unterminated think = no answer
@@ -43,10 +44,10 @@ def score(path):
                 tok_s=gen_tok/gen_s if gen_s else 0,truncated=trunc,peak_rss_gb=d['peak_rss_kb']/1024/1024,rows=rows)
 if __name__=='__main__':
     out={}
-    for p in sorted(glob.glob('/workspace/fin-llm-eval/results/*.json')):
+    for p in sorted(glob.glob((_SCANNER_ROOT + '/fin-llm-eval/results/*.json'))):
         if p.endswith(('summary.json','speed.json')): continue
         s=score(p); out[s['model']]=s
         print(f"{s['model']}: {s['correct']}/{s['n']} ({s['acc']:.0%}) avg_tok={s['avg_tok']:.0f} tok/s={s['tok_s']:.2f} trunc={s['truncated']} peakRSS={s['peak_rss_gb']:.2f}GB")
         for r in s['rows']:
             if r[1]!='qual': print('   ',r)
-    json.dump(out,open('/workspace/fin-llm-eval/results/summary.json','w'),indent=1)
+    json.dump(out,open((_SCANNER_ROOT + '/fin-llm-eval/results/summary.json'),'w'),indent=1)

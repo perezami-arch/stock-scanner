@@ -31,24 +31,27 @@ Outputs: CSV (all rows) + Hebrew Markdown section (per-tool summary + top tests)
 CLI:  python3 tool_stats.py TRACKER.xlsx [--extra scan_raw.csv ...] [--ledger LEDGER] [--since 2026-10-12] [--out DIR]
 API:  import tool_stats as TS; table, md = TS.run(tracker, extras=[...], ledger=TS.LEDGER, since='2026-10-12', out_dir=None)
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, re, sys, math, json, glob, argparse, warnings
 import numpy as np, pandas as pd
 warnings.filterwarnings("ignore")
-sys.path.insert(0, "/workspace")
+sys.path.insert(0, _SCANNER_ROOT)
 
 VERSION = "2026-10-08.3"   # .2: excess_dir_d20 preferred; bench = tracker prices_all.pkl first (same as build7)
                            # .3: Elliott v2 (scanner_elliott_v2) - exp_ev2_* -> tool "elliott_v2"; price/text/tautological ev2 columns = info;
                            #     trade-direction ev2 view built from raw ev2_long_*/ev2_short_* (e.g. scan_hooks.csv extras) when exp_ev2_* is missing
 FORWARD_START = "2026-10-12"
-LEDGER = "/workspace/scan-runs/platform_verdicts_ledger.csv"
+LEDGER = (_SCANNER_ROOT + "/scan-runs/platform_verdicts_ledger.csv")
 HORIZONS = (5, 10, 20)
 MIN_SIDE = 20            # FDR family: >= 20 results on each side
 INTERIM_N, DECISION_N = 15, 30
 MIN_DATES = 5
 Q = 0.10
-CACHE = "/workspace/research-models/bench"
+CACHE = (_SCANNER_ROOT + "/research-models/bench")
 MODEL_RE = re.compile(r"^(llm_|grok|perplexity|pplx|claude|gpt|jev|platform_|verdict)", re.I)
 INCLUDE_RE = re.compile(r"^(exp_|watch_|sr_|openbb_|obb_|short_(?:si_pct|si_dtc|si_chg|svr_|comp_|squeeze|ib_fee|ib_avail)|tv_|tradingview|llm_|grok|perplexity|pplx|claude|gpt|jev|candle_|liq_|vp\d|vpanc|vp20m|lowvol|momentum_score$)", re.I)
+# 10.10: liq-sweep / fib-spiral price levels & times are info only (not tests): exp_fs_A..D, entry/stop/targets, ls_* price levels
+PRICE_LSFS_RE = re.compile(r"^exp_(fs_(A|B|C|D|D_time|D_conf_time|entry|stop|lines|target_t1|target_t2|target_786|t1_src|t2_src)|ls_(level|pierce_time|entry_e1|e2_limit|stop|target|atr14|dir))$")
 SKIP_RE = re.compile(r"(_date|_at|_lbl|_label_end|_train_end|_bar|_model|_status|_flag|_ts|_utc|_price|_level|_poc|_vah|_val|_near|_lo|_hi|"
                      r"_tgt|_inval|_last|_above|_below|_pwh|_pwl|_pdh|_pdl|_headlines_top3|sector_etf|_patterns|_patterns_prev2|_kind_lbl|"
                      r"_reason|_text|_risk|_cost.*|_version|_from|_age_days|_period_end|_last_filed)$", re.I)
@@ -239,7 +242,7 @@ LEDGER_META = {"llm_jev_sentiment": "signed", "llm_pplx_flag": "flag", "llm_jev_
 def bench_series(sym):
     """daily closes for SPY / BTC-USD: tracker prices_all.pkl first, else yfinance (cached per day)."""
     try:
-        p = pd.read_pickle("/workspace/tracker/prices_all.pkl")
+        p = pd.read_pickle((_SCANNER_ROOT + "/tracker/prices_all.pkl"))
         if sym in p.columns.get_level_values(0):
             s = p[sym]["Close"].dropna(); s.index = pd.to_datetime(s.index); cached = s
         else: cached = None
@@ -314,6 +317,7 @@ def _meta():
     return m
 def kind_of(col, s, meta):
     if col in meta: return meta[col]
+    if PRICE_LSFS_RE.match(col): return "info"
     if SKIP_RE.search(col) and not col.startswith("watch_"): return "info"
     v = s.dropna()
     if not len(v): return "empty"
@@ -498,7 +502,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("tracker"); ap.add_argument("--extra", nargs="*", default=[]); ap.add_argument("--ledger", default=LEDGER)
     ap.add_argument("--no-ledger", action="store_true"); ap.add_argument("--since", default=FORWARD_START); ap.add_argument("--horizon", type=int, default=20)
-    ap.add_argument("--out", default="/workspace/research-models/tool_stats"); ap.add_argument("--cols", nargs="*"); ap.add_argument("--include-re")
+    ap.add_argument("--out", default=(_SCANNER_ROOT + "/research-models/tool_stats")); ap.add_argument("--cols", nargs="*"); ap.add_argument("--include-re")
     ap.add_argument("--min-side", type=int, default=MIN_SIDE)
     a = ap.parse_args()
     T, md = run(a.tracker, a.extra, None if a.no_ledger else a.ledger, a.since, a.horizon, a.out, a.cols, a.include_re, min_side=a.min_side)

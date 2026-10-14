@@ -1,5 +1,6 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, numpy as np, pandas as pd, warnings; warnings.filterwarnings("ignore")
-sys.path.insert(0, "/workspace"); sys.path.insert(0, "/workspace/tradingview/validation")
+sys.path.insert(0, _SCANNER_ROOT); sys.path.insert(0, (_SCANNER_ROOT + "/tradingview/validation"))
 import scanner_stops as SS
 from validate import load, run, same, TICK
 tot = ok = nstop = 0

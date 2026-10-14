@@ -7,10 +7,11 @@ Level tests: paired per-trade difference (variant - baseline) on covered trades,
 Min N >= 20 on each side (filter) / >= 20 covered trades (level). Every executed comparison enters ONE BH family (q = 0.10).
 Robust = q < 0.10 AND median difference same sign AND raw-return difference same sign AND sign kept after dropping the top-1 and
 top-3 tickers (ranked by their contribution to the difference). q < 0.10 failing any check = LUCK."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import numpy as np, pandas as pd, warnings, sys
 import statsmodels.api as sm
 warnings.filterwarnings('ignore')
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 s=open(OUT+'analyze.py').read(); exec(s[:s.index('# ======================= REPORT')])
 exec(s[s.index('def rulepass_long'):s.index('def table_policies')])
 GT=pd.read_csv(OUT+'sim_geo_trades.csv'); GF=pd.read_pickle(OUT+'geo_features.pkl')

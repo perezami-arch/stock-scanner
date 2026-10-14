@@ -10,8 +10,9 @@ Elliott (EW): from the confirmed pivot sequence ending in a same-side-as-origin 
 Modes: 'c' close-based (checks from close of e+2, stop before target on the same close, fills at close);
        'i' intraday (from e+1; stop if Low<=stop first (conservative), fill min(Open,stop); target if High>=tgt, fill max(Open,tgt)).
 Also records hold-to-end return so 'money left on the table' after target exits can be measured."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import numpy as np, pandas as pd
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 s=open(OUT+'sim_fib.py').read(); exec(s[s.index('def atr14'):s.index('def clock')])
 D=pd.read_pickle(OUT+'setups_prepared.pkl'); F=pd.read_pickle(OUT+'frames.pkl')
 COST={'stock':dict(fee=0.02, slip=0.05), 'crypto':dict(fee=0.10, slip=0.10)}

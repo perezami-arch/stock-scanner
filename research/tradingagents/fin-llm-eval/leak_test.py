@@ -1,9 +1,10 @@
 """Point-in-time leakage test for TradingAgents tools: trade_date fixed, model 'asks' for later dates."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import re, json, sys, inspect
 from tradingagents.default_config import DEFAULT_CONFIG
 from tradingagents.dataflows.config import set_config
 from tradingagents.agents import tools as T
-cfg = DEFAULT_CONFIG.copy(); cfg["data_cache_dir"]="/workspace/fin-llm-eval/results/ta_cache"; set_config(cfg)
+cfg = DEFAULT_CONFIG.copy(); cfg["data_cache_dir"]=(_SCANNER_ROOT + "/fin-llm-eval/results/ta_cache"); set_config(cfg)
 TD = sys.argv[1] if len(sys.argv)>1 else "2026-08-20"
 LATE = "2026-10-07"
 DATE = re.compile(r"(20\d\d-\d\d-\d\d)")

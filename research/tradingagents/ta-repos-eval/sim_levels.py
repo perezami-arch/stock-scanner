@@ -9,13 +9,14 @@ Only the level dictionary differs (built from out/smc_features.pkl and out/ew_fe
  EW (per repo taew / ewa): S_<r>inv = rule invalidation (w3: wave-1 origin, w5: wave-1 end) -/+0.5 ATR, S_<r>last = end of the last
                completed wave (wave-2 / wave-4 end) -/+0.5 ATR; T_<r> = wave target (w3: w2 + 1.618*w1, w5: w4 + w1)
 fix = the level is the only stop; hyb = tighter of level and policy stop. No level beyond entry -> baseline trade, covered=False."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import numpy as np, pandas as pd, sys
-sys.path.insert(0,'/workspace/trading-frameworks-eval/iaf')
+sys.path.insert(0,(_SCANNER_ROOT + '/trading-frameworks-eval/iaf'))
 from stop_rules import atr_wilder, ChandelierStop
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 s=open(OUT+'sim_fib.py').read(); exec(s[s.index('def zigzag'):s.index('def clock')])
 D=pd.read_pickle(OUT+'setups_prepared.pkl'); F=pd.read_pickle(OUT+'frames.pkl')
-SM=pd.read_pickle('/workspace/ta-repos-eval/out/smc_features.pkl').set_index('setup_id'); EWF=pd.read_pickle('/workspace/ta-repos-eval/out/ew_features.pkl').set_index('setup_id')
+SM=pd.read_pickle((_SCANNER_ROOT + '/ta-repos-eval/out/smc_features.pkl')).set_index('setup_id'); EWF=pd.read_pickle((_SCANNER_ROOT + '/ta-repos-eval/out/ew_features.pkl')).set_index('setup_id')
 COST={'stock':dict(fee=0.02, slip=0.05), 'crypto':dict(fee=0.10, slip=0.10)}
 def clock(asset):
     if asset=='crypto': cal=pd.date_range('2026-05-01','2026-10-07',freq='D'); opens=cal
@@ -118,7 +119,7 @@ for asset in ('stock','crypto'):
                 rows.append(dict(setup_id=r.setup_id,asset=asset,direction=r.direction,policy=f'{vname}_{mode}',variant=vname,mode=mode,covered=covered,
                     entry_date=cal[k],exit_date=cal[exk],entry_fill=ein,status=status,ret_net=ret,days=int(exk-k),
                     R_pct=pol_k*A/ein*100,level=lvl_used,level_dist_atr=(abs(lvl_used-ein)/A if lvl_used is not None else np.nan),target_hit=hit))
-Rr=pd.DataFrame(rows); Rr.to_csv('/workspace/ta-repos-eval/out/sim_levels_trades.csv',index=False)
+Rr=pd.DataFrame(rows); Rr.to_csv((_SCANNER_ROOT + '/ta-repos-eval/out/sim_levels_trades.csv'),index=False)
 # regression vs the scanner policy rows of sim_ratchet_trades.csv
 RT=pd.read_csv(OUT+'sim_ratchet_trades.csv'); ok=True
 for asset,dirn,src in (('stock','LONG','rt_ratchet_h618'),('stock','SHORT','rt_ratchet'),('crypto','LONG','rt_fixed3')):

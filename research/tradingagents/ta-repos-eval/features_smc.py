@@ -6,9 +6,10 @@ function stamps an artificial swing on the very last bar). The wrapper therefore
   * removes the artificial swings that swing_highs_lows() stamps on bar 0 and the LAST bar (never confirmed),
   * uses swing_length=10 (a swing at bar i is confirmed at i+5 <= cutoff), close-break BOS/CHoCH, OB with wick mitigation,
   * treats an FVG / OB / liquidity level as 'open' only if its mitigation/sweep index is 0 (= not hit up to the cutoff)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, numpy as np, pandas as pd, warnings, io, contextlib
 warnings.filterwarnings('ignore')
-sys.path.insert(0,'/workspace/ta-repos-eval')
+sys.path.insert(0,(_SCANNER_ROOT + '/ta-repos-eval'))
 from common import *
 with contextlib.redirect_stdout(io.StringIO()): from smartmoneyconcepts import smc
 from multiprocessing import Pool

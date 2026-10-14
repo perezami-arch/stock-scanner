@@ -20,11 +20,12 @@ Binding PIT rules (research team, 08.10.2026):
 Units: *_ttm/debt/cash/equity in USD; growth, margins, roe, fcf_yield as FRACTIONS (0.12 = 12%); peg = pe / (EPS growth in %).
 Import-safe (no network on import).
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, json, gzip, time, threading, datetime as dt
 import numpy as np, pandas as pd
 
 UA = os.environ.get('SEC_EDGAR_UA', 'Ilan Perets scanner perezami@icloud.com')
-CACHE = '/workspace/fundamentals-cache'
+CACHE = (_SCANNER_ROOT + '/fundamentals-cache')
 MIN_INTERVAL = 0.125          # <= 8 requests / second (SEC limit is 10)
 FORMS_Q = {'10-Q', '10-Q/A'}; FORMS_K = {'10-K', '10-K/A', '20-F', '20-F/A', '40-F', '40-F/A', '10-KT', '10-KT/A'}
 FORMS = FORMS_Q | FORMS_K

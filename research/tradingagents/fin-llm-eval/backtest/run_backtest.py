@@ -1,3 +1,4 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, os, time, json, traceback, pandas as pd
 from tradingagents.default_config import DEFAULT_CONFIG
 from tradingagents.graph.trading_graph import TradingAgentsGraph
@@ -13,18 +14,18 @@ class Usage(BaseCallbackHandler):
                     self.pt+=um.get('input_tokens',0); self.ct+=um.get('output_tokens',0)
         except Exception: pass
 MODEL=sys.argv[1]; START=int(sys.argv[2]); END=int(sys.argv[3])
-OUT='/workspace/fin-llm-eval/backtest/runs'; os.makedirs(OUT,exist_ok=True)
-S=pd.read_csv('/workspace/fin-llm-eval/backtest/sample_order.csv')
+OUT=(_SCANNER_ROOT + '/fin-llm-eval/backtest/runs'); os.makedirs(OUT,exist_ok=True)
+S=pd.read_csv((_SCANNER_ROOT + '/fin-llm-eval/backtest/sample_order.csv'))
 for _,r in S[(S.priority>=START)&(S.priority<END)].iterrows():
     f=f"{OUT}/{int(r.priority):03d}_{r.ticker}_{r.trade_date}.json"
-    if os.path.exists(f) or os.path.exists('/workspace/fin-llm-eval/backtest/STOP'): continue
+    if os.path.exists(f) or os.path.exists((_SCANNER_ROOT + '/fin-llm-eval/backtest/STOP')): continue
     crypto = r.asset=='crypto'
     analysts = ("market",) if crypto else ("market","fundamentals")
     cfg=DEFAULT_CONFIG.copy()
     cfg.update(llm_provider="ollama", backend_url="http://127.0.0.1:11434/v1", deep_think_llm=MODEL, quick_think_llm=MODEL,
                max_debate_rounds=1, max_risk_discuss_rounds=1, temperature=0.3, max_tokens=int(os.environ.get("MAXTOK","500")), max_tool_rounds=3,
                news_article_limit=8, global_news_article_limit=5,
-               results_dir=f"{OUT}/logs", data_cache_dir="/workspace/fin-llm-eval/results/ta_cache",
+               results_dir=f"{OUT}/logs", data_cache_dir=(_SCANNER_ROOT + "/fin-llm-eval/results/ta_cache"),
                memory_log_path=f"{OUT}/mem/{int(r.priority):03d}.md")   # fresh memory per run: no cross-run outcome leakage
     t0=time.time(); rec=dict(r.to_dict(), model=MODEL, analysts=list(analysts))
     try:

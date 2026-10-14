@@ -13,8 +13,9 @@ Variants: fib_T1/T2/T3 = full exit at that target; fib_scale = 1/3 off at each t
 Two execution modes: 'c' = close-based like IAF (checks start at close of e+2, fill at that close);
           'i' = intraday OHLC (from bar e+1: stop if Low<=stop fills at min(Open,stop); target if High>=target
           fills at max(Open,target); if both in one bar the STOP is assumed first = conservative)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import numpy as np, pandas as pd, sys
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 D=pd.read_pickle(OUT+'setups_prepared.pkl'); F=pd.read_pickle(OUT+'frames.pkl')
 COST={'stock':dict(fee=0.02, slip=0.05), 'crypto':dict(fee=0.10, slip=0.10)}
 Z=float(sys.argv[1]) if len(sys.argv)>1 else 2.0   # zigzag reversal threshold in ATRs

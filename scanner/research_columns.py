@@ -35,16 +35,17 @@ Tools (prefix -> what, PIT handling):
   exp_finrl_   FinRL PPO (2048 steps) action for the ticker on the last visible bar, same nightly pattern.
 OpenBB (exp_openbb_*) is built separately by the scanner agent (/workspace/openbb_snapshot.py) and is not part of this module.
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, io, time, json, math, pickle, struct, signal, threading, contextlib, importlib.util, subprocess, warnings
 import numpy as np, pandas as pd
 warnings.filterwarnings("ignore")
-sys.path.insert(0, "/workspace")
+sys.path.insert(0, _SCANNER_ROOT)
 import scanner_geometry as GEO            # read-only use: pit_cut / atr14 (same as the stops + geometry columns)
 
 VERSION = "2026-10-08.1"
-TA_VENV = "/workspace/ta-repos-eval/venv/bin/python"
-TA_DIR = "/workspace/ta-repos-eval"
-MODEL_DIR = "/workspace/research-models"
+TA_VENV = (_SCANNER_ROOT + "/ta-repos-eval/venv/bin/python")
+TA_DIR = (_SCANNER_ROOT + "/ta-repos-eval")
+MODEL_DIR = (_SCANNER_ROOT + "/research-models")
 PANDAS_TA_PIN = "0.4.71b0"
 PTA_BLOCKED = {"dpo", "zigzag", "tos_stdevall", "ichimoku_chikou", "chikou", "ics", "hwc", "ha", "jma", "alligator"}
 # dpo: centred by default (reads n/2+1 later bars); ichimoku chikou: close shifted back 26 bars (= future close at the row);
@@ -362,7 +363,7 @@ class _Worker:
         for k in list(env):          # no secrets into the worker (it never needs network)
             if any(s in k for s in ("KEY", "SECRET", "TOKEN", "PASSWORD")): env.pop(k)
         self.p = subprocess.Popen([self.python, os.path.abspath(__file__), "--worker"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                  stderr=subprocess.DEVNULL, env=env, cwd="/workspace")
+                                  stderr=subprocess.DEVNULL, env=env, cwd=_SCANNER_ROOT)
     def call(self, tool, payload, timeout):
         with self.lock:
             if self.p is None or self.p.poll() is not None: self._start()

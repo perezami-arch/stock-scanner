@@ -1,3 +1,4 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 # ---- Grok automations tab + gaps for new automation rows + data for the PDF
 import os as _os, collections as _co
 _AD=json.load(open('auto/grok_auto_parsed.json'))
@@ -6,7 +7,7 @@ _SK={'crypto':'gcrypto','portfolio-news-scan':'gpns','x-trends-digest':'gxtd'}
 AUTO_SUM=[]
 _contam=[('grok-crypto-2026-07-17-2.md',s_) for s_ in ('LTC','XRP')]
 for nm,dd_ in _DIRS.items():
-    fl=sorted(_os.listdir(f'/workspace/grok-outputs/{dd_}'))
+    fl=sorted(_os.listdir(f'{_SCANNER_ROOT}/grok-outputs/{dd_}'))
     rr=[x for x in _AD['rows'] if x['auto']==nm and (x['file'],x['sym']) not in _contam]
     ns=dict(_AD['nosetup']).get(nm,[]) if isinstance(_AD['nosetup'],dict) else []
     ns=_AD['nosetup'].get(nm,[])
@@ -37,7 +38,7 @@ for j,h in enumerate(['אוטומציה','קובץ','סטאפים','הערה'],1
 k+=1
 _cnt=_co.Counter((x['auto'],x['file']) for x in _AD['rows'] if (x['file'],x['sym']) not in _contam)
 for nm in _DIRS:
-    for f_ in sorted(_os.listdir(f'/workspace/grok-outputs/{_DIRS[nm]}')):
+    for f_ in sorted(_os.listdir(f'{_SCANNER_ROOT}/grok-outputs/{_DIRS[nm]}')):
         n_=_cnt.get((nm,f_),0); why=dict(_AD['nosetup'].get(nm,[])).get(f_,'')
         if f_=='grok-x-trends-digest-2026-09-25.md': why='זהה מילה במילה לקובץ של 20.09 — השורות נשמרו ומסומנות ככפולות/חזרות'
         if f_=='grok-crypto-2026-07-17-2.md': why='9 שורות (ONDO, BP, BTC 84,100, LTC, XRP, ETH, SOL, AVAX, LINK) הן העתק של שורות מ-25.09 שהודבקו בטעות — לא נוספו; נוספו רק BTC ו-ETH המקוריים'

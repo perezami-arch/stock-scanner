@@ -1,7 +1,8 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, pandas as pd, numpy as np
-sys.path.insert(0, "/workspace/sr-waves-eval")
-O = "/workspace/elliott-v2-eval"
-B = pd.read_csv("/workspace/sr-waves-eval/bt_rows.csv"); B = B[B.err.isna()] if "err" in B else B
+sys.path.insert(0, (_SCANNER_ROOT + "/sr-waves-eval"))
+O = (_SCANNER_ROOT + "/elliott-v2-eval")
+B = pd.read_csv((_SCANNER_ROOT + "/sr-waves-eval/bt_rows.csv")); B = B[B.err.isna()] if "err" in B else B
 E = pd.read_csv(f"{O}/ev2_rows.csv")
 W0 = B[["setup_id", "wave_end_signal"]].rename(columns={"wave_end_signal": "wave_end_old_any"})
 D = B[["setup_id", "ticker", "direction", "cutoff_bar", "excluded", "dup", "x20", "stop_hit20", "chand4_stopped", "chand4_ret"]].merge(E, on="setup_id").merge(W0, on="setup_id")

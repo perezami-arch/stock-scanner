@@ -1,6 +1,7 @@
 """Table M: ratchet / floor / tighten-after-profit chandelier variants (sim_ratchet.py) in % and R units."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import numpy as np, pandas as pd
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 s=open(OUT+'analyze.py').read(); exec(s[:s.index('# ======================= REPORT')])
 exec(s[s.index('def rulepass_long'):s.index('def table_policies')])
 SE=pd.read_csv(OUT+'sim_trades_enriched.csv'); SE=SE[SE.in_main & ~SE.dup.astype(bool)]

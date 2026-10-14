@@ -1,3 +1,4 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import pandas as pd, numpy as np, ast
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -7,7 +8,7 @@ from openpyxl.worksheet.formula import ArrayFormula
 from stats3 import rows, S, st, SS, TS, H2H, OVL, excl, gk, rows_full, rows_counted, GROUPS, DUPS, PAIRS, CONFS, BA, REP_T, NPAIRS, AFTER
 from dups import fd, srcl, SRCN as SRCD, HEB
 import json, re
-_P='/home/box/agent-data/agents/392ab573-33c2-4c0d-8dc3-6b3991775b0d/attachments/'
+_P=_sr_os.environ.get('SCANNER_ATTACH_DIR', '/home/box/agent-data/agents/392ab573-33c2-4c0d-8dc3-6b3991775b0d/attachments/')
 CH30b={}
 for _l in open('pending_chart_notes.txt').read().splitlines()[1:]:
     _p=_l.split()
@@ -220,4 +221,4 @@ for r in sorted(gk,key=lambda r:(r['alert_date'],CATO[r['cat']],r['rank'])):
         k+=1
 for j,wd in enumerate([12,12,6,8,8,18,30,90],1): gp.column_dimensions[L(j)].width=wd
 exec(open('sec_tab.py').read())
-wb.save('/workspace/scan-tracker-since-2026-09-07.xlsx'); print('saved',len(rows))
+wb.save((_SCANNER_ROOT + '/scan-tracker-since-2026-09-07.xlsx')); print('saved',len(rows))

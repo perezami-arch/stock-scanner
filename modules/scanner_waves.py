@@ -39,6 +39,7 @@ POINT-IN-TIME / NO REPAINTING
    wave_volume_dominance [zigzag or Weis], climax, momentum_divergence [RSI or CCI], elliott_context); *_n = number of families,
    *_signal = *_n >= 2. The old any-reason OR is kept as *_any / *_n_raw for comparison. Weight 0.
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json, math, warnings
 import numpy as np, pandas as pd
 warnings.filterwarnings("ignore")
@@ -68,7 +69,7 @@ def families(reasons):
 _mods = {}
 def _m():
     if not _mods:
-        import sys; sys.path.insert(0, "/workspace")
+        import sys; sys.path.insert(0, _SCANNER_ROOT)
         import scanner_geometry as GEO
         try:
             import scanner_stops as ST

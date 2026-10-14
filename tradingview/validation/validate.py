@@ -1,10 +1,11 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, json, math, numpy as np, pandas as pd, warnings
 warnings.filterwarnings("ignore")
-sys.path.insert(0, "/workspace"); sys.path.insert(0, "/workspace/tradingview/validation")
+sys.path.insert(0, _SCANNER_ROOT); sys.path.insert(0, (_SCANNER_ROOT + "/tradingview/validation"))
 import scanner_stops as SS
 from pine_port import PinePort, isna
-CACHE = "/workspace/scanner-momentum-cache/20261008T1029Z"
-OUT = pd.read_csv("/workspace/scan-runs/stops-test/stops_out.csv").set_index("ticker")
+CACHE = (_SCANNER_ROOT + "/scanner-momentum-cache/20261008T1029Z")
+OUT = pd.read_csv((_SCANNER_ROOT + "/scan-runs/stops-test/stops_out.csv")).set_index("ticker")
 TICK = [("MU", "stock", "stock/MU.csv"), ("CVX", "stock", "stock/CVX.csv"), ("NVDA", "stock", "stock/NVDA.csv"), ("BTC", "crypto", "crypto_daily/BTC-USD.csv")]
 MAP = dict(fib_leg_origin="leg_o", fib_leg_end="leg_e", fib_r382="r382", fib_r500="r500", fib_r618="r618", fib_r786="r786",
            fib_tp_1272="x1272", fib_tp_1618="x1618", fib_tp_2618="x2618", fib_stop_struct="struct", fib_stop_fallback="struct_fb",
@@ -85,4 +86,4 @@ if __name__ == "__main__":
             report.append(dict(test="C_stop", ticker=t, entry=ed, ok=ok))
     x = load("stock/CVX.csv", "stock"); k = len(x) - 1
     p, _ = run(x, entry_idx=k, entry_px=208.8); print(f"  CVX live row (entry 2026-10-07 @208.8): port={p.trail:.4f} csv live_next_level={OUT.loc['CVX','live_next_level']}")
-    pd.DataFrame(report).to_csv("/workspace/tradingview/validation/validation_summary.csv", index=False)
+    pd.DataFrame(report).to_csv((_SCANNER_ROOT + "/tradingview/validation/validation_summary.csv"), index=False)

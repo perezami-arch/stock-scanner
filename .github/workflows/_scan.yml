@@ -1,0 +1,91 @@
+# Reusable scan job: builds the box layout at $SCANNER_ROOT, restores state, runs, collects reports, saves state.
+name: scan (reusable)
+on:
+  workflow_call:
+    inputs:
+      kind: {type: string, required: true}        # weekly | daily
+      dry:  {type: boolean, required: true}       # true = --no-models paper run, no commits (artifact only)
+      il_date: {type: string, required: true}
+permissions:
+  contents: write
+env:
+  SCANNER_ROOT: ${{ github.workspace }}/runtime
+  TZ: Asia/Jerusalem
+  PYTHONUNBUFFERED: '1'
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with: {path: repo}
+      - name: Checkout state branch (if it exists)
+        run: |
+          if git ls-remote --exit-code --heads "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" state >/dev/null; then
+            git clone -q --depth 1 -b state "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" state
+          else
+            mkdir state && git -C state init -q -b state
+          fi
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13', cache: pip, cache-dependency-path: repo/requirements*.txt}
+      - name: Install requirements
+        run: |
+          pip install -r repo/requirements.txt
+          pip install -r repo/requirements-optional.txt || echo "::warning::optional research packages not installed (weight-0 columns will be NaN)"
+      - name: OpenBB venv (optional)
+        continue-on-error: true
+        timeout-minutes: 15
+        run: |
+          python -m venv "$SCANNER_ROOT/venv-openbb" && "$SCANNER_ROOT/venv-openbb/bin/pip" install -q openbb pandas \
+            || { echo "::warning::OpenBB venv unavailable - snapshot step will be skipped"; rm -rf "$SCANNER_ROOT/venv-openbb"; }
+      - name: Build scanner root + restore state
+        run: |
+          bash repo/ops/materialize_root.sh repo "$SCANNER_ROOT"
+          python repo/ops/state.py restore state "$SCANNER_ROOT"
+      - name: "Run ${{ inputs.kind }} (${{ inputs.dry && 'DRY - paper, no models' || 'live' }})"
+        working-directory: ${{ env.SCANNER_ROOT }}
+        env:
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
+          ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          KIND: ${{ inputs.kind }}
+          DRY: ${{ inputs.dry }}
+        run: |
+          set -o pipefail
+          mkdir -p "$SCANNER_ROOT/scan-runs/_actions"
+          LOG="$SCANNER_ROOT/scan-runs/_actions/${KIND}.log"
+          OB=""; [ -x "$SCANNER_ROOT/venv-openbb/bin/python" ] || OB="--no-openbb"
+          if [ "$DRY" = "true" ] && [ "$KIND" = "weekly" ]; then
+            python run_unified_scan.py --trial --no-models 2>&1 | tee "$LOG"   # weekly path (selection of 20, report), no LLM calls
+          elif [ "$DRY" = "true" ]; then
+            python run_unified_scan.py --paper --no-models 2>&1 | tee "$LOG"
+            python run_daily_report.py --no-models $OB 2>&1 | tee -a "$LOG"
+          elif [ "$KIND" = "weekly" ]; then
+            python run_unified_scan.py 2>&1 | tee "$LOG"                       # 20 names by score, all models
+          else
+            python run_unified_scan.py --paper --no-models 2>&1 | tee "$LOG"
+            python run_daily_report.py $OB 2>&1 | tee -a "$LOG"
+          fi
+      - name: Collect reports
+        if: always()
+        run: python repo/ops/collect_reports.py "$SCANNER_ROOT" repo "${{ inputs.il_date }}" "${{ inputs.kind }}${{ inputs.dry && '-dry' || '' }}"
+      - name: Upload artifact (reports + log)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.kind }}-${{ inputs.il_date }}${{ inputs.dry && '-dry' || '' }}
+          path: |
+            repo/reports/
+            ${{ env.SCANNER_ROOT }}/scan-runs/_actions/
+          retention-days: 30
+      - name: Commit reports (main) and state (state branch)
+        if: ${{ success() && !inputs.dry }}
+        run: |
+          git config --global user.name "stock-scanner-bot"; git config --global user.email "actions@users.noreply.github.com"
+          python repo/ops/state.py save state "$SCANNER_ROOT"
+          cd state && git add -A && (git diff --cached --quiet || git commit -qm "state after ${{ inputs.kind }} ${{ inputs.il_date }}")
+          git push -q "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" HEAD:state
+          cd ../repo && git add -f reports && (git diff --cached --quiet || git commit -qm "reports: ${{ inputs.kind }} ${{ inputs.il_date }}")
+          git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}"

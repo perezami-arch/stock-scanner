@@ -1,7 +1,8 @@
 """Shared backtest helpers (fib-spiral & liq-sweep): data loading, costs, exit simulation, clustered stats, BH-FDR."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json, os, glob, math, numpy as np, pandas as pd
 from scipy import stats as SS
-FD = '/workspace/fib-spiral/data'
+FD = (_SCANNER_ROOT + '/fib-spiral/data')
 UNI = json.load(open(f'{FD}/universe_crypto.json'))['symbols']
 NONCRYPTO = set(json.load(open(f'{FD}/noncrypto.json')))
 CRYPTO = [s for s in UNI if s not in NONCRYPTO]

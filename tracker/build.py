@@ -1,3 +1,4 @@
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import pandas as pd, numpy as np, ast
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -175,4 +176,4 @@ rd.cell(1,26,'סה"כ (ערך מחושב)').fill=HF; rd.cell(1,26).font=HFont
 rd.cell(len(rows)+4,1,'שינוי יומי גולמי של המניה (יום 1 מול מחיר ההתראה, אחר כך סגירה מול סגירה), לא מותאם כיוון — כמו בגיליון "מניות שפל שנתי". סה"כ = מכפלה עם היפוך סימן לשורט, כמו הנוסחה המקורית.').font=Font(name='Arial',italic=True,size=9)
 for j in range(1,27): rd.column_dimensions[L(j)].width=10
 rd.freeze_panes='E2'
-wb.save('/workspace/scan-tracker-since-2026-09-07.xlsx'); print('saved')
+wb.save((_SCANNER_ROOT + '/scan-tracker-since-2026-09-07.xlsx')); print('saved')

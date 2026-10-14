@@ -5,10 +5,11 @@ Stock longs: with and without 'sell 1/2 at the 1.618 extension' (same confirmed 
 already behind the entry the next extension beyond it is used; no leg/target -> stop only).
 Records per trade: R (price) = initial stop distance, R-multiple, max favourable close excursion in R (while held and
 to 2026-10-07), tightened flag."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import numpy as np, pandas as pd, sys
-sys.path.insert(0,'/workspace/trading-frameworks-eval/iaf')
+sys.path.insert(0,(_SCANNER_ROOT + '/trading-frameworks-eval/iaf'))
 from stop_rules import atr_wilder, ChandelierStop
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 s=open(OUT+'sim_fib.py').read(); exec(s[s.index('def zigzag'):s.index('def clock')])
 D=pd.read_pickle(OUT+'setups_prepared.pkl'); F=pd.read_pickle(OUT+'frames.pkl')
 COST={'stock':dict(fee=0.02, slip=0.05), 'crypto':dict(fee=0.10, slip=0.10)}

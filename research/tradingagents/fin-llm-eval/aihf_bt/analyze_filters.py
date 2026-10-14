@@ -1,10 +1,11 @@
 """Approve/veto outcome comparison for ai-hedge-fund personas and TradingAgents on the scanner sample.
 Outcomes: /workspace/trading-frameworks-eval/iaf/sim_trades_enriched.csv (PIT entry = next open after cutoff, costs incl.,
 open trades marked at 2026-10-07 close). Policies: hold (no stop) and chand4_c (active rule: 4xATR14 chandelier, close-based)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json, glob, warnings, pandas as pd, numpy as np
 warnings.filterwarnings("ignore")
 from scipy.stats import mannwhitneyu
-T = pd.read_csv('/workspace/trading-frameworks-eval/iaf/sim_trades_enriched.csv', low_memory=False)
+T = pd.read_csv((_SCANNER_ROOT + '/trading-frameworks-eval/iaf/sim_trades_enriched.csv'), low_memory=False)
 O = T[T.policy == 'hold'][['setup_id', 'ret_net', 'x_spy', 'x_btc', 'status', 'days']].rename(columns={'ret_net': 'hold', 'x_spy': 'hold_x_spy', 'x_btc': 'hold_x_btc'})
 C = T[T.policy == 'chand4_c'][['setup_id', 'ret_net', 'status']].rename(columns={'ret_net': 'chand4', 'status': 'chand4_status'})
 O = O.merge(C, on='setup_id', how='left')
@@ -43,7 +44,7 @@ def verdict_aihf(r):
     return 'approve' if (s == 'bullish') == (r['direction'] == 'LONG') else 'veto'
 sections = []
 for p in ['druckenmiller', 'buffett']:
-    f = f'/workspace/fin-llm-eval/aihf_bt/{p}.jsonl'
+    f = f'{_SCANNER_ROOT}/fin-llm-eval/aihf_bt/{p}.jsonl'
     try: rows = [json.loads(l) for l in open(f)]
     except FileNotFoundError: continue
     d = pd.DataFrame(rows); d['verdict'] = d.apply(verdict_aihf, axis=1); d['asset'] = 'stock'
@@ -53,7 +54,7 @@ for p in ['druckenmiller', 'buffett']:
     sections.append(txt + f'\n\nVerdict counts: {d.verdict.value_counts().to_dict()}. Leak check: {lk} setups used any filing/price dated after the cutoff '
                     f'(every snapshot input dated <= trade_date: {mx:.0%}). Runtime/setup: median {d.runtime_s.median():.0f}s; '
                     f'LLM tokens median prompt {ok.llm_pt.median():.0f}, output {ok.llm_ct.median():.0f}.\n')
-rows = [json.load(open(f)) for f in sorted(glob.glob('/workspace/fin-llm-eval/backtest/runs/*.json'))]
+rows = [json.load(open(f)) for f in sorted(glob.glob((_SCANNER_ROOT + '/fin-llm-eval/backtest/runs/*.json')))]
 if rows:
     d = pd.DataFrame(rows); d = d[d.ok == True]
     def vt(r):
@@ -63,4 +64,4 @@ if rows:
     d['verdict'] = d.apply(vt, axis=1)
     txt, dm = report(d, 'TradingAgents full multi-agent (Qwen2.5-3B, market+fundamentals analysts, 1 debate + 1 risk round)', 'ta')
     sections.append(txt + '\n\nPer setup: ' + '; '.join(f"{r.ticker} {r.direction} -> {r.decision} ({r.runtime_s/60:.0f} min, {r.llm_calls} calls, {r.prompt_tokens} prompt / {r.completion_tokens} output tok)" for r in d.itertuples()) + '\n')
-open('/workspace/fin-llm-eval/aihf_bt/filter_results.md', 'w').write('\n\n'.join(sections)); print('\n\n'.join(sections))
+open((_SCANNER_ROOT + '/fin-llm-eval/aihf_bt/filter_results.md'), 'w').write('\n\n'.join(sections)); print('\n\n'.join(sections))

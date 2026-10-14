@@ -1,8 +1,9 @@
 """Run evalset against an Ollama model; record answers, tokens/s, peak RSS of the runner."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json, sys, time, re, threading, os, subprocess, urllib.request
 MODEL=sys.argv[1]; OUT=sys.argv[2]; NUM_PREDICT=int(sys.argv[3]) if len(sys.argv)>3 else 2048
 ONLY=sys.argv[4].split(',') if len(sys.argv)>4 else None
-E=json.load(open('/workspace/fin-llm-eval/eval/evalset.json'))
+E=json.load(open((_SCANNER_ROOT + '/fin-llm-eval/eval/evalset.json')))
 SYS="Answer in English."
 INSTR=("Show your calculation briefly, then on the last line write 'FINAL ANSWER: <number>' "
        "(a plain number only; percentages as a number of percent, e.g. 12.34 for 12.34%; round to 2 decimals).")

@@ -1,6 +1,7 @@
 """Parse other Grok automations (crypto / portfolio-news-scan / x-trends-digest / daily-stock-tracker) into setup rows. Added 04.10.2026."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import re, glob, os, json
-BASE='/workspace/grok-outputs'
+BASE=(_SCANNER_ROOT + '/grok-outputs')
 AUTOS={'crypto':'GROK crypto','portfolio-news-scan':'GROK portfolio-news-scan','x-trends-digest':'GROK x-trends-digest','daily-stock-tracker':'GROK daily-stock-tracker'}
 # run time (UTC hour, minute) from the Grok automation schedule page (IDT = UTC+3)
 RUNUTC={'crypto':(8,30),'portfolio-news-scan':(13,30),'x-trends-digest':(9,0),'daily-stock-tracker':(11,0)}

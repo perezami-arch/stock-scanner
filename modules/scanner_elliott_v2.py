@@ -24,6 +24,7 @@ formulas (scanner_stops.elliott_counts / select_count). What v2 adds:
     breached after its end, up to the last visible bar. Old and new anchors are both recorded; no valid leg -> ev2_fib_* blank.
 POINT-IN-TIME: everything from pit_cut(df, cutoff) only; confirmed pivot = confirm_idx <= last visible bar.
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json, math, warnings
 import numpy as np, pandas as pd
 warnings.filterwarnings("ignore")
@@ -33,7 +34,7 @@ RET = [0.382, 0.5, 0.618, 0.786]; EXT = [1.272, 1.618]
 _mods = {}
 def _m():
     if not _mods:
-        import sys; sys.path.insert(0, "/workspace")
+        import sys; sys.path.insert(0, _SCANNER_ROOT)
         import scanner_geometry as GEO, scanner_stops as ST
         _mods.update(GEO=GEO, ST=ST)
     return _mods

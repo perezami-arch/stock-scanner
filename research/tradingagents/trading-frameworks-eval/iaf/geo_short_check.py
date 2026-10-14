@@ -1,6 +1,7 @@
 """Descriptive follow-up (not in the BH family): do the two short-side survivors add anything to the existing short rule?"""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import numpy as np, pandas as pd
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 s=open(OUT+'analyze.py').read(); exec(s[:s.index('# ======================= REPORT')]); exec(s[s.index('def rulepass_long'):s.index('def table_policies')])
 T=add_bench(pd.read_csv(OUT+'sim_geo_trades.csv')); T=T[T.in_main&~T.dup.astype(bool)&(T.policy=='base_c')&(T.asset=='stock')&(T.direction=='SHORT')]
 T=T.merge(pd.read_pickle(OUT+'geo_features.pkl'),on='setup_id'); T['rules']=T.apply(rulepass_short,axis=1)

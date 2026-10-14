@@ -2,9 +2,10 @@
 Every value is computed on the history truncated at the rule bar (leak_ta.py shows none of the columns used here changes when
 later bars exist; DPO, Ichimoku chikou, TOS_STDEVALL and ZIGZAG — the columns that do — are NOT used). Raw values are stored;
 direction alignment is done in analyze.py."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, numpy as np, pandas as pd, warnings
 warnings.filterwarnings('ignore')
-sys.path.insert(0,'/workspace/ta-repos-eval')
+sys.path.insert(0,(_SCANNER_ROOT + '/ta-repos-eval'))
 from common import *
 import talib, pandas_ta as ta
 from multiprocessing import Pool

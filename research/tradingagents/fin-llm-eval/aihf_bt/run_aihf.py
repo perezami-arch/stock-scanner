@@ -1,8 +1,9 @@
 """ai-hedge-fund persona agents (blind, point-in-time) as approve/veto filter on scanner stock setups.
 Data: EdgarClient (SEC EDGAR as filed <= trade_date + Yahoo closes <= trade_date). LLM: local Ollama Qwen2.5-3B.
 Usage: run_aihf.py PERSONA N   (resumable; one jsonl line per setup)"""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, os, json, time, requests, pandas as pd
-sys.path.insert(0, '/workspace/fin-llm-eval/aihf_bt')
+sys.path.insert(0, (_SCANNER_ROOT + '/fin-llm-eval/aihf_bt'))
 from edgar_client import EdgarClient
 from hedge_fund.llm.cache import PromptCache
 from hedge_fund.signals.druckenmiller import DruckenmillerAgent
@@ -20,17 +21,17 @@ class OllamaLLM:
         return j['message']['content']
 P = {'druckenmiller': DruckenmillerAgent, 'buffett': BuffettAgent}
 persona, N = sys.argv[1], int(sys.argv[2])
-OUT = f'/workspace/fin-llm-eval/aihf_bt/{persona}.jsonl'
+OUT = f'{_SCANNER_ROOT}/fin-llm-eval/aihf_bt/{persona}.jsonl'
 done = {json.loads(l)['setup_id'] for l in open(OUT)} if os.path.exists(OUT) else set()
-S = pd.read_csv('/workspace/fin-llm-eval/backtest/sample_order.csv'); S = S[S.asset == 'stock'].head(N)
+S = pd.read_csv((_SCANNER_ROOT + '/fin-llm-eval/backtest/sample_order.csv')); S = S[S.asset == 'stock'].head(N)
 client = EdgarClient(); llm = OllamaLLM()
-agent = P[persona](llm=llm, cache=PromptCache(f'/workspace/fin-llm-eval/aihf_bt/cache_{persona}'), blind=True, breakpoints=None)
+agent = P[persona](llm=llm, cache=PromptCache(f'{_SCANNER_ROOT}/fin-llm-eval/aihf_bt/cache_{persona}'), blind=True, breakpoints=None)
 # blind=True withholds ticker/dates/$ size; breakpoints=None -> no size percentile (needs FD data)
 agent._breakpoints = None
 from hedge_fund.features.snapshot import build_snapshot
 agent.build_snapshot = lambda t, d, dc: build_snapshot(t, d, dc, periods=8, breakpoints=None)
 for _, r in S.iterrows():
-    if r.setup_id in done or os.path.exists('/workspace/fin-llm-eval/aihf_bt/STOP'): continue
+    if r.setup_id in done or os.path.exists((_SCANNER_ROOT + '/fin-llm-eval/aihf_bt/STOP')): continue
     t0 = time.time(); n0 = len(client.audit); llm.last = {}
     try:
         sig = agent.predict(r.ticker.replace('.', '-'), r.trade_date, client)

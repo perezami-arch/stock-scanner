@@ -3,8 +3,9 @@
 Conventions: entry = Open of entry bar e (+slippage); stops evaluated on daily closes starting at close of e+2
 (mirrors IAF: stop attached after fill is observed, first check one bar later); exit at the triggering close
 (-slippage); trailing high-water mark starts at close of bar e; hold = mark-to-market at 2026-10-07 close."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import numpy as np, pandas as pd
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 D=pd.read_pickle(OUT+'setups_prepared.pkl'); F=pd.read_pickle(OUT+'frames.pkl')
 COST={'stock':dict(fee=0.02, slip=0.05), 'crypto':dict(fee=0.10, slip=0.10)}
 POLS={'hold':None,'fsetup':('setup',False),'f8':(8,False),'t5':(5,True),'t8':(8,True),'t12':(12,True)}

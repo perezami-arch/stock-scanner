@@ -1,16 +1,17 @@
 """Backtest of the frozen Fib-spiral SHORT rule (RULE.frozen.md). Writes out/events_*.csv, out/results.csv, out/summary.md"""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, json, glob, math, numpy as np, pandas as pd
 from multiprocessing import Pool
-sys.path.insert(0, '/workspace/fib-spiral')
+sys.path.insert(0, (_SCANNER_ROOT + '/fib-spiral'))
 import fib_spiral as FS, common_bt as C
-OUT = '/workspace/fib-spiral/out'; FD = C.FD
+OUT = (_SCANNER_ROOT + '/fib-spiral/out'); FD = C.FD
 SEED = 20261008
 def datasets():
     ds = {'crypto_1h': [(s, f'{FD}/crypto_1h/{s}.parquet', 'crypto', 3600000, 720) for s in C.CRYPTO if os.path.exists(f'{FD}/crypto_1h/{s}.parquet')],
           'stock_1d': [(os.path.basename(p)[:-8], p, 'stock', 86400000, 120) for p in sorted(glob.glob(f'{FD}/stocks/*.parquet')) if not p.endswith('/SPY.parquet')]}
     one = ['PROMUSDT', 'USELESSUSDT'] + [s for s in C.CRYPTO if s not in ('PROMUSDT', 'USELESSUSDT')][:8]
-    ds['crypto_1m'] = [(s, f'/workspace/liq-sweep/data/crypto_1m/{s}.parquet', 'crypto', 60000, 43200) for s in one
-                       if os.path.exists(f'/workspace/liq-sweep/data/crypto_1m/{s}.parquet')]
+    ds['crypto_1m'] = [(s, f'{_SCANNER_ROOT}/liq-sweep/data/crypto_1m/{s}.parquet', 'crypto', 60000, 43200) for s in one
+                       if os.path.exists(f'{_SCANNER_ROOT}/liq-sweep/data/crypto_1m/{s}.parquet')]
     return ds
 
 def run_symbol(args):

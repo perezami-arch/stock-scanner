@@ -1,8 +1,9 @@
 """First tradable 1-min bar at/after the decision time, from Alpaca market data (keys from env, never printed).
 Stocks: SIP feed, regular session only (13:30-20:00 UTC; whole sample Jul-Oct 2026 is EDT). Crypto: v1beta3 us bars.
 Writes minute_entries.csv (setup_id, entry_minute_utc, minute_open, minute_close, n_bars_window, note)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, time, json, requests, pandas as pd, numpy as np
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 H={'APCA-API-KEY-ID':os.environ['ALPACA_API_KEY_ID'],'APCA-API-SECRET-KEY':os.environ['ALPACA_API_SECRET_KEY']}
 D=pd.read_pickle(OUT+'setups_prepared.pkl')
 S=D[D.has_data & D.decision_utc.notna() & D.direction.isin(['LONG','SHORT']) & D.time_source.isin(['exact','schedule','ui_log'])]

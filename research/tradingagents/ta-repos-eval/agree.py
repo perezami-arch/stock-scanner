@@ -1,8 +1,9 @@
 """Agreement tables: TA-Lib candles vs scanner_geometry candles; smc objects vs scanner_geometry liquidity objects; Elliott repos vs our count;
 coverage per repo and segment. Universe = the main-sheet, non-duplicate setups with an active-policy trade (same as the tests)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import numpy as np, pandas as pd, warnings
 warnings.filterwarnings('ignore')
-O='/workspace/ta-repos-eval/out/'; IAF='/workspace/trading-frameworks-eval/iaf/'
+O=(_SCANNER_ROOT + '/ta-repos-eval/out/'); IAF=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 B=pd.read_pickle(O+'analysis_base.pkl'); GF=pd.read_pickle(IAF+'geo_features.pkl')
 B=B.merge(GF[[c for c in GF.columns if c.startswith(('candle_','liq_','vp'))]+['setup_id']],on='setup_id',how='left',suffixes=('','_geo'))
 def kappa(a,b):

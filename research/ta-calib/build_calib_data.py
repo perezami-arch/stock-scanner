@@ -13,14 +13,15 @@ stock SHORT chandelier 4xATR14 ratchet (close); crypto fixed 3xATR14 (close). Co
 crypto 0.10%+0.10%. Entry = open of the first bar after the decision time (same as sim_ratchet.py).
 Horizon: exit at the close of the 20th bar counting the entry bar (k+19) if still open (stocks: trading days,
 crypto: daily UTC bars). complete20=False when the data ends (2026-10-07) before that bar (marked to market)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, numpy as np, pandas as pd
-IAF = '/workspace/trading-frameworks-eval/iaf/'; OUT = '/workspace/ta-calib/'
+IAF = (_SCANNER_ROOT + '/trading-frameworks-eval/iaf/'); OUT = (_SCANNER_ROOT + '/ta-calib/')
 sys.path.insert(0, IAF)
 from stop_rules import atr_wilder, ChandelierStop
 s = open(IAF + 'sim_fib.py').read(); exec(s[s.index('def zigzag'):s.index('def clock')])
 D = pd.read_pickle(IAF + 'setups_prepared.pkl'); F = pd.read_pickle(IAF + 'frames.pkl'); B = pd.read_pickle(IAF + 'bench_yf.pkl')
 G = pd.read_pickle(IAF + 'geo_features.pkl')[['setup_id', 'vp120_va_pos', 'vp120_val', 'vp120_vah', 'vp120_poc']]
-S846 = pd.read_csv('/workspace/fin-llm-eval/laptop-run/setups_846.csv')
+S846 = pd.read_csv((_SCANNER_ROOT + '/fin-llm-eval/laptop-run/setups_846.csv'))
 RUN = S846[S846.skip_reason.isna()].copy()
 COST = {'stock': dict(fee=0.02, slip=0.05), 'crypto': dict(fee=0.10, slip=0.10)}
 H20 = 19   # exit bar offset from the entry bar (20 bars incl. entry bar)

@@ -1,10 +1,11 @@
 """Shared inputs for the TA-repos evaluation (read-only use of the tracker / §3.14 artefacts).
 Setups = every setup with an active-policy trade in sim_geo_trades.csv (base_c), i.e. the §3.14 universe.
 PIT: the last visible bar = rule_bar_actual (the same information cutoff as every earlier table; verified in §3.14)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import numpy as np, pandas as pd, warnings
 warnings.filterwarnings('ignore')
-IAF='/workspace/trading-frameworks-eval/iaf/'
-OUT='/workspace/ta-repos-eval/out/'
+IAF=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
+OUT=(_SCANNER_ROOT + '/ta-repos-eval/out/')
 D=pd.read_pickle(IAF+'setups_prepared.pkl'); F=pd.read_pickle(IAF+'frames.pkl')
 _T=pd.read_csv(IAF+'sim_geo_trades.csv'); _ids=set(_T[_T.policy=='base_c'].setup_id)
 S=D[D.setup_id.isin(_ids)].copy()

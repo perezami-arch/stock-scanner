@@ -1,4 +1,5 @@
-import sys; sys.path.insert(0,'/workspace/tracker')
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
+import sys; sys.path.insert(0,(_SCANNER_ROOT + '/tracker'))
 import yfinance as yf, pandas as pd, json, os
 from concurrent.futures import ThreadPoolExecutor
 from stats3 import rows_counted

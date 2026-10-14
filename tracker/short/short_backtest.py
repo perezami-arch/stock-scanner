@@ -1,16 +1,17 @@
 """PIT short-interest / short-volume / squeeze backtest on the 846 main-sheet setups (stocks). EXPERIMENTAL, weight 0.
 Writes /workspace/tracker/short_pit_lookup.csv and prints the in-sample tables."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, ast, re, time, json
-sys.path.insert(0, '/workspace')
+sys.path.insert(0, _SCANNER_ROOT)
 import pandas as pd, numpy as np
 import scanner_short as SH
-TR = '/workspace/tracker'; t0 = time.time()
+TR = (_SCANNER_ROOT + '/tracker'); t0 = time.time()
 S = pd.read_csv(f'{TR}/setups-point-in-time-2026-10-08.csv'); R = pd.read_pickle(f'{TR}/rows_all.pkl')
 S['tracker_source'] = [R[int(x[1:]) - 1]['source'] for x in S.setup_id]
 M = S[(S.in_main_sheet == True) & (S.asset_class == 'stock') & S.alert_date.notna()].copy()
 FL = pd.read_csv(f'{TR}/fundamentals_pit_lookup.csv')[['setup_id', 'fund_shares']]
 M = M.merge(FL, on='setup_id', how='left')
-src = open('/workspace/swing_scan.py').read()
+src = open((_SCANNER_ROOT + '/swing_scan.py')).read()
 LIVE = [t for t in ast.literal_eval(re.search(r"tickers = (\[.*?\])\n", src, re.S).group(1)) if not t.startswith('^')]
 ETF = ast.literal_eval(re.search(r"ETF_LIKE = (\{.*?\})\n", src, re.S).group(1))
 LIVE = sorted({t for t in LIVE if t not in ETF}); UNIV = sorted(set(LIVE) | set(M.ticker))
@@ -34,7 +35,7 @@ for x in M.itertuples():
     rows.append(dict(setup_id=x.setup_id, tracker_source=x.tracker_source, ticker=x.ticker, direction=x.direction, alert_date=x.alert_date,
                      cutoff_bar_date=x.cutoff_bar_date, dup_not_counted=x.dup_not_counted, excess_dir_d20=ex20, outcome=r['outcome'], mae=r['mae'], **o))
 L = pd.DataFrame(rows)
-rt = pd.read_csv('/workspace/trading-frameworks-eval/iaf/sim_ratchet_trades.csv'); rt = rt[rt.policy == 'rt_plain_c'][['setup_id', 'status', 'ret_net']]
+rt = pd.read_csv((_SCANNER_ROOT + '/trading-frameworks-eval/iaf/sim_ratchet_trades.csv')); rt = rt[rt.policy == 'rt_plain_c'][['setup_id', 'status', 'ret_net']]
 L = L.merge(rt.rename(columns={'status': 'active_stop_status', 'ret_net': 'active_ret_net'}), on='setup_id', how='left')
 L.to_csv(f'{TR}/short_pit_lookup.csv', index=False, encoding='utf-8-sig')
 print(f'saved {len(L)} rows {time.time()-t0:.0f}s')

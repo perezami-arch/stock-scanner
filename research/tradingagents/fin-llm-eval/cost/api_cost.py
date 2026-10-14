@@ -1,8 +1,9 @@
 """Daily API cost for ~10 setups/day via OpenRouter. Prices pulled live from https://openrouter.ai/api/v1/models on 2026-10-08
 (snapshot saved next to this file). Token budgets: measured on the box where available (see results.md section 7)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json
 P = {m['id']: (float(m['pricing']['prompt']) * 1e6, float(m['pricing']['completion']) * 1e6)
-     for m in json.load(open('/workspace/fin-llm-eval/cost/openrouter_models_2026-10-08.json'))['data']}
+     for m in json.load(open((_SCANNER_ROOT + '/fin-llm-eval/cost/openrouter_models_2026-10-08.json')))['data']}
 MODELS = ['anthropic/claude-sonnet-5.5', 'openai/gpt-5.6-sol', 'anthropic/claude-sonnet-4.6', 'x-ai/grok-4.7', 'anthropic/claude-opus-5.5',
           'google/gemini-3.8-flash', 'deepseek/deepseek-v3.2']
 # (label, input tokens per setup, output tokens per setup incl. reasoning)

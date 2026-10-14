@@ -1,8 +1,9 @@
 """Stratified sample from the canonical point-in-time setups file (main sheet, not dup)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import pandas as pd, numpy as np, yfinance as yf
-d=pd.read_csv('/workspace/tracker/setups-point-in-time-2026-10-08.csv')
+d=pd.read_csv((_SCANNER_ROOT + '/tracker/setups-point-in-time-2026-10-08.csv'))
 m=d[(d.in_main_sheet==True)&(d.dup_not_counted!=True)&d.cutoff_bar_date.notna()&d.direction.notna()].copy()
-x=pd.read_excel('/workspace/scan-tracker-2026-10-08.xlsx',sheet_name='מעקב סריקות')
+x=pd.read_excel((_SCANNER_ROOT + '/scan-tracker-2026-10-08.xlsx'),sheet_name='מעקב סריקות')
 m['xl_idx']=(m.main_sheet_row-2).astype(int)
 m['xl_ticker']=m.xl_idx.map(lambda i: x.iloc[i]['טיקר'])
 assert (m.xl_ticker==m.ticker).mean()>0.99, (m.xl_ticker!=m.ticker).sum()
@@ -48,7 +49,7 @@ s=pd.DataFrame(order)
 s['priority']=range(len(s))
 s['asset']=np.where(s.market=='crypto 24/7','crypto','stock')
 cols=['priority','stratum','setup_id','platform','model','automation','scan_type','ticker','asset','direction','alert_date','alert_time_utc','time_source','cutoff_bar_date','trade_date','pplx_70min_changed','cutoff_rule','data_asof_note','entry','tracker_total_return']
-s[cols].to_csv('/workspace/fin-llm-eval/backtest/sample_order.csv',index=False)
+s[cols].to_csv((_SCANNER_ROOT + '/fin-llm-eval/backtest/sample_order.csv'),index=False)
 print(len(s), 'changed by 70-min rule:', int(m.pplx_70min_changed.sum()))
 h=s.head(48); print(h.stratum.value_counts().to_dict()); print(h.direction.value_counts().to_dict(), h.asset.value_counts().to_dict(), int(h.win.sum()))
 print(h[['priority','ticker','model','automation','direction','trade_date','tracker_total_return']].to_string())

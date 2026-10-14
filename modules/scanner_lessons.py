@@ -11,13 +11,14 @@ checkpoint triggers (cost gate), right/wrong scoring with real prices, per-platf
   * Lessons: ONLY from CLOSED positions, built ONCE per ISO week, written to prompts/<platform>_vN.txt + prompts/CHANGELOG.md;
     prompts/active.json says which version each platform uses (ledger column prompt_version) so we can measure if lessons helped.
   * All LLM verdict columns: forward-only from 12.10.2026 (trial / sim rows never counted)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, json, glob, math, datetime as dt
 import numpy as np, pandas as pd
-sys.path.insert(0, '/workspace')
-PROMPTS = os.environ.get('LESSONS_PROMPTS_DIR', '/workspace/prompts')
-REGISTRY = '/workspace/scan-runs/positions_registry.csv'
+sys.path.insert(0, _SCANNER_ROOT)
+PROMPTS = os.environ.get('LESSONS_PROMPTS_DIR', (_SCANNER_ROOT + '/prompts'))
+REGISTRY = (_SCANNER_ROOT + '/scan-runs/positions_registry.csv')
 FORWARD_FROM = '2026-10-12'
-PLATFORMS = ('grok', 'grok_analyst', 'pplx', 'claude', 'gpt', 'jev')
+PLATFORMS = ('grok', 'pplx', 'claude', 'gpt', 'jev')
 HORIZON = 20
 REG_COLS = ['trade_id', 'trade_key', 'ticker', 'asset', 'direction', 'source_run', 'scan_asof_local', 'cutoff_utc', 'entry_session', 'entry_ref',
             'entry_price', 'entry_fill', 'stop_initial', 'target', 'atr14_at_cutoff', 'levels_file', 'status', 'checkpoints_done', 'last_decision_utc',
@@ -63,6 +64,7 @@ def register_run(run_dir, path=REGISTRY, is_sim=False):
         if tid in set(reg.trade_id): continue
         L = json.load(open(LF.path(run_dir, {'t': r.ticker, 'direction': r.direction})))
         es = LF.entry_session(cut) if r.asset != 'crypto' else (cut.tz_convert('UTC').normalize() + pd.Timedelta(days=1)).tz_localize(None)
+        if os.environ.get('ENTRY_SESSION_OVERRIDE'): es = pd.Timestamp(os.environ['ENTRY_SESSION_OVERRIDE'])   # 12.10: late manual run (cutoff Fri close, entry Tue open)
         new.append({'trade_id': tid, 'trade_key': f"{r.ticker}|{r.direction}|{L['data']['last_bar']}", 'ticker': r.ticker, 'asset': r.asset,
                     'direction': r.direction, 'source_run': run_dir, 'scan_asof_local': meta.get('scan_asof_local'), 'cutoff_utc': str(cut),
                     'entry_session': str(pd.Timestamp(es).date()), 'entry_ref': r.entry, 'stop_initial': r.stop, 'target': r.target,
@@ -79,7 +81,7 @@ def bars(ticker, asset, asof_utc, cache_dir=None):
         import scanner_crypto as SCR
         return SCR.alpaca_daily(ticker, asof)
     import scanner_stops as ST
-    px = cache_dir or f"/workspace/scanner-momentum-cache/{asof.strftime('%Y%m%dT%H%MZ')}"
+    px = cache_dir or f"{_SCANNER_ROOT}/scanner-momentum-cache/{asof.strftime('%Y%m%dT%H%MZ')}"
     return ST.daily_bars(ticker, 'stock', asof, px)
 
 def bench(asset, asof_utc, cache_dir=None):
@@ -114,7 +116,10 @@ def triggers(prev, cur, trade, jev):
     """cost gate: reasons to call the paid LLM platforms at a day-5/10 checkpoint (else 'skipped - no material change')."""
     t = []
     if jev and (jev.get('n_material') or 0) > 0: t.append(f"Jev: {jev['n_material']} כותרות מהותיות")
-    if jev and (jev.get('for_claude') or []): t.append(f"Jev: {len(jev['for_claude'])} כותרות בביטחון נמוך/חשודות")
+    # 10.10 tightened (sim: the old rule fired on 22/23 checkpoints): a low-confidence headline triggers only if Jev still rates it
+    # material (>= 2) and relevant; a manipulation-flagged headline always triggers.
+    lc = [i for i in (jev or {}).get('for_claude') or [] if i.get('flagged') or (i.get('materiality', 0) >= 2 and i.get('relevant', 0) >= 0.6)]
+    if lc: t.append(f"Jev: {len(lc)} כותרות מהותיות בביטחון נמוך/חשודות")
     if cur.get('near_stop'): t.append('קרוב לסטופ (פחות מ-1 ATR)')
     tg = trade.get('target')
     try: tg = float(tg)
@@ -126,7 +131,9 @@ def triggers(prev, cur, trade, jev):
         for k, lab in (('above_sma50', 'SMA50'), ('above_sma200', 'SMA200')):
             if prev.get(k) is not None and cur.get(k) is not None and prev[k] != cur[k]: t.append(f"{'איבד' if prev[k] else 'חזר מעל'} {lab}")
         if prev.get('va120_pos') and cur.get('va120_pos') and prev['va120_pos'] != cur['va120_pos']: t.append(f"VA120: {prev['va120_pos']}→{cur['va120_pos']}")
-        if prev.get('elliott_v2') and cur.get('elliott_v2') and prev['elliott_v2'] != cur['elliott_v2']: t.append(f"ספירת אליוט השתנתה ({prev['elliott_v2']} → {cur['elliott_v2']})")
+        # Elliott: provisional relabels are noise; trigger only on a CONFIRMED (non-provisional) change of the count
+        pe, ce = str(prev.get('elliott_v2') or ''), str(cur.get('elliott_v2') or '')
+        if pe and ce and pe != ce and 'provisional' not in ce: t.append(f"ספירת אליוט השתנתה ({pe} → {ce})")
         if prev.get('elliott_v1_valid') and cur.get('elliott_v1_valid') is False: t.append('ספירת אליוט v1 בוטלה')
     return t
 
@@ -137,10 +144,6 @@ def call_of(row):
     cv = row.get('conviction_or_sentiment')
     try: cv = float(cv)
     except Exception: cv = None
-    if p == 'grok_analyst':
-        if cv is None or not math.isfinite(cv) or v not in ('supports', 'neutral', 'opposes'): return None
-        if v == 'neutral': return 0
-        return -1 if v == 'opposes' or cv < 45 else 1 if cv >= 60 else 0
     if p == 'claude':
         if cv is None: return None
         return 1 if (cv >= 60 and v != 'opposes') else -1 if (cv < 45 or v == 'opposes') else 0

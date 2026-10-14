@@ -6,13 +6,14 @@ An order for a setup is submitted at the label of its entry bar e (= first sessi
 the alert was provably known); IAF fills market orders at the Open of the first bar with label >= order
 time, i.e. the Open of bar e.  Decisions come from the precomputed point-in-time table, never from
 IAF's data window (which would expose bar e's close at that moment)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, re, time, json, logging, warnings, pandas as pd, numpy as np
 from datetime import datetime, timezone, timedelta
 warnings.filterwarnings('ignore'); logging.disable(logging.WARNING)
 from investing_algorithm_framework import (create_app, TradingStrategy, TimeUnit, DataSource, PandasOHLCVDataProvider,
     BacktestDateRange, PortfolioConfiguration, OrderSide, SimulationBlotter, FixedBasisPointsSlippage, PercentageCommission)
 ASSET=sys.argv[1]; POL=sys.argv[2]; LIMIT=int(sys.argv[3]) if len(sys.argv)>3 else None
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 COST={'stock':dict(fee=0.02, slip=0.05), 'crypto':dict(fee=0.10, slip=0.10)}[ASSET]   # percent per side
 POLICY={'hold':None,'fsetup':('setup',False),'f8':(8,False),'t5':(5,True),'t8':(8,True),'t12':(12,True)}[POL]
 D=pd.read_pickle(OUT+'setups_prepared.pkl'); F=pd.read_pickle(OUT+'frames.pkl')

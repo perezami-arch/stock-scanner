@@ -13,8 +13,9 @@ scanner_platforms.grok() then uses only posts created in [cutoff-72h, cutoff) (p
 the cached posts with no search tool (tokens only); fewer -> Grok's own x_search (paid per post). Posts are UNTRUSTED text for Grok.
 `python3 x_cache.py status [SYMBOL...]` shows what is cached for today.
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, os, json, datetime as dt
-ROOT = os.environ.get('PLATFORM_X_CACHE_DIR', '/workspace/x-cache')
+ROOT = os.environ.get('PLATFORM_X_CACHE_DIR', (_SCANNER_ROOT + '/x-cache'))
 
 def normalize(raw):
     """accepts the x MCP search result (dict with data/includes, or a list of posts with url/username) -> list of post dicts."""

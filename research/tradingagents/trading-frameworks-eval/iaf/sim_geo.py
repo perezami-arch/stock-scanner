@@ -11,10 +11,11 @@ chandelier 4xATR; crypto LONG fixed 3xATR. Crypto shorts are frozen by the rules
 (b) TARGET variants (policy stop kept, REPLACES the 1.618 half for stock longs): nearest untaken swing-high cluster above the entry
     (long; short mirrored) or nearest open FVG edge in the trade direction (liq_fvg_above_lo / liq_fvg_below_hi); full exit or 1/2.
 No object beyond entry -> the variant falls back to the baseline trade (covered=False). Comparisons use covered trades only (paired)."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import numpy as np, pandas as pd, sys
-sys.path.insert(0,'/workspace/trading-frameworks-eval/iaf')
+sys.path.insert(0,(_SCANNER_ROOT + '/trading-frameworks-eval/iaf'))
 from stop_rules import atr_wilder, ChandelierStop
-OUT='/workspace/trading-frameworks-eval/iaf/'
+OUT=(_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 s=open(OUT+'sim_fib.py').read(); exec(s[s.index('def zigzag'):s.index('def clock')])
 D=pd.read_pickle(OUT+'setups_prepared.pkl'); F=pd.read_pickle(OUT+'frames.pkl')
 GF=pd.read_pickle(OUT+'geo_features.pkl').set_index('setup_id')

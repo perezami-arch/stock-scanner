@@ -1,62 +1,47 @@
 # סורק מניות וקריפטו של אילן (stock-scanner)
 
-שמירת קבצי המחקר והמעקב במחשב Windows: [תיקייה מקומית וסנכרון מאומת](ops/WINDOWS_STORAGE.he.md).
-
-שכבת מחקר משולבת: [שילוב המחקר בניקוד הטכני](research/jewish-lunar/INTEGRATION.he.md).
-בכניסה `run_unified_scan.py` נוספה שכבה ניסיונית שמשקלה המוגדר 30%, לצד 70% לציון הבסיס, לפי בקשת אילן.
-היא כוללת לוח אסטרונומי ציבורי ומנגנון הרחבה חודשי. התיעוד להלן מתאר את תמונת המקור; אזכורי משקל 0 קודמים אינם מתארים את שכבת השקלול החדשה.
-
-**פער בסיס שזוהה מול מסמך 8.10 שסיפק אילן:** במפרט המקורי מומנטום הוא 10/100 לצד טכני וסטופים/יעדים; `unified_score` בקוד הזמין משתמש במומנטום כבסיס כולו. יעד השילוב הוא 70% מהבסיס המקורי המלא ו־30% מחקר. המנגנון קיים, אך השלמת נוסחת הבסיס ואימותה מול הבוט עדיין נדרשים. ראו [השוואת המפרט למימוש](ARCHITECTURE.he.md#השוואה-למסמך-המקור-מ810) ו[מסמך המקור](docs/sources/scanner-architecture-2026-10-08.pdf).
-
-
-הרחבת המעקב: [מחקר מצטבר ומעקב יומי](research/jewish-lunar/FORWARD_RESEARCH.he.md), כולל חדשות לכל עסקה פתוחה ובדיקות 5/10/20 ימי מסחר **אחרי סגירת עסקה**. קובצי הפעלה למחשב הלינוקס: [התקנה ותזמון](ops/LINUX_DEPLOYMENT.he.md). עדכון הריפו לבדו אינו מפעיל את הבוט. סיכומי המעקב יתפרסמו כאן מדי יום לאחר הפעלת המתזמן.
-
-ריפו פרטי שמכיל **קוד, תיעוד ומחקר**: כולל לוח אסטרונומי ציבורי וסיכומי מעקב עתידיים; בלי מפתחות או מטמוני מחירים גולמיים. מטרתו לאפשר ל-GPT (דרך מחבר GitHub של ChatGPT) ולבוטים אחרים לקרוא את הסורק ואת המבנה שלו.
+ריפו פרטי שמכיל **רק קוד ותיעוד**: בלי נתונים, בלי לוגים, בלי מפתחות. מטרתו לאפשר ל-GPT (דרך מחבר GitHub של ChatGPT) ולבוטים אחרים לקרוא את הסורק ואת המבנה שלו.
 התמונה צולמה מהמחשב של הבוט ב-10.10.2026. הקוד רץ בפועל מ-`/workspace` על המחשב הזה, ולא מהריפו.
 
 > **חשוב:** הקוד מייבא קבצים לפי נתיבים מוחלטים תחת `/workspace/...` (ולפעמים `sys.path.insert('/workspace')`). הקוד **לא שוכתב**. טבלת הנתיבים המקוריים נמצאת בהמשך.
 
 ## ארכיטקטורה ותפקידי הפלטפורמות
-תפקידי המודלים בטבלה הם העדכון האחרון שאילן אישר בשיחה: **Claude אנליסט, Grok אנליסט נוסף לצד סנטימנט וקריפטו, GPT פרקליט השטן מול שניהם**. הגדרת Claude במסמך 8.10 נשמרת כהיסטוריה בלבד. [פרטי שילוב Grok כאנליסט](docs/GROK_ANALYST.he.md).
-
 | רכיב | תפקיד |
 |---|---|
 | **הבוט (שוק ההון)** | כל הטכני: מחירים, ATR, סטופים, פיבו/אליוט, רמות, גלי ווליום, מומנטום 12-1, ניקוד |
-| **Grok (xAI)** | אנליסט נוסף: טכני, תזה וסיכונים; במקביל סנטימנט מ-X והקשר קריפטו |
+| **Grok (xAI)** | סנטימנט מ-X, וקריפטו |
 | **Perplexity Sonar** | קטליסטים (דוחות, חדשות, אירועים) |
 | **Claude** | האנליסט: מסכם וממליץ על כל מועמד |
-| **GPT** | פרקליט השטן: מאתגר בנפרד את התזות של Claude ושל Grok |
+| **GPT** | פרקליט השטן: מאתגר את התזה של Claude |
 | **Jev** | פילטר מקדים לכותרות חדשות לפני שהן מגיעות למודלים |
 
-ראו [ארכיטקטורה מלאה ותרשימי התהליך](ARCHITECTURE.he.md), המבוססים על מסלול הקריאות בקוד.
+ראו `ARCHITECTURE.md` לתרשים זרימה.
 
 ## הזרימה
-1. **איסוף וסריקה טכנית** על יקום טיקרים מוגדר: מחירים, חדשות והקשר מאקרו. מניות ארה"ב וקריפטו; ETF משמשים להקשר ואינם נבחרים כמועמדים במסלול הנוכחי.
-2. **כללי כשירות וכיוון**, ואחריהם בניית רמות, פיבו, גאן, אליוט, נרות ונפח למועמדים.
-3. **דירוג ובחירה מוקדמת**: בסיס מומנטום 12–1 עם שכבת מחקר עד 30%, סף ציון, דוחות ותקרת סקטור; הקפאת תמונת המחקר.
-4. **גרפים וחוות דעת** במסלול השבועי: Grok → Perplexity → Jev → Claude → GPT. המודלים אינם משנים ישירות את ציון הדירוג.
-5. **שער דוחות סופי והתאמת מספרים**, ואז עד 50 המלצות ודוח בעברית. מידע מהמודלים יכול להשפיע על שער הדוחות.
-6. **רישום ומעקב יומי** ב־`positions_registry.csv`, חדשות וטכני, ביקורת מהכניסה ותחקור 5/10/20 אחרי יציאה; מחקר מצטבר ב־SQLite.
-7. **לקחים ושמירה**: גרסאות הנחיות למודלים, השוואת דירוגים, סיכומים וארכיונים בגיטהאב וסנכרון ל־Windows. המשקלים אינם מתעדכנים אוטומטית. הטראקר הוותיק `tracker/build7.py` הוא מסלול נפרד שאינו מופעל ישירות בכניסה המאוחדת.
+1. **בדיקת משטר שוק** (`tracker/market_regime.py`, `tracker/rules/regime*.py`).
+2. **מועמדים**: סריקה טכנית על היקום (מניות ארה"ב ≥ $1.5B, קריפטו) ב-`scanner/swing_scan.py` + `modules/scanner_crypto.py`.
+3. **העשרה**: פונדמנטלס, חדשות, שורט, רמות, גלים, גאומטריה, אליוט v2, עמודות מחקר (רובן במשקל 0).
+4. **אתגרים צולבים** בין הפלטפורמות (`scanner/scanner_platforms.py`): Grok ↔ Perplexity ↔ Claude ↔ GPT.
+5. **ניקוד** ובחירת עד 20 שמות.
+6. **דוח** בעברית (Markdown + PDF) – `scanner/unified_report.py`, `scanner/run_daily_report.py`.
+7. **טראקר ולולאת למידה**: `tracker/` (build7, engine, alerts), `modules/scanner_lessons.py`, `scanner/run_checkpoints.py`, `scanner/tool_stats.py`.
 
-## לוחות זמנים מבוקשים (שעון ישראל; דורשים התקנה במחשב הבוט)
-- **שבועי:** יום שני 09:00 – ריצה מלאה עם כל המודלים, עד 50 שמות לפי ציון, **בלי חלוקה ללונג/שורט**.
-- **יומי:** כל יום 08:24 – סריקת נייר (`--paper --no-models`) ואחריה דוח ביניים.
+## לוחות זמנים (שעון ישראל)
+- **שבועי:** יום שני 09:00 – ריצה מלאה עם כל המודלים, עד 20 שמות לפי ציון, **בלי חלוקה ללונג/שורט**.
+- **יומי:** ימי חול 08:24 – סריקת נייר (`--paper --no-models`) ואחריה דוח ביניים.
 
 ## כללים פעילים
 - מניות: **סטופ נגרר 4×ATR14** (שנדליר).
 - לונג במניות: **חצי מהפוזיציה יוצא בפיבו 1.618**.
 - קריפטו לונג: **סטופ קבוע 3×ATR14**. **קריפטו שורט מוקפא.**
 - כלל שורט: `ck_score ≥ 3` **וגם** מחיר מתחת ל-SMA200.
-- **מומנטום 12-1:** במפרט 8.10 שווה 10 נקודות מתוך 100. בקוד הכניסה הזמין הוא בסיס הדירוג כולו; זהו פער מתועד, ולא שחזור מאומת של הציון המקורי.
+- **מומנטום 12-1** שווה 10 נקודות בציון.
 - **חסימת דוחות:** לא נכנסים 5 ימי מסחר לפני דוח (`EARNINGS_BLOCK_TD`).
 - **שווי שוק מינימלי $1.5B.**
 - **מקסימום 2 מניות לסקטור.**
 
 ## מדיניות משקל 0 וכלל ה"סיום"
-שכבת גאן/תכונה מתועדת כחריגה מפורשת לפי בקשת אילן: 30% למחקר, אף שטרם אומת יתרון. אין בכך שינוי אוטומטי של משקלי כלים אחרים.
-
-המדיניות הקודמת לכלים אחרים: כל כלי חדש נכנס כעמודה **במשקל 0**: נרשם בדוח ובטראקר, ולא משנה ציון, כניסה, סטופ או יעד.
+כל כלי חדש נכנס כעמודה **במשקל 0**: נרשם בדוח ובטראקר, ולא משנה ציון, כניסה, סטופ או יעד.
 כלי "מסיים" ומקבל משקל רק אם:
 - **≥ 30 תוצאות מחוץ למדגם** מ-**8–10 ימי כניסה** שונים לפחות (מדידה קדימה מ-12.10.2026);
 - **FDR (Benjamini–Hochberg) q < 0.10**;
@@ -110,16 +95,24 @@ Alpaca (מחירים, חדשות Benzinga, קריפטו), yfinance, OpenBB (FINR
 ## מה לא נכלל
 נתונים (`*.csv`, `*.xlsx`, `*.pkl`), לוגים, `scan-runs/`, `openbb-snapshots/`, נתוני `research-models/`, קבצי `.bak`, `venv`, `__pycache__`, `node_modules`, `.env*`, תיקיות `data/` ו-`out/` של הבקטסטים, וכל פרויקט אחר שיושב ב-`/workspace`.
 
+## הרצה מ-GitHub Actions (בהכנה, branch `actions-migration`)
+הריפו הופך למקור הקוד היחיד. סריקה שבועית ביום שני 09:00 ודוח יומי בימי חול 08:24 (שעון ישראל, כולל מעבר שעון) רצים ב-Actions.
+המצב (טראקר, רישום פוזיציות, לדג'רים, X cache) נשמר ב-branch נפרד `state`, והדוחות נכתבים ל-`reports/YYYY-MM-DD/`.
+הנתיבים בקוד נקראים מ-`SCANNER_ROOT` (ברירת מחדל `/workspace`, כך שהמחשב של הבוט ממשיך לעבוד כרגיל).
+פרטים: [ops/ACTIONS.md](ops/ACTIONS.md) · התאמת הקומיטים מ-10.10: [RECONCILIATION.md](RECONCILIATION.md).
+**התזמון כבוי עד אישור של אילן.**
+
 ---
 
 ## English summary
-Private code/research repository based on the 10 Oct 2026 snapshot of Ilan's unified stock + crypto scanner. The live system runs from `/workspace` on the bot's box; existing imports still use those paths. GitHub updates require deployment to that Linux environment.
+Private, code-and-docs-only snapshot (10 Oct 2026) of Ilan's unified stock + crypto scanner. The live system runs from `/workspace` on the bot's box; imports use absolute `/workspace` paths and were **not** rewritten (see the module map above for original paths).
 
-- **Roles:** bot = technicals; Grok = X sentiment + crypto + an additional analyst; Perplexity Sonar = catalysts; Claude = analyst; GPT = devil's advocate challenging both analysts; Jev = news pre-filter.
+- **Roles:** bot = technicals; Grok = X sentiment + crypto; Perplexity Sonar = catalysts; Claude = analyst; GPT = devil's advocate; Jev = news pre-filter.
 - **Flow:** regime check → candidates → enrichment → cross-challenges → scoring → Hebrew report → tracker + learning loop.
-- **Schedule (Israel time):** weekly Monday 09:00, full models, up to 50 names by score, no long/short split; daily paper scan + interim report every day at 08:24.
+- **Schedule (Israel time):** weekly Monday 09:00, full models, up to 20 names by score, no long/short split; daily paper scan + interim report on weekdays at 08:24.
 - **Active rules:** 4×ATR14 trailing stop on stocks; half off at Fib 1.618 on longs; crypto longs fixed 3×ATR stop; crypto shorts frozen; short rule ck_score≥3 and below SMA200; 12-1 momentum = 10 pts; 5-trading-day earnings block; min $1.5B market cap; max 2 per sector.
-- **Research overlay:** explicit user-selected experimental 30% budget / 70% baseline. Other tools retain the prior weight-0 graduation policy. Daily news/technical follow-up and post-exit 5/10/20-session audits are included; coefficients do not update automatically.
+- **Weight-0 policy:** new tools are logged only. Graduation needs ≥30 out-of-sample results from 8–10 entry days, BH-FDR q<0.10, incremental value, and walk-forward stability.
 - **Single source of truth:** the per-run levels JSON (`scanner/levels_schema.json`, `modules/scanner_levelsfile.py`).
 - TradingAgents integration lives in `research/tradingagents/` (our code only; upstream repos not vendored). It runs on Ilan's laptop with local LLMs via Ollama (not OpenRouter); data comes from yfinance, Alpaca and the OpenStock snapshot (`laptop_scripts/openstock_market.py`, live runs only, self-blocks in historical backtests).
-- No secrets or raw price caches are committed. Public calendar fixtures and generated research/follow-up summaries are explicitly included. Env var names are listed above.
+- GitHub Actions migration: see `ops/ACTIONS.md` (schedules disabled until approved) and `RECONCILIATION.md`.
+- No secrets, data, or logs are committed. Env var names are listed above.

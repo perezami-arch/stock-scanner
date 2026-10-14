@@ -24,11 +24,12 @@ Cache: /workspace/news-cache/<SYMBOL>/<YYYY-MM-DD>.json, one file per COMPLETE U
 content/images dropped). A day is cached only when it ended >= 6h before the fetch, so partial days are always refetched.
 A window needs one paginated API call covering only its missing days. Rate limit: Alpaca free = 200 req/min; we stay <=180.
 """
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, json, time, threading
 from datetime import datetime, timedelta, timezone
 
 API_URL = "https://data.alpaca.markets/v1beta1/news"
-CACHE_DIR = os.environ.get("NEWS_CACHE_DIR", "/workspace/news-cache")
+CACHE_DIR = os.environ.get("NEWS_CACHE_DIR", (_SCANNER_ROOT + "/news-cache"))
 CACHE_SETTLE_HOURS = 6          # a UTC day is cached only once it ended this long ago
 MAX_PAGES = 40                  # 40 x 50 = 2000 articles per window (NVDA ~ 150-250 / week)
 FIELDS = ("id", "headline", "summary", "source", "created_at_utc", "symbols", "url")

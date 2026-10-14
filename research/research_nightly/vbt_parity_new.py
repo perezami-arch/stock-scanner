@@ -12,15 +12,16 @@ Stage 2 (gh-repos-eval/venv-vbt, started automatically): both engines + comparis
 Usage: python3 research_nightly/vbt_parity_new.py --tracker /workspace/scan-tracker-2026-10-12-mom.xlsx [--since 2026-10-12]
        python3 research_nightly/vbt_parity_new.py --trades trades.csv   (ticker, direction, alert_date|entry_date, [asset, atr14_wilder, tp_half_1618])
 Output: research-models/vbt_parity/<stamp>/{signals.csv, bars/, parity_trades.csv, parity_summary.json}"""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import os, sys, json, glob, argparse, subprocess
 import numpy as np, pandas as pd
-VBT_PY = "/workspace/gh-repos-eval/venv-vbt/bin/python"; IAF = "/workspace/trading-frameworks-eval/iaf"
-ROOT = "/workspace/research-models/vbt_parity"
+VBT_PY = (_SCANNER_ROOT + "/gh-repos-eval/venv-vbt/bin/python"); IAF = (_SCANNER_ROOT + "/trading-frameworks-eval/iaf")
+ROOT = (_SCANNER_ROOT + "/research-models/vbt_parity")
 COST = {"stock": dict(fee=0.0002, slip=0.0005), "crypto": dict(fee=0.0010, slip=0.0010)}
 TOL = 1e-4
 
 def prep(a):
-    sys.path.insert(0, "/workspace"); import tool_stats as TS
+    sys.path.insert(0, _SCANNER_ROOT); import tool_stats as TS
     if a.trades:
         T = pd.read_csv(a.trades)
     else:
@@ -37,7 +38,7 @@ def prep(a):
     start = (T.day1_from.min() - pd.Timedelta(days=120)).strftime("%Y-%m-%d")
     syms = sorted(set(T.ticker.astype(str).str.upper().str.replace(".", "-")))
     Z = yf.download(syms, start=start, interval="1d", auto_adjust=True, progress=False, group_by="ticker", threads=True)
-    now = pd.Timestamp.now(tz="UTC"); sys.path.insert(0, "/workspace"); import scanner_geometry as GEO
+    now = pd.Timestamp.now(tz="UTC"); sys.path.insert(0, _SCANNER_ROOT); import scanner_geometry as GEO
     for s in syms:
         try:
             x = (Z[s] if isinstance(Z.columns, pd.MultiIndex) else Z).dropna(subset=["Close"])

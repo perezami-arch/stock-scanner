@@ -1,12 +1,13 @@
 """RULE §12 leak/repaint test."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import sys, numpy as np, pandas as pd, math
-sys.path.insert(0, '/workspace/fib-spiral'); import fib_spiral as FS, common_bt as C
+sys.path.insert(0, (_SCANNER_ROOT + '/fib-spiral')); import fib_spiral as FS, common_bt as C
 from backtest_fib import datasets
 rng = np.random.default_rng(7); ds = datasets(); res = []
 def norm(dct):
     return {k: (round(float(v), 9) if isinstance(v, (float, np.floating)) else (str(v) if not isinstance(v, (dict, bool, int, str)) else v)) for k, v in dct.items()}
 for name in ('crypto_1h', 'stock_1d', 'crypto_1m'):
-    items = ds[name]; ev = pd.read_csv(f'/workspace/fib-spiral/out/events_{name}.csv')
+    items = ds[name]; ev = pd.read_csv(f'{_SCANNER_ROOT}/fib-spiral/out/events_{name}.csv')
     for it in [items[k] for k in rng.choice(len(items), min(12, len(items)), replace=False)]:
         sym, path, asset, bar_ms, W = it; d = C.load_ohlcv(path).drop(columns=['ts'])
         evs, _ = FS.find_events(d, asset, 'F9')
@@ -29,6 +30,6 @@ for name in ('crypto_1h', 'stock_1d', 'crypto_1m'):
                         and (a1['fs_target_t1'] == e['fs_target_t1'] or (a1['fs_target_t1'] != a1['fs_target_t1'] and e['fs_target_t1'] != e['fs_target_t1'])) \
                         and a1['fs_target_t2'] == e['fs_target_t2'] or (a1['fs_target_t2'] != a1['fs_target_t2'])
                 res.append(dict(dataset=name, symbol=sym, kind=kind, bar=b, identical=same, event_reproduced=ok_ev, state=a1['fs_state']))
-r = pd.DataFrame(res); r.to_csv('/workspace/fib-spiral/out/leak_test.csv', index=False)
+r = pd.DataFrame(res); r.to_csv((_SCANNER_ROOT + '/fib-spiral/out/leak_test.csv'), index=False)
 print(r.groupby(['dataset', 'kind'])[['identical', 'event_reproduced']].agg(['sum', 'count']))
 print(r.state.value_counts())

@@ -1,13 +1,14 @@
 """Table of the manual 20-setup TradingAgents run (laptop, 2026-10-08 15:19-) vs active-policy outcomes."""
+import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/workspace')  # repo-portable root (default: the box)
 import json, sys, numpy as np, pandas as pd
-sys.path.insert(0, '/workspace/ta-calib')
+sys.path.insert(0, (_SCANNER_ROOT + '/ta-calib'))
 res = [json.loads(l) for l in open(sys.argv[1], encoding='utf-8') if l.strip()]
 R = pd.DataFrame(res); R = R[R.finished_at >= '2026-10-08T15:19'].drop_duplicates('setup_id', keep='last')
-O = pd.read_csv('/workspace/ta-calib/outcomes_calib.csv')
-T = pd.read_csv('/workspace/trading-frameworks-eval/iaf/sim_ratchet_trades.csv')
+O = pd.read_csv((_SCANNER_ROOT + '/ta-calib/outcomes_calib.csv'))
+T = pd.read_csv((_SCANNER_ROOT + '/trading-frameworks-eval/iaf/sim_ratchet_trades.csv'))
 T['want'] = np.where(T.asset == 'crypto', 'rt_fixed3_c', np.where(T.direction == 'LONG', 'rt_ratchet_h618_c', 'rt_ratchet_c'))
 T = T[T.policy == T.want][['setup_id', 'entry_date', 'exit_date', 'status', 'ret_net', 'days']]
-IAF = '/workspace/trading-frameworks-eval/iaf/'
+IAF = (_SCANNER_ROOT + '/trading-frameworks-eval/iaf/')
 F = pd.read_pickle(IAF + 'frames.pkl'); B = pd.read_pickle(IAF + 'bench_yf.pkl')
 def bser(t):
     x = F[(t, True)] if t == 'BTC-USD' else B[t][['Open', 'Close']].dropna()
@@ -35,4 +36,4 @@ print()
 for s, g in X.groupby('stance'):
     print(f"{s:8s} N={len(g):2d} mean={g.ret_net.mean()*100:+.2f}% median={g.ret_net.median()*100:+.2f}% hit={(g.ret_net>0).mean()*100:.0f}% x_mkt={g.x_mkt.mean()*100:+.2f}%  stopped={int((g.status=='stopped').sum())}")
 print(f"ALL      N={len(X)} mean={X.ret_net.mean()*100:+.2f}%  x_mkt={X.x_mkt.mean()*100:+.2f}%")
-X[cols].to_csv('/workspace/ta-calib/table20.csv', index=False)
+X[cols].to_csv((_SCANNER_ROOT + '/ta-calib/table20.csv'), index=False)
