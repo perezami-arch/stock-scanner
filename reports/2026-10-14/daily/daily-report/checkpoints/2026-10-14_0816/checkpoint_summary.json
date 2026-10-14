@@ -1,0 +1,13 @@
+{
+ "asof_utc": "2026-10-14 05:16:37.841542+00:00",
+ "cp_dir": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-10-14/checkpoints/2026-10-14_0816",
+ "open_before": 13,
+ "checkpoints": [],
+ "closed": [],
+ "pending_entry": [],
+ "scoreboard": [],
+ "spent_usd": 0.0,
+ "ledger_rows_written": 0,
+ "llm_positions": 0,
+ "skipped_rows": 0
+}
