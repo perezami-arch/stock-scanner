@@ -8,15 +8,16 @@ def test_earn15_shorts_only():
     E._RS.clear(); assert E.components(C('SHORT', 10), '2026-10-16', closes(0))['exp_adj_penalty_earn'] == 8
     E._RS.clear(); assert E.components(C('SHORT', 16), '2026-10-16', closes(0))['exp_adj_penalty_earn'] == 0
     E._RS.clear(); assert E.components(C('LONG', 10), '2026-10-16', closes(0))['exp_adj_penalty_earn'] == 0
-def test_sector_rs():
-    E._RS.clear(); assert E.components(C('SHORT'), '2026-10-17', closes(0.02))['exp_adj_penalty_rs'] == 5
+def test_sector_rs_flag_weight0():
+    E._RS.clear(); r = E.components(C('SHORT'), '2026-10-17', closes(0.02)); assert r['exp_adj_rs_against'] and r['exp_adj_penalty_rs'] == 0
     E._RS.clear(); assert E.components(C('LONG'), '2026-10-18', closes(0.02))['exp_adj_penalty_rs'] == 0
-    E._RS.clear(); assert E.components(C('LONG'), '2026-10-19', closes(-0.02))['exp_adj_penalty_rs'] == 5
+    E._RS.clear(); r = E.components(C('LONG'), '2026-10-19', closes(-0.02)); assert r['exp_adj_rs_against'] and r['exp_adj_penalty_rs'] == 0
     E._RS.clear(); assert E.components(C('SHORT'), '2026-10-20', closes(0.01))['exp_adj_penalty_rs'] == 0
     E._RS.clear(); assert E.components(C('LONG', a='crypto'), '2026-10-21', closes(-0.05))['exp_adj_penalty_rs'] == 0
 def test_short_cap():
-    assert E.total_penalty('SHORT', 20, {'exp_adj_penalty_earn': 8, 'exp_adj_penalty_rs': 5}) == 25
-    assert E.total_penalty('LONG', 0, {'exp_adj_penalty_rs': 5}) == 5
+    assert E.total_penalty('SHORT', 20, {'exp_adj_penalty_earn': 8, 'exp_adj_penalty_rs': 0}) == 25
+    assert E.total_penalty('SHORT', 10, {'exp_adj_penalty_earn': 8}) == 18
+    assert E.total_penalty('LONG', 0, {'exp_adj_penalty_rs': 0}) == 0
 if __name__ == '__main__':
     for k, f in list(globals().items()):
         if k.startswith('test_'): f(); print('PASS', k)

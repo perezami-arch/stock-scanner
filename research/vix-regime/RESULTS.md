@@ -38,5 +38,5 @@ Rule (locked, `scanner/vix_regime.py::vix30_bonus`, applied in `run_unified_scan
 
 ## Scoring v3-shortveto-cred (16.10.2026, Ilan 17:16 + 17:18) — see scanner/short_cred.py and scanner/entry_adj.py docstrings
 - Model credibility on short warnings: Beta(15,15) shrinkage, −10 per model × weight, cap −20; signals given on >80% of shorts do not count.
-- Short with earnings within 15 trading days: −8. Sector RS (ETF 5d − SPY 5d): short with RS > +1.5% −5; long with RS < −1.5% −5.
+- Short with earnings within 15 trading days: −8 (confirmed by independent S&P 2005–2026 validation, −0.75% gap). Sector RS (ETF 5d − SPY 5d, ±1.5%): column only, WEIGHT 0 (validation: no effect for shorts or longs).
 - All short penalties together capped at −25. Names pushed below trade grade are paper-tracked (registry blocked_by_veto).
