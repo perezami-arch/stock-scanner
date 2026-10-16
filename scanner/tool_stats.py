@@ -202,12 +202,17 @@ def merge_extra(x, path):
     return m
 def _jev_num(v):
     m = re.search(r"([+-]?\d+(?:\.\d+)?)\)?\s*$", str(v)); return float(m.group(1)) if m else np.nan
-def ledger_columns(path=LEDGER, forward_start=FORWARD_START):
+def ledger_columns(path=LEDGER, forward_start=FORWARD_START, include_trial=False):
     """platform_verdicts_ledger.csv -> one row per (ticker, direction, scan date) with llm_* columns."""
     if not path or not os.path.exists(path): return None
     L = pd.read_csv(path)
     if "decision_point" in L: L = L[L.decision_point.astype(str).eq("entry")]
-    if "trial" in L: L = L[~L.trial.astype(str).str.lower().isin(["true", "1"])]
+    is_tr = L.trial.astype(str).str.lower().isin(["true", "1"]) if "trial" in L else pd.Series(False, index=L.index)
+    if not include_trial: L = L[~is_tr]
+    else:   # 16.10: trial rows kept but tagged; models in the 08.10 trial saw NO chart images -> separable
+        L = L.copy(); L["source"] = np.where(is_tr[L.index], "trial-" + L.asof_local.astype(str).str[:10], "forward")
+        L["chart_images"] = L.get("image_input", pd.Series(index=L.index, dtype=object)).astype(str).eq("image")
+        forward_start = "2000-01-01"; L["forward_only_from"] = forward_start
     L["alert_date"] = pd.to_datetime(L.asof_local.astype(str).str[:10], errors="coerce")
     fo = pd.to_datetime(L.get("forward_only_from", forward_start), errors="coerce").fillna(pd.Timestamp(forward_start))
     L = L[L.alert_date >= np.maximum(fo, pd.Timestamp(forward_start))]
@@ -216,6 +221,7 @@ def ledger_columns(path=LEDGER, forward_start=FORWARD_START):
     out = {}
     for (t, d, a), g in L.groupby(["ticker", "direction", "alert_date"]):
         r = {}
+        if include_trial: r["llm_source"] = g.source.iloc[0]; r["llm_chart_images"] = bool(g.chart_images.any())
         for _, z in g.iterrows():
             p = str(z.platform).lower(); v = str(z.verdict).strip().lower() if pd.notna(z.verdict) else None
             if v is None or v in ("nan", ""): continue
@@ -233,7 +239,7 @@ def ledger_columns(path=LEDGER, forward_start=FORWARD_START):
         out[(t, d, a)] = r
     X = pd.DataFrame.from_dict(out, orient="index"); X.index.names = ["ticker", "direction", "alert_date"]
     return X.reset_index()
-LEDGER_META = {"llm_jev_sentiment": "signed", "llm_pplx_flag": "flag", "llm_jev_verdict": "info", "llm_grok_verdict": "info",
+LEDGER_META = {"llm_source": "info", "llm_chart_images": "info", "llm_jev_sentiment": "signed", "llm_pplx_flag": "flag", "llm_jev_verdict": "info", "llm_grok_verdict": "info",
                "llm_pplx_verdict": "info", "llm_claude_verdict": "info", "llm_gpt_verdict": "info",   # covered by the explicit flags below
                "llm_gpt_veto": "flag", "llm_gpt_flag_or_veto": "flag", "llm_grok_approve": "flag",
                "llm_grok_veto": "flag", "llm_pplx_approve": "flag", "llm_claude_supports": "flag"}

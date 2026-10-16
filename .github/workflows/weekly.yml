@@ -1,4 +1,4 @@
-# weekly scan - Monday 09:00 Israel time. Two UTC crons (summer UTC+3 / winter UTC+2); ops/gate.py keeps exactly one.
+# weekly scan - Primary trigger = workflow_dispatch from the routines; crons are a FALLBACK, ops/gate.py skips if today's report exists.
 # Schedule enabled 14.10.2026 (Ilan's approval).
 name: weekly
 on:
@@ -11,6 +11,10 @@ on:
         description: 'Dry run: paper scan, no LLM calls, no commits (artifact only)'
         type: boolean
         default: true
+      force:
+        description: 'Run even if today''s report already exists'
+        type: boolean
+        default: false
   pull_request:          # dry run on PRs that touch the pipeline (never commits)
     paths: ['.github/workflows/**', 'ops/**', 'scanner/**', 'modules/**', 'requirements*.txt']
 concurrency:
@@ -26,9 +30,9 @@ jobs:
       il_date: ${{ steps.g.outputs.il_date }}
     steps:
       - uses: actions/checkout@v4
-        with: {sparse-checkout: ops}
+        with: {sparse-checkout: "ops\nreports"}
       - id: g
-        run: python3 ops/gate.py 9 "${{ github.event.schedule }}"
+        run: python3 ops/gate.py 09:00 "${{ github.event.schedule }}" weekly "${{ github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.dry) }}" "${{ inputs.force || false }}"
   scan:
     needs: gate
     if: needs.gate.outputs.run == 'true'
