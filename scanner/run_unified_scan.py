@@ -246,6 +246,7 @@ def main():
     ap.add_argument('--candidates', type=int, default=20); ap.add_argument('--sector-cap', type=int, default=int(os.environ.get('PLATFORM_MAX_PER_SECTOR', '2')))
     ap.add_argument('--min-score', type=float, default=MIN_SCORE_DEFAULT, help='unified-score floor; names below it are not selected (default 60, see addendum)')
     ap.add_argument('--no-crypto', action='store_true')
+    ap.add_argument('--research-n', type=int, default=0, help='16.10: top-N names by score (hard rules only: mcap/short rule/earnings block) all go through the models and are tracked; trade_grade = the regular selection (0 = off)')
     ap.add_argument('--blocked-research', type=int, default=-1, help='earnings-blocked names still researched by the models (-1 = auto max(2, N/2))')
     ap.add_argument('--budget', type=float, default=None); ap.add_argument('--tracker', default=None)
     ap.add_argument('--no-hooks', action='store_true'); ap.add_argument('--no-research-columns', action='store_true'); ap.add_argument('--no-tool-stats', action='store_true')
@@ -304,13 +305,22 @@ def main():
     # 5. selection (pure) + candidates_full.csv - every rule-passing name with its score, rank and why it was / was not picked
     ok = [c for c in allc if (c['t'], c['direction']) in built]
     sel, blk = select(ok, a.candidates, a.sector_cap, a.min_score, a.blocked_research)
+    sel_ids = {id(c) for c in sel}; extra = []
+    for c in ok: c['_trade_grade'] = id(c) in sel_ids
+    if a.research_n and a.research_n > len(sel):   # research set: score order, earnings-blocked excluded, no floor / sector cap
+        blkd = {id(c) for c in ok if (c.get('_eg') or {}).get('blocked')}
+        for c in sorted(ok, key=lambda c: (c.get('unified_score') is None, -(c.get('unified_score') or 0), c['t'])):
+            if len(sel) + len(extra) >= a.research_n: break
+            if id(c) in sel_ids or id(c) in blkd: continue
+            extra.append(c); c['_sel_note'] = (c.get('_sel_note') or '') + ' | מחקר (לא trade-grade)'
+        log(f'research set: {len(sel)} trade-grade + {len(extra)} research-only = {len(sel)+len(extra)} (N={a.research_n}, {len(ok)-len(blkd)} pass hard rules)')
     rows = []
     for c in allc:
         L = (built.get((c['t'], c['direction'])) or (None, None))[1]
         f = LF.facts_for_prompt(L) if L else {}
         rows.append({'ticker': c['t'], 'asset': c['asset'], 'direction': c['direction'], 'unified_score': c.get('unified_score'), 'score_rank': None,
                      'passes_min_score': (c.get('unified_score') is not None and c['unified_score'] >= a.min_score), 'min_score': a.min_score,
-                     ('would_select' if a.paper else 'selected'): any(c is x for x in sel), 'selection_note': c.get('_sel_note', c.get('levels_error')),
+                     ('would_select' if a.paper else 'selected'): any(c is x for x in sel), 'trade_grade': bool(c.get('_trade_grade')), 'in_research_set': any(c is x for x in sel + extra), 'selection_note': c.get('_sel_note', c.get('levels_error')),
                      'rank_basis': c.get('rank_basis'),
                      'momentum_score': c.get('momentum_score'), 'momentum_12_1': c.get('momentum_12_1'), 'short_ck_score': c.get('short_ck_score'),
                      'short_rule_pass': c.get('short_rule_pass'), 'sector_etf': c.get('sector_etf'), 'mcap_b': c.get('mcap_b'),
@@ -339,7 +349,7 @@ def main():
         json.dump({'mode': 'paper', 'n_full': len(rows), 'n_paper_appended': n}, open(f'{run_dir}/paper_summary.json', 'w'), indent=1)
         return
     # 6. selection (computed above): one ranking, no fixed long/short split; may be 20 longs and 0 shorts, or fewer than N
-    cands = sel + blk
+    cands = sel + extra + blk
     ids = {id(c) for c in sel}
     for c in cands: c['_selected'] = id(c) in ids
     selL = [c for c in sel if c['asset'] == 'stock' and c['direction'] == 'LONG']; selS = [c for c in sel if c['direction'] == 'SHORT']
@@ -383,6 +393,7 @@ def main():
     ci = json.load(open(ci_path)) if os.path.exists(ci_path) else []
     rec = LF.reconcile(run_dir, cands, report_numbers, trows, ci)
     for t_ in trows: t_['recon_status'] = 'תואם' if not rec.get((t_['ticker'], t_['direction'])) else 'לא תואם'
+    for t_, c in zip(trows, cands): t_['trade_grade'] = bool(c.get('_trade_grade')); t_['research_only'] = any(c is x for x in extra)
     pd.DataFrame(trows).to_csv(f'{run_dir}/tracker_rows.csv', index=False, encoding='utf-8-sig')
     json.dump({f'{k[0]}|{k[1]}': v for k, v in rec.items()}, open(f'{run_dir}/reconciliation.json', 'w'), ensure_ascii=False, indent=1)
     log('reconciliation:', sum(not v for v in rec.values()), 'תואם /', sum(bool(v) for v in rec.values()), 'לא תואם')
