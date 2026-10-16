@@ -36,3 +36,22 @@ P['lo15']=test(vv<15,'VIX<15 (sens): riskOFF-riskON',-1)
 P['mom_cmp']=test(vv>v.rolling(20).mean().loc[S.index],'momentum cmp: VIX>SMA20 -> riskOFF-riskON',-1)
 p=pd.Series(P).sort_values(); q=(p*len(p)/np.arange(1,len(p)+1))[::-1].cummin()[::-1]; print('BH q:',q.round(3).to_dict())
 pd.DataFrame({'spread_on_minus_off':S,'vix':vv}).to_csv('market_spread.csv')
+# 19.20 marker (pre-registered by Ilan 16.10)
+pv=v.shift(1).loc[S.index]
+P2={}
+P2['up1920']=test((vv>19.2)&(pv<=19.2),'cross UP 19.20: riskOFF-riskON fwd20',-1)
+P2['dn1920']=test((vv<19.2)&(pv>=19.2),'cross DOWN 19.20: riskON-riskOFF fwd20')
+P2['above1920']=test(vv>19.2,'VIX>19.20 state: riskOFF-riskON',-1)
+p=pd.Series(P2).sort_values(); print('BH q (19.20 family):',(p*len(p)/np.arange(1,len(p)+1))[::-1].cummin()[::-1].round(3).to_dict())
+p2=v.shift(2).loc[S.index]
+P3={}
+P3['up2']=test((vv>19.2)&(pv>19.2)&(p2<=19.2),'2-close UP 19.20: riskOFF-riskON',-1)
+P3['dn2']=test((vv<19.2)&(pv<19.2)&(p2>=19.2),'2-close DOWN 19.20: riskON-riskOFF')
+vf=v.loc[S.index]
+def whip(mask,up):
+    idx=np.where(mask.values)[0]; w=0
+    for i in idx:
+        nxt=vf.iloc[i+1:i+6]; w+= (nxt<19.2).any() if up else (nxt>19.2).any()
+    return len(idx),w
+for nm,m,u in [('1-close up',(vv>19.2)&(pv<=19.2),1),('2-close up',(vv>19.2)&(pv>19.2)&(p2<=19.2),1),('1-close down',(vv<19.2)&(pv>=19.2),0),('2-close down',(vv<19.2)&(pv<19.2)&(p2>=19.2),0)]:
+    n,w=whip(m,u); print(f'{nm}: signals={n} whipsaw(reverse within 5d)={w} ({w/n:.0%})')

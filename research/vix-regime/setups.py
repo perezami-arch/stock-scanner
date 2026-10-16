@@ -54,3 +54,12 @@ for _,rw in d[(d.vix<16)&d.L&d.riskon&d.asset.eq('stock')].iterrows():
     out.append(res)
 o=pd.DataFrame(out); print('stop 3x vs 4x ATR, risk-on longs VIX<16: n=%d mean 3x %+.2f%% 4x %+.2f%% diff %+.2f pp, p=%.3f'%(len(o),o[3].mean()*100,o[4].mean()*100,(o[3]-o[4]).mean()*100,stats.ttest_1samp(o[3]-o[4],0).pvalue))
 d.to_csv('setups_regime.csv',index=False)
+
+for conf in (1,2):
+    st=pd.read_csv(f'vix_zone_state_{conf}c.csv',index_col=0,parse_dates=True).iloc[:,0]
+    d[f'zone{conf}']=d.t.map(lambda t:st[:t].iloc[-1]); prv=d.t.map(lambda t:st[:t].iloc[-2])
+    up=(d[f'zone{conf}']==1)&(prv==0); dn=(d[f'zone{conf}']==0)&(prv==1)
+    print(f'[{conf}c] setups in fear state',int(d[f'zone{conf}'].sum()),'dates',d[d[f'zone{conf}']==1].alert_date.nunique(),'| up events',int(up.sum()),'down events',int(dn.sum()))
+    d[f'fz{conf}']=np.where(d.L&(d[f'zone{conf}']==1),np.where(d.riskon,-1,1),0)
+    if d[f'fz{conf}'].abs().sum()>0: cl([f'fz{conf}','dmom','crypto'],f'[{conf}c] fear zone: risk-on long -1/defensive +1',d)
+d.to_csv('setups_regime.csv',index=False)

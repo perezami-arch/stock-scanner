@@ -15,17 +15,29 @@ def _data(cut):
         z = z[z['^VIX'].notna()]; z = z[z.index <= pd.Timestamp(k)]
         r = z[ETFS].pct_change(); dv = z['^VIX'].diff()
         c = pd.Series({e: r[e].iloc[-250:].corr(dv.iloc[-250:]) for e in ETFS})
-        _C[k] = (float(z['^VIX'].iloc[-1]), c)
+        vx = z['^VIX'].values; zs = {}
+        for conf in (1, 2):   # 19-20 zone (Ilan 16.10): >20 = fear on, <19 = fear off, 19-20 keep previous; conf = consecutive closes
+            cur, hist = 0, []
+            for i in range(len(vx)):
+                if i >= conf - 1 and (vx[i - conf + 1:i + 1] > 20).all(): cur = 1
+                elif i >= conf - 1 and (vx[i - conf + 1:i + 1] < 19).all(): cur = 0
+                hist.append(cur)
+            zs[conf] = (hist[-1], hist[-2] if len(hist) > 1 else hist[-1])
+        _C[k] = (float(z['^VIX'].iloc[-1]), c, zs)
     return _C[k]
 def fit(c, cut):
     try:
-        vix, corr = _data(cut)
+        vix, corr, zs = _data(cut)
+        zone = {}
+        for conf, sfx in ((1, ''), (2, '_2c')):
+            now, prev = zs[conf]
+            zone.update({f'exp_vix_zone_19_20{sfx}': now, f'exp_vix_cross_up_20{sfx}': bool(now == 1 and prev == 0), f'exp_vix_cross_down_19{sfx}': bool(now == 0 and prev == 1)})
         e = 'BTC-USD' if c.get('asset') == 'crypto' else c.get('sector_etf')
-        if e not in corr or not np.isfinite(corr[e]): return {'exp_vixreg_vix': vix, 'exp_vixreg_corr': None, 'exp_vixreg_fit': None}
+        if e not in corr or not np.isfinite(corr[e]): return {'exp_vixreg_vix': vix, 'exp_vixreg_corr': None, 'exp_vixreg_fit': None, **zone}
         on = corr[e] < corr.median(); f = 0
         if c.get('direction') == 'LONG':
             if vix > VIX_HI: f = 1 if on else -1
             elif vix < VIX_LO: f = -1 if on else 1
-        return {'exp_vixreg_vix': round(vix, 2), 'exp_vixreg_corr': round(float(corr[e]), 3), 'exp_vixreg_fit': f}
+        return {'exp_vixreg_vix': round(vix, 2), 'exp_vixreg_corr': round(float(corr[e]), 3), 'exp_vixreg_fit': f, **zone}
     except Exception as ex:
         return {'exp_vixreg_vix': None, 'exp_vixreg_corr': None, 'exp_vixreg_fit': None, 'exp_vixreg_error': str(ex)[:120]}
