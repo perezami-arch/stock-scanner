@@ -23,7 +23,7 @@ HORIZON = 20
 REG_COLS = ['trade_id', 'trade_key', 'ticker', 'asset', 'direction', 'source_run', 'scan_asof_local', 'cutoff_utc', 'entry_session', 'entry_ref',
             'entry_price', 'entry_fill', 'stop_initial', 'target', 'atr14_at_cutoff', 'levels_file', 'status', 'checkpoints_done', 'last_decision_utc',
             'last_state', 'last_close', 'last_close_date', 'current_stop', 'unrealized_dir', 'exit_date', 'exit_price', 'exit_reason', 'ret_dir',
-            'bench_ret', 'excess_dir', 'half_taken', 'is_trial', 'is_sim']
+            'bench_ret', 'excess_dir', 'half_taken', 'is_trial', 'is_sim', 'blocked_by_veto']
 
 # ------------------------------------------------------------------ prompt versions
 def _active():
@@ -47,7 +47,7 @@ def load_registry(path=REGISTRY):
 def save_registry(d, path=REGISTRY):
     os.makedirs(os.path.dirname(path), exist_ok=True); d[REG_COLS].to_csv(path, index=False)
 
-def register_run(run_dir, path=REGISTRY, is_sim=False):
+def register_run(run_dir, path=REGISTRY, is_sim=False, veto_blocked=None):
     """add the weekly run's recommendations (tracker_rows.csv recon 'תואם', earnings not blocked). Trial / paper runs refused."""
     if ('_trial' in run_dir or '_paper' in run_dir) and not is_sim: return 0
     tr = f'{run_dir}/tracker_rows.csv'
@@ -59,7 +59,8 @@ def register_run(run_dir, path=REGISTRY, is_sim=False):
     sel = json.load(open(f'{run_dir}/selected.json')) if os.path.exists(f'{run_dir}/selected.json') else None
     reg = load_registry(path); new = []
     for _, r in t.iterrows():
-        if sel is not None and f"{r.ticker}|{r.direction}" not in sel: continue
+        vb = (veto_blocked or {}).get(f"{r.ticker}|{r.direction}")   # 16.10: veto-blocked shorts tracked as paper positions to completion
+        if sel is not None and f"{r.ticker}|{r.direction}" not in sel and not vb: continue
         tid = r.setup_id
         if tid in set(reg.trade_id): continue
         L = json.load(open(LF.path(run_dir, {'t': r.ticker, 'direction': r.direction})))
@@ -70,7 +71,7 @@ def register_run(run_dir, path=REGISTRY, is_sim=False):
                     'entry_session': str(pd.Timestamp(es).date()), 'entry_ref': r.entry, 'stop_initial': r.stop, 'target': r.target,
                     'atr14_at_cutoff': (L.get('technical') or {}).get('atr14_wilder'), 'levels_file': LF.path(run_dir, {'t': r.ticker, 'direction': r.direction}),
                     'status': 'open', 'checkpoints_done': '', 'last_decision_utc': str(cut), 'last_state': json.dumps(snapshot_state(L, None, r.direction)),
-                    'is_trial': False, 'is_sim': is_sim})
+                    'is_trial': False, 'is_sim': is_sim, 'blocked_by_veto': vb or ''})
     if new: reg = pd.concat([reg, pd.DataFrame(new)], ignore_index=True); save_registry(reg, path)
     return len(new)
 
