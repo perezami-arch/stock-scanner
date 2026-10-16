@@ -27,3 +27,11 @@ Not graduated (setup-level q>=0.10; high-VIX leg has no setup data). Proposal (i
 | 2-close event DOWN through 19 | 70 | — | −0.30% | 0.57 | 0.69 |
 Setups: only 9 setups (1 date) in the fear zone (1-close), 0 for 2-close → untestable. Columns exp_vix_zone_19_20[_2c], exp_vix_cross_up_20[_2c], exp_vix_cross_down_19[_2c] logged at weight 0.
 Reading: the "caution on risk-on longs above 20" direction is NOT supported; data favour the contrarian side (risk-on beats defensive once fear is on), consistent with the VIX>30 result.
+
+## ACTIVATED 16.10.2026 14:58 IL (Ilan, group chat) — scoring model v2-vix30
+Rule (locked, `scanner/vix_regime.py::vix30_bonus`, applied in `run_unified_scan.py`, SCORING_VERSION='v2-vix30 (2026-10-16)'):
+- Episode starts on the FIRST daily VIX close > 30 after a close <= 30 (point-in-time, closes up to the scan cutoff only).
+- Bonus active on the cross session and the next 19 sessions (20 sessions = the tested horizon), regardless of VIX in between; no re-arming inside an active window; a new episode only after the window ends.
+- +5 points to unified_score (capped at 100) for LONG setups whose sector is risk-on: PIT 250-day corr(sector ETF daily return, dVIX) below the cross-sectional median of the 14 ETFs (crypto -> BTC-USD). SHORTs and defensive sectors: 0.
+- Audit columns in candidates_full.csv: scoring_version, unified_score_v1, vix30_bonus, vix30_episode_active, vix30_sessions_since_cross, vix30_riskon_sector, vix30_vix.
+- VIX<16 and the 19–20 zone columns stay at weight 0.

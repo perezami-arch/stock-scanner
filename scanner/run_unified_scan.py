@@ -72,6 +72,7 @@ def _num(v):
 # the floor is a flag (--min-score) and is itself measured forward. See the addendum.
 MIN_SCORE_DEFAULT = 60.0
 
+SCORING_VERSION = 'v2-vix30 (2026-10-16)'   # v1 = momentum percentile only; v2 = + VIX>30 risk-on LONG bonus (vix_regime.vix30_bonus)
 def unified_score(c):
     if c.get('asset') == 'crypto':
         v = c.get('momentum_score')
@@ -288,7 +289,15 @@ def main():
         except Exception as e:
             log('crypto leg failed:', e)
     allc = full + crypto
-    for c in allc: c['unified_score'], c['rank_basis'] = unified_score(c); c['rank_score'] = c['unified_score']
+    import vix_regime as _VR
+    for c in allc:
+        c['unified_score'], c['rank_basis'] = unified_score(c); c['unified_score_v1'] = c['unified_score']
+        c['_vix30'] = _VR.vix30_bonus(c, cut)
+        if c['unified_score'] is not None and c['_vix30'].get('vix30_bonus'):
+            c['unified_score'] = round(min(100.0, c['unified_score'] + c['_vix30']['vix30_bonus']), 1); c['rank_basis'] += ' + VIX>30 risk-on bonus'
+        c['rank_score'] = c['unified_score']
+    log(f"scoring {SCORING_VERSION}: VIX30 episode active={next(iter([x['_vix30'].get('vix30_episode_active') for x in allc]), None)}, "
+        f"bonus applied to {sum(1 for x in allc if x['_vix30'].get('vix30_bonus'))} names")
     log(f'rule pass: {sum(c["direction"]=="LONG" and c["asset"]=="stock" for c in allc)} stock LONG, '
         f'{sum(c["direction"]=="SHORT" for c in allc)} stock SHORT, {len(crypto)} crypto LONG')
     # 3. levels JSON for every passing name + pre-gate
@@ -337,7 +346,7 @@ def main():
                      'rsi14': (f.get('waves') or {}).get('rsi14'),
                      'cci20': (f.get('waves') or {}).get('cci20'), 'watch_short_below_va120': c.get('watch_short_below_va120'),
                      'bar_hash': (f.get('levels_file') or {}).get('bar_hash'), 'levels_file': LF.path(run_dir, c) if L else None,
-                     'levels_error': c.get('levels_error'), **_VR.fit(c, cut)})
+                     'levels_error': c.get('levels_error'), 'scoring_version': SCORING_VERSION, 'unified_score_v1': c.get('unified_score_v1'), **(c.get('_vix30') or {}), **_VR.fit(c, cut)})
     df = pd.DataFrame(rows).sort_values(['unified_score', 'ticker'], ascending=[False, True], na_position='last').reset_index(drop=True)
     df['score_rank'] = df['unified_score'].rank(ascending=False, method='min').astype('Int64')
     df.to_csv(f'{run_dir}/candidates_full.csv', index=False, encoding='utf-8-sig')
