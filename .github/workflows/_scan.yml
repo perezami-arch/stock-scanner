@@ -58,12 +58,12 @@ jobs:
           LOG="$SCANNER_ROOT/scan-runs/_actions/${KIND}.log"
           OB=""; [ -x "$SCANNER_ROOT/venv-openbb/bin/python" ] || OB="--no-openbb"
           if [ "$DRY" = "true" ] && [ "$KIND" = "weekly" ]; then
-            python run_unified_scan.py --trial --no-models --research-n 50 --sector-cap 0 2>&1 | tee "$LOG"   # weekly path (selection of 20, report), no LLM calls
+            python run_unified_scan.py --trial --no-models --research-n 50 --candidates 50 --sector-cap 0 2>&1 | tee "$LOG"   # weekly path (selection of 20, report), no LLM calls
           elif [ "$DRY" = "true" ]; then
             python run_unified_scan.py --paper --no-models --sector-cap 0 2>&1 | tee "$LOG"
             python run_daily_report.py --no-models $OB 2>&1 | tee -a "$LOG"
           elif [ "$KIND" = "weekly" ]; then
-            python run_unified_scan.py --research-n 50 --budget 8.0 --sector-cap 0 2>&1 | tee "$LOG"   # 16.10: top 50 by score through all models (trade_grade = regular rules), budget $8
+            python run_unified_scan.py --research-n 50 --candidates 50 --budget 8.0 --sector-cap 0 2>&1 | tee "$LOG"   # 16.10: top 50 by score through all models (trade_grade = regular rules), budget $8
           else
             python run_unified_scan.py --paper --no-models --sector-cap 0 2>&1 | tee "$LOG"
             python run_daily_report.py $OB 2>&1 | tee -a "$LOG"
