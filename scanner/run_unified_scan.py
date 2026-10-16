@@ -314,6 +314,7 @@ def main():
             if id(c) in sel_ids or id(c) in blkd: continue
             extra.append(c); c['_sel_note'] = (c.get('_sel_note') or '') + ' | מחקר (לא trade-grade)'
         log(f'research set: {len(sel)} trade-grade + {len(extra)} research-only = {len(sel)+len(extra)} (N={a.research_n}, {len(ok)-len(blkd)} pass hard rules)')
+    import vix_regime as _VR   # weight 0 research column (16.10)
     rows = []
     for c in allc:
         L = (built.get((c['t'], c['direction'])) or (None, None))[1]
@@ -336,7 +337,7 @@ def main():
                      'rsi14': (f.get('waves') or {}).get('rsi14'),
                      'cci20': (f.get('waves') or {}).get('cci20'), 'watch_short_below_va120': c.get('watch_short_below_va120'),
                      'bar_hash': (f.get('levels_file') or {}).get('bar_hash'), 'levels_file': LF.path(run_dir, c) if L else None,
-                     'levels_error': c.get('levels_error')})
+                     'levels_error': c.get('levels_error'), **_VR.fit(c, cut)})
     df = pd.DataFrame(rows).sort_values(['unified_score', 'ticker'], ascending=[False, True], na_position='last').reset_index(drop=True)
     df['score_rank'] = df['unified_score'].rank(ascending=False, method='min').astype('Int64')
     df.to_csv(f'{run_dir}/candidates_full.csv', index=False, encoding='utf-8-sig')
