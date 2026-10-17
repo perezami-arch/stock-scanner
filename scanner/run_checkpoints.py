@@ -38,6 +38,12 @@ def get_bars(t, asset, asof, cp_dir):
         return x
     return ST.daily_bars(t, 'stock', pd.Timestamp(asof).tz_convert('UTC'), px_dir_for(asof))
 
+def half_exit(stp, exit_date=None):
+    """(half_price, half_date) of the 1/2 take-profit if it was taken on or before the exit close, else (None, None)."""
+    if not stp.get('half_taken') or not stp.get('half_date'): return None, None
+    if exit_date is not None and pd.Timestamp(stp['half_date']) > pd.Timestamp(exit_date): return None, None
+    return _f(stp.get('half_price')), stp['half_date']
+
 def sessions_after(x, entry_session):
     return x[x.index >= pd.Timestamp(entry_session)]
 
@@ -167,17 +173,23 @@ def run(asof, registry, ledger, out_dir, budget_usd=1.0, no_models=False, max_ll
         lc = _f(x.Close.iloc[-1])
         reg.at[i, 'checkpoints_done'] = ','.join(sorted(done)); reg.at[i, 'last_state'] = json.dumps(prev, default=str)
         reg.at[i, 'last_decision_utc'] = last_dec; reg.at[i, 'last_close'] = lc; reg.at[i, 'last_close_date'] = str(x.index[-1].date())
-        reg.at[i, 'current_stop'] = stp.get('next_level'); reg.at[i, 'half_taken'] = stp.get('half_taken')
+        reg.at[i, 'current_stop'] = stp.get('next_level'); reg.at[i, 'stop_initial_fill'] = stp.get('initial_stop')
+        hp, hd = half_exit(stp, exit_date)
+        reg.at[i, 'half_taken'] = None if 'half_taken' not in stp else bool(hd)
+        reg.at[i, 'half_date'] = hd; reg.at[i, 'half_price'] = hp
         reg.at[i, 'unrealized_dir'] = None if not fill else round(sgn * (lc / fill - 1), 5)
+        reg.at[i, 'unrealized_dir_weighted'] = None if not fill else round(ST.weighted_return(d, fill, lc, hp), 5)
         if exit_date:
             b = SLS.bench(asset, asof)
             bb = b[(b.index >= pd.Timestamp(T['entry_session'])) & (b.index <= pd.Timestamp(exit_date))] if b is not None else None
             br = (float(bb.Close.iloc[-1] / bb.Open.iloc[0] - 1)) if bb is not None and len(bb) else None
-            rd = sgn * (exit_px / fill - 1)
-            reg.loc[i, ['status', 'exit_date', 'exit_price', 'exit_reason', 'ret_dir', 'bench_ret', 'excess_dir']] = \
-                ['closed', exit_date, exit_px, reason, round(rd, 5), None if br is None else round(br, 5), None if br is None else round(rd - sgn * br, 5)]
+            rd = sgn * (exit_px / fill - 1); rw = ST.weighted_return(d, fill, exit_px, hp)
+            reg.loc[i, ['status', 'exit_date', 'exit_price', 'exit_reason', 'ret_dir', 'bench_ret', 'excess_dir', 'ret_dir_weighted', 'excess_dir_weighted']] = \
+                ['closed', exit_date, exit_px, reason, round(rd, 5), None if br is None else round(br, 5), None if br is None else round(rd - sgn * br, 5),
+                 round(rw, 5), None if br is None else round(rw - sgn * br, 5)]
             summary['closed'].append({'ticker': t, 'direction': d, 'exit_date': exit_date, 'reason': reason, 'ret_dir': round(rd, 4),
-                                      'excess_dir': None if br is None else round(rd - sgn * br, 4)})
+                                      'excess_dir': None if br is None else round(rd - sgn * br, 4), 'ret_dir_weighted': round(rw, 4),
+                                      'excess_dir_weighted': None if br is None else round(rw - sgn * br, 4), 'half_date': hd, 'half_price': hp})
     SLS.save_registry(reg, registry)
     if all_rows: SP.append_ledger(all_rows, ledger)
     budget.save()
