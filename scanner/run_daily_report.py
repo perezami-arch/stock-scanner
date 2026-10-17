@@ -65,8 +65,16 @@ def paper_line():
     return (f"עסקאות נייר (לא פוזיציות, למדידת העמודות הניסיוניות בלבד): {len(d)} שורות, {d.alert_date.nunique()} ימי כניסה שונים, "
             f"{int((d.status.astype(str) == 'open').sum()) if 'status' in d else '—'} פתוחות.")
 
+def half_cell(r):
+    """'—' when the position has no half target (shorts, crypto, fallback), 'לא' before it is hit, else 'date @ price'."""
+    hp = pd.to_numeric(pd.Series([r.get('half_price')]), errors='coerce').iloc[0]
+    if pd.notna(hp) and str(r.get('half_date') or '') not in ('', 'nan', 'None'): return f"{r.half_date} @ {hp:.2f}"
+    return 'לא' if str(r.get('half_taken')) in ('False', 'false', '0', '0.0') else '—'
+
 def pct(v):
-    try: return f"\u200e{100 * float(v):+.2f}%"
+    try:
+        v = float(v)
+        return f"\u200e{100 * v:+.2f}%" if v == v else '—'
     except Exception: return '—'
 
 def main():
@@ -93,10 +101,10 @@ def main():
     op = reg[reg.status == 'open']
     w(f'## 1. פוזיציות פתוחות ({len(op)})')
     if len(op):
-        w('| טיקר | כיוון | כניסה | סגירה אחרונה | תשואה מכוונת | סטופ נוכחי | נקודות ביקורת |'); w('|---|---|---|---|---|---|---|')
+        w('| טיקר | כיוון | כניסה | סגירה אחרונה | תשואה מכוונת | חצי ביעד | תשואה משוקללת | סטופ נוכחי | נקודות ביקורת |'); w('|---|---|---|---|---|---|---|---|---|')
         for _, r in op.iterrows():
             w(f"| {r.ticker} | {DIRH.get(r.direction, r.direction)} | {r.entry_fill or r.entry_ref} ({r.entry_session}) | {r.last_close or '—'} ({r.last_close_date or '—'}) | "
-              f"{pct(r.unrealized_dir)} | {r.current_stop or '—'} | {r.checkpoints_done or '—'} |")
+              f"{pct(r.unrealized_dir)} | {half_cell(r)} | {pct(r.unrealized_dir_weighted)} | {r.current_stop or '—'} | {r.checkpoints_done or '—'} |")
     else: w('אין פוזיציות פתוחות (הרישום מתחיל מהסריקה השבועית של 12.10).')
     if s['pending_entry']: w(f"\nממתינות לפתיחת המסחר (כניסה בפתיחה הבאה): {', '.join(s['pending_entry'])}")
     # 2. checkpoints
@@ -111,7 +119,8 @@ def main():
     w(f"\n## 3. סגירות ({len(s['closed'])})")
     sc = pd.read_csv(f"{s['cp_dir']}/scored_rows.csv") if os.path.exists(f"{s['cp_dir']}/scored_rows.csv") else pd.DataFrame()
     for c in s['closed']:
-        w(f"- **{c['ticker']} {DIRH.get(c['direction'])}** נסגר {c['exit_date']} ({c['reason']}): תשואה מכוונת {pct(c['ret_dir'])}, מול המדד {pct(c['excess_dir'])}")
+        hh = f" · חצי מומש {c['half_date']} ב-{c['half_price']:.2f}, תשואה משוקללת {pct(c.get('ret_dir_weighted'))} (מול המדד {pct(c.get('excess_dir_weighted'))})" if c.get('half_date') else ''
+        w(f"- **{c['ticker']} {DIRH.get(c['direction'])}** נסגר {c['exit_date']} ({c['reason']}): תשואה מכוונת {pct(c['ret_dir'])}, מול המדד {pct(c['excess_dir'])}{hh}")
         g = sc[sc.ticker == c['ticker']] if len(sc) else sc
         for _, r in g.iterrows():
             res = 'צדק' if r.right is True or str(r.right) == 'True' else 'טעה' if str(r.right) == 'False' else 'ללא הכרעה'

@@ -23,7 +23,10 @@ HORIZON = 20
 REG_COLS = ['trade_id', 'trade_key', 'ticker', 'asset', 'direction', 'source_run', 'scan_asof_local', 'cutoff_utc', 'entry_session', 'entry_ref',
             'entry_price', 'entry_fill', 'stop_initial', 'target', 'atr14_at_cutoff', 'levels_file', 'status', 'checkpoints_done', 'last_decision_utc',
             'last_state', 'last_close', 'last_close_date', 'current_stop', 'unrealized_dir', 'exit_date', 'exit_price', 'exit_reason', 'ret_dir',
-            'bench_ret', 'excess_dir', 'half_taken', 'is_trial', 'is_sim', 'blocked_by_veto']
+            'bench_ret', 'excess_dir', 'half_taken', 'is_trial', 'is_sim', 'blocked_by_veto',
+            # 17.10: half take-profit (stock longs, Fib 1.618 on close) + whole-position returns (1/2 at half_price, 1/2 at the last close /
+            # exit). ret_dir / excess_dir / unrealized_dir stay the FULL-position values (platform right/wrong scoring is unchanged).
+            'stop_initial_fill', 'half_date', 'half_price', 'unrealized_dir_weighted', 'ret_dir_weighted', 'excess_dir_weighted']
 
 # ------------------------------------------------------------------ prompt versions
 def _active():

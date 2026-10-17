@@ -10,12 +10,13 @@ DEFINITIONS REUSED FROM THE RESEARCHER'S BACKTEST (/workspace/trading-frameworks
     crypto = Yahoo UTC daily bars (same source as the backtest frames), bar D usable once D+1 00:00 UTC <= scan time.
 
 ACTIVE RULES
-  1. US stock LONG : chandelier close-based. level_j = max(close since entry through j-1) - 4*ATR14[j-1]; exit at the close that
+  1. US stock LONG : chandelier close-based. level_j = max(level_{j-1}, max(close since entry through j-1) - 4*ATR14[j-1]),
+                     starting at the initial stop (17.10: ratchet - never loosens, never below the initial stop); exit at the close that
                      is <= level. Initial stop = entry - 4*ATR14 (ATR of the last completed bar before the scan).
      + ACTIVE partial exit (v2, 08.10 13:28): take 1/2 at the Fib 1.618 extension of the last confirmed 2xATR zigzag leg
                      (sim_targets.py HY2: origin + 1.618*(end-origin); if already behind entry -> the next extension 2.618), close-checked;
                      the rest stays under the 4xATR chandelier. No confirmed swing / no extension beyond entry -> pure chandelier + flag.
-  2. US stock SHORT: only if it passes the short rule (ck_score>=3 & close<SMA200). level_j = min(close since entry) + 4*ATR14[j-1]
+  2. US stock SHORT: only if it passes the short rule (ck_score>=3 & close<SMA200). level_j = min(level_{j-1}, min(close since entry) + 4*ATR14[j-1])
                      (v2: 4x, was 3x). Initial = entry + 4*ATR14. Shorts failing the rule get NO stop and short_rule_pass=False.
   3. Crypto LONG   : fixed stop = entry - 3*ATR14, checked on the daily (UTC) close, no trailing, no take-profit target.
   4. Crypto SHORT  : FROZEN. Never output as a setup; written to frozen_crypto_shorts (separate CSV) for measurement only.
@@ -120,34 +121,57 @@ def half_at_1618(x, ref, a=None):
     return dict(tp_half_1618=round(float(cand[0]), 4), tp_half_fallback=False,
                 partial_exit_rule=f"1/2 at Fib {lvl} = {cand[0]:.2f} on close; rest under 4xATR chandelier")
 
+def _ratchet(sgn, prev, raw):
+    """never loosen: longs keep the higher of the previous live level and the new chandelier value, shorts the lower."""
+    return max(prev, raw) if sgn == 1 else min(prev, raw)
+
 def stop_status(x, asset, direction, entry_date, entry_price, tp_half=None):
     """Live monitoring of an open trade, same semantics as the backtest close mode (sim_chand 'c' / sim_fib atr3 'c'):
     entry bar k = first bar on/after entry_date; first check at the close of k+2; exit at that close.
-    Stock longs with tp_half: 1/2 exits at the first close >= tp_half (stop checked first on the same close, as sim_targets 'c').
-    Returns dict(next_level, stopped, stop_date, stop_close[, half_taken, half_date]). next_level applies to the NEXT close."""
+    Stock trailing stop (17.10 fix): level_j = ratchet(level_{j-1}, max/min close since entry through j-1 -/+ 4*ATR14[j-1]),
+    starting from the initial stop (entry -/+ 4*ATR14 of the bar before the entry bar). It only moves in the trade's favour:
+    never down for longs / up for shorts, and never below (long) / above (short) the initial stop (an ATR expansion used to
+    loosen it). The raw, un-ratcheted chandelier value is returned as next_level_raw for audit.
+    Stock longs with tp_half: 1/2 exits at the first close >= tp_half (stop checked first on the same close, as sim_targets 'c');
+    the remaining half stays under the same stop.
+    Returns dict(next_level, initial_stop, stopped, stop_date, stop_close[, half_taken, half_date, half_price]).
+    next_level applies to the NEXT close."""
     direction = direction.upper(); sgn = 1 if direction == "LONG" else -1
     rule = RULES.get((asset, direction))
     if rule is None: return dict(next_level=None, stopped=None, note="no active rule (frozen / failed short rule)")
     H, L, C = x.High.values, x.Low.values, x.Close.values; A = atr14(H, L, C); K = rule["stop_atr_mult"]
     k = int(np.searchsorted(x.index.values, np.datetime64(pd.Timestamp(entry_date)), side="left"))
     Arule = A[k - 1] if 0 < k <= len(C) else A[-1]
+    init = float(entry_price - sgn * K * Arule)
+    has_tp = tp_half is not None and pd.notna(tp_half)
+    half = dict(half_taken=False, half_date=None, half_price=None) if has_tp else {}
     if k >= len(C) - 1:                       # no completed close after the entry bar yet -> the approved initial stop applies
-        h0 = dict(half_taken=False, half_date=None) if (tp_half is not None and pd.notna(tp_half)) else {}
-        return dict(next_level=round(float(entry_price - sgn * K * Arule), 4), stopped=False, note="initial stop (no close after entry bar yet)", **h0)
+        return dict(next_level=round(init, 4), initial_stop=round(init, 4), stopped=False, note="initial stop (no close after entry bar yet)", **half)
     if not rule["trailing"]:
-        lv = entry_price - sgn * K * Arule
+        lv = init
         for j in range(k + 2, len(C)):
-            if sgn * (C[j] - lv) <= 0: return dict(next_level=round(lv, 4), stopped=True, stop_date=str(x.index[j].date()), stop_close=float(C[j]))
-        return dict(next_level=round(lv, 4), stopped=False)
-    ext = C[k]; half = {}
-    if tp_half is not None and pd.notna(tp_half): half = dict(half_taken=False, half_date=None)
+            if sgn * (C[j] - lv) <= 0: return dict(next_level=round(lv, 4), initial_stop=round(init, 4), stopped=True, stop_date=str(x.index[j].date()), stop_close=float(C[j]))
+        return dict(next_level=round(lv, 4), initial_stop=round(init, 4), stopped=False)
+    ext = C[k]
     if k + 1 < len(C): ext = max(ext, C[k + 1]) if sgn == 1 else min(ext, C[k + 1])
+    lv = init                                 # live level; ratchets from the initial stop, never loosens
     for j in range(k + 2, len(C)):
-        lv = ext - sgn * K * A[j - 1]
-        if sgn * (C[j] - lv) <= 0: return dict(next_level=round(lv, 4), stopped=True, stop_date=str(x.index[j].date()), stop_close=float(C[j]), **half)
-        if half and not half["half_taken"] and C[j] >= tp_half: half.update(half_taken=True, half_date=str(x.index[j].date()), half_close=float(C[j]))
+        if np.isfinite(A[j - 1]): lv = _ratchet(sgn, lv, ext - sgn * K * A[j - 1])
+        if sgn * (C[j] - lv) <= 0:
+            return dict(next_level=round(lv, 4), initial_stop=round(init, 4), stopped=True, stop_date=str(x.index[j].date()), stop_close=float(C[j]), **half)
+        if has_tp and not half["half_taken"] and sgn * (C[j] - tp_half) >= 0:
+            half.update(half_taken=True, half_date=str(x.index[j].date()), half_price=float(C[j]))
         ext = max(ext, C[j]) if sgn == 1 else min(ext, C[j])
-    return dict(next_level=round(float(ext - sgn * K * A[-1]), 4), stopped=False, **half)
+    raw = float(ext - sgn * K * A[-1])
+    nxt = _ratchet(sgn, lv, raw) if np.isfinite(raw) else lv
+    return dict(next_level=round(float(nxt), 4), next_level_raw=round(raw, 4), initial_stop=round(init, 4), stopped=False, **half)
+
+def weighted_return(direction, fill, price, half_price=None):
+    """direction-adjusted return of the whole position: 1/2 at half_price (if the half exit was taken) + 1/2 at price."""
+    sgn = 1 if str(direction).upper() == "LONG" else -1
+    full = sgn * (float(price) / float(fill) - 1)
+    if half_price is None or not np.isfinite(float(half_price)): return full
+    return 0.5 * sgn * (float(half_price) / float(fill) - 1) + 0.5 * full
 
 # ---------------------------------------------------------------- experimental Fib / Elliott
 def _dev(ratio, allowed):
