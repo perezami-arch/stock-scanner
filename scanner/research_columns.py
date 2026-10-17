@@ -257,6 +257,20 @@ MODEL_COLS = ["score", "pct", "pct_dir", "bar", "train_end", "label_end", "model
 
 # ------------------------------------------------------------------ registry
 # name -> (function, columns (without prefix), libraries needed, venv python if not importable here, timeout s, note)
+# ------------------------------------------------------------------ multi-degree pivots / confluence + volume phase (16.10.2026, weight 0)
+# research/pivots/PREREG.md; modules/scanner_pivots.py + modules/scanner_volphase.py. Logged only.
+def tool_piv(df, cutoff, asset, direction):
+    import scanner_pivots as PV
+    return {f"exp_piv_{k}": v for k, v in PV.pivot_columns(df, cutoff, asset, direction).items()}
+def tool_vph(df, cutoff, asset, direction):
+    import scanner_volphase as VPH
+    return {f"exp_vph_{k}": v for k, v in VPH.volphase_columns(df, cutoff, asset, direction).items()}
+try:
+    import scanner_pivots as _PV, scanner_volphase as _VPH
+    PIV_COLS, VPH_COLS = list(_PV.COLS), list(_VPH.COLS)
+except Exception:
+    PIV_COLS, VPH_COLS = ["version"], ["version"]
+
 REGISTRY = {
     "talib":  dict(fn=tool_talib, cols=TALIB_IND + TALIB_CDL + ["last_bar"], deps=["talib"], venv=TA_VENV, timeout=10, priority=1,
                    note="TA-Lib 0.8.1, BSD; leak test 0/233 outputs"),
@@ -274,6 +288,10 @@ REGISTRY = {
                    note="Qlib Alpha158+LightGBM, MIT; nightly walk-forward, scan = lookup"),
     "finrl":  dict(fn=tool_finrl, cols=MODEL_COLS, deps=[], venv=None, timeout=5, priority=4, needs_symbol=True,
                    note="FinRL PPO 2048 steps, MIT; nightly, scan = lookup"),
+    "piv":    dict(fn=tool_piv, cols=PIV_COLS, deps=[], venv=None, timeout=10, priority=2,
+                   note="multi-degree pivots + Fib/Gann confluence (PREREG research/pivots), weight 0"),
+    "vph":    dict(fn=tool_vph, cols=VPH_COLS, deps=[], venv=None, timeout=5, priority=2,
+                   note="4-state volume phase + CMF20/OBV (PREREG research/pivots), weight 0"),
 }
 DEFAULT_TOOLS = list(REGISTRY)
 def tool_columns(tool):
@@ -299,6 +317,9 @@ for _t in ("taew", "ewa", "ewaves"):
 for _t in ("qlib", "finrl"):
     COLUMN_META.update({f"exp_{_t}_pct_dir": "pct", f"exp_{_t}_pct": "info", f"exp_{_t}_score": "info", f"exp_{_t}_bar": "info",
                         f"exp_{_t}_train_end": "info", f"exp_{_t}_label_end": "info", f"exp_{_t}_model": "info"})
+COLUMN_META.update({f"exp_piv_{c}": "info" for c in PIV_COLS} | {f"exp_vph_{c}": "info" for c in VPH_COLS})
+COLUMN_META.update({"exp_piv_support_zone_dist_atr": "signed", "exp_piv_in_zone_strength": "info", "exp_vph_dom10_aligned": "signed",
+                    "exp_vph_w_dom10_aligned": "signed", "exp_vph_cmf20_dir": "signed"})
 for _t in REGISTRY: COLUMN_META[f"exp_{_t}_status"] = "info"
 
 # columns proposed for the tracker (build7 cols after the fundamentals); everything else stays in scan_raw.csv
