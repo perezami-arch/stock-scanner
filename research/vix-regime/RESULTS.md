@@ -35,3 +35,8 @@ Rule (locked, `scanner/vix_regime.py::vix30_bonus`, applied in `run_unified_scan
 - +5 points to unified_score (capped at 100) for LONG setups whose sector is risk-on: PIT 250-day corr(sector ETF daily return, dVIX) below the cross-sectional median of the 14 ETFs (crypto -> BTC-USD). SHORTs and defensive sectors: 0.
 - Audit columns in candidates_full.csv: scoring_version, unified_score_v1, vix30_bonus, vix30_episode_active, vix30_sessions_since_cross, vix30_riskon_sector, vix30_vix.
 - VIX<16 and the 19–20 zone columns stay at weight 0.
+
+## Scoring v3-shortveto-cred (16.10.2026, Ilan 17:16 + 17:18) — see scanner/short_cred.py and scanner/entry_adj.py docstrings
+- Model credibility on short warnings: Beta(15,15) shrinkage, −10 per model × weight, cap −20; signals given on >80% of shorts do not count.
+- Short with earnings within 15 trading days: −8 (confirmed by independent S&P 2005–2026 validation, −0.75% gap). Sector RS (ETF 5d − SPY 5d, ±1.5%): column only, WEIGHT 0 (validation: no effect for shorts or longs).
+- All short penalties together capped at −25. Names pushed below trade grade are paper-tracked (registry blocked_by_veto).

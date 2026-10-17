@@ -72,7 +72,7 @@ def _num(v):
 # the floor is a flag (--min-score) and is itself measured forward. See the addendum.
 MIN_SCORE_DEFAULT = 60.0
 
-SCORING_VERSION = 'v2-vix30 (2026-10-16)'   # v1 = momentum percentile only; v2 = + VIX>30 risk-on LONG bonus (vix_regime.vix30_bonus)
+SCORING_VERSION = 'v3-shortveto-cred (2026-10-16) on v2-vix30'   # v1 = momentum percentile only; v2 = + VIX>30 risk-on LONG bonus (vix_regime.vix30_bonus)
 def unified_score(c):
     if c.get('asset') == 'crypto':
         v = c.get('momentum_score')
@@ -323,6 +323,8 @@ def main():
             if id(c) in sel_ids or id(c) in blkd: continue
             extra.append(c); c['_sel_note'] = (c.get('_sel_note') or '') + ' | מחקר (לא trade-grade)'
         log(f'research set: {len(sel)} trade-grade + {len(extra)} research-only = {len(sel)+len(extra)} (N={a.research_n}, {len(ok)-len(blkd)} pass hard rules)')
+    import entry_adj as _EA
+    for c in ok: c['_adj'] = _EA.components(c, cut)
     import vix_regime as _VR   # weight 0 research column (16.10)
     rows = []
     for c in allc:
@@ -346,7 +348,7 @@ def main():
                      'rsi14': (f.get('waves') or {}).get('rsi14'),
                      'cci20': (f.get('waves') or {}).get('cci20'), 'watch_short_below_va120': c.get('watch_short_below_va120'),
                      'bar_hash': (f.get('levels_file') or {}).get('bar_hash'), 'levels_file': LF.path(run_dir, c) if L else None,
-                     'levels_error': c.get('levels_error'), 'scoring_version': SCORING_VERSION, 'unified_score_v1': c.get('unified_score_v1'), **(c.get('_vix30') or {}), **_VR.fit(c, cut)})
+                     'levels_error': c.get('levels_error'), 'scoring_version': SCORING_VERSION, **(c.get('_adj') or {}), 'unified_score_v1': c.get('unified_score_v1'), **(c.get('_vix30') or {}), **_VR.fit(c, cut)})
     df = pd.DataFrame(rows).sort_values(['unified_score', 'ticker'], ascending=[False, True], na_position='last').reset_index(drop=True)
     df['score_rank'] = df['unified_score'].rank(ascending=False, method='min').astype('Int64')
     df.to_csv(f'{run_dir}/candidates_full.csv', index=False, encoding='utf-8-sig')
@@ -387,6 +389,30 @@ def main():
         log('charts_he.pdf failed:', ex)
     # 8. platforms
     res = SP.run_platforms(cands, run_dir, enabled=not a.no_models)
+    # 8b. v3-shortveto-cred: credibility-weighted penalty on SHORTs the models warned against (point-in-time counts)
+    veto_blocked = {}
+    try:
+        import short_cred as SCD
+        try: cred = SCD.compute(cut, save=not a.no_models and suffix == '' and not a.paper)
+        except Exception as e: cred = {'models': {}}; log('short credibility counts failed (veto penalty 0):', e)
+        for c, r in zip(cands, res['rows']):
+            vp, who = (SCD.penalty(cred, r) if c['direction'] == 'SHORT' else (0.0, []))
+            comp = c.get('_adj') or {}
+            c['short_penalty_models'] = who; c['veto_penalty'] = vp
+            c['short_penalty'] = _EA.total_penalty(c['direction'], vp, comp)
+            if c['short_penalty'] and c.get('unified_score') is not None:
+                c['unified_score'] = round(c['unified_score'] - c['short_penalty'], 1)
+                if c.get('_selected') and c['unified_score'] < a.min_score:
+                    why = ([f"veto:{','.join(who)}"] if vp else []) + (['earn15'] if comp.get('exp_adj_penalty_earn') else []) + (['sectorRS'] if comp.get('exp_adj_penalty_rs') else [])
+                    c['_selected'] = False; c['_trade_grade'] = False; c['blocked_by_veto'] = ';'.join(why)
+                    veto_blocked[f"{c['t']}|{c['direction']}"] = c['blocked_by_veto']
+        for c in cands:
+            if c.get('short_penalty'): log(f"  penalty {c['t']} {c['direction']}: -{c['short_penalty']} (veto {c.get('veto_penalty', 0)}, earn {(c.get('_adj') or {}).get('exp_adj_penalty_earn')}, RS {(c.get('_adj') or {}).get('exp_adj_penalty_rs')}) -> {c['unified_score']}{' BLOCKED (paper)' if c.get('blocked_by_veto') else ''}")
+        res['short_cred_md'] = SCD.markdown(cred)
+        json.dump({'cred': cred, 'veto_blocked': veto_blocked}, open(f'{run_dir}/short_cred.json', 'w'), indent=1, default=str)
+        log(f"scoring {SCD.VERSION}: penalties " + ', '.join(f"{m}={v['penalty_pts']}" for m, v in cred.get('models', {}).items()) + f"; veto-blocked {list(veto_blocked)}")
+    except Exception as e:
+        log('short credibility failed (no penalty applied):', e)
     # 4b. post-gate with Perplexity + exception; levels JSON updated (earnings only)
     eg = {}
     for c, r in zip(cands, res['rows']):
@@ -403,7 +429,7 @@ def main():
     ci = json.load(open(ci_path)) if os.path.exists(ci_path) else []
     rec = LF.reconcile(run_dir, cands, report_numbers, trows, ci)
     for t_ in trows: t_['recon_status'] = 'תואם' if not rec.get((t_['ticker'], t_['direction'])) else 'לא תואם'
-    for t_, c in zip(trows, cands): t_['trade_grade'] = bool(c.get('_trade_grade')); t_['research_only'] = any(c is x for x in extra)
+    for t_, c in zip(trows, cands): t_['trade_grade'] = bool(c.get('_trade_grade')); t_['research_only'] = any(c is x for x in extra); t_['blocked_by_veto'] = c.get('blocked_by_veto', ''); t_['short_penalty'] = c.get('short_penalty', 0.0)
     pd.DataFrame(trows).to_csv(f'{run_dir}/tracker_rows.csv', index=False, encoding='utf-8-sig')
     json.dump({f'{k[0]}|{k[1]}': v for k, v in rec.items()}, open(f'{run_dir}/reconciliation.json', 'w'), ensure_ascii=False, indent=1)
     log('reconciliation:', sum(not v for v in rec.values()), 'תואם /', sum(bool(v) for v in rec.values()), 'לא תואם')
@@ -413,12 +439,13 @@ def main():
     if not a.no_models and suffix == '' and not a.paper:     # real weekly run only -> open positions for the checkpoint runner
         try:
             import scanner_lessons as SLS
-            log('positions registry: +', SLS.register_run(run_dir), 'new open positions')
+            log('positions registry: +', SLS.register_run(run_dir, veto_blocked=veto_blocked), 'new open positions')
         except Exception as e:
             log('positions registry failed:', e)
     # 10. research columns + tool_stats + report
     rcs = None if a.no_research_columns else research_columns(run_dir, cut, px_dir)
     ts_md, ts_err = (None, 'skipped') if a.no_tool_stats else tool_stats(a.tracker or latest_tracker())
+    if res.get('short_cred_md'): ts_md = res['short_cred_md'] + '\n' + (ts_md or '')
     res.update(earnings=eg, recon=rec, tool_stats_md=ts_md, tool_stats_err=ts_err, research_status=rcs, n_full=len(rows),
                candidates_n=a.candidates, min_score=a.min_score, sector_cap=a.sector_cap, run_kind='trial' if suffix == '_trial' else 'weekly', cutoff=str(cut))
     import unified_report as UR
