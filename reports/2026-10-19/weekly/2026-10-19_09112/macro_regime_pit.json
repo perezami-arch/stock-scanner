@@ -1,0 +1,38 @@
+{
+ "cutoff_utc": "2026-10-16 20:00",
+ "note": "logged only, weight 0",
+ "US10Y": {
+  "value": 5.098,
+  "date": "2026-10-16",
+  "chg_20d_bp": 10.0,
+  "chg_30d_bp": 9.2,
+  "src": "yahoo ^TNX"
+ },
+ "US30Y": {
+  "value": 5.436,
+  "date": "2026-10-16"
+ },
+ "US3M": {
+  "value": 4.07,
+  "date": "2026-10-16"
+ },
+ "US2Y_yahoo_2YY=F": {
+  "value": null,
+  "date": null
+ },
+ "VIX": {
+  "value": 19.99,
+  "date": "2026-10-16"
+ },
+ "us2y10y_spread": {
+  "value": 0.33,
+  "obs_date": "2026-10-15",
+  "src": "FRED DGS10-DGS2 (vintage as of cutoff date)",
+  "DGS10": 5.1,
+  "DGS2": 4.77
+ },
+ "us10y30y_spread": 0.338,
+ "aaii": {
+  "status": "no AAII week available before cutoff"
+ }
+}

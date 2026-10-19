@@ -1,0 +1,48 @@
+{
+ "meta": {
+  "cutoff_utc": "2026-10-19 06:11:00+00:00",
+  "source": "alpaca v1beta1/news"
+ },
+ "news": {
+  "AAVE": [
+   {
+    "id": 62416983,
+    "headline": "Looking Beyond Bitcoin? Analysts See Bigger Opportunities in These 5 Altcoins",
+    "summary": "Bitcoin struggles near $83,000 as analysts favor five altcoins tied to DeFi, tokenized stocks and AI infrastructure.",
+    "source": "benzinga",
+    "created_at_utc": "2026-10-16T16:27:17Z",
+    "symbols": [
+     "AAVEUSD",
+     "AEROUSD",
+     "ASST",
+     "BTCUSD",
+     "COIN",
+     "HOOD",
+     "LITUSD",
+     "MSTR",
+     "UNIUSD"
+    ],
+    "url": "https://www.benzinga.com/crypto/cryptocurrency/26/10/62416983/looking-beyond-bitcoin-analysts-see-bigger-opportunities-in-these-5-altcoins",
+    "after_cutoff": false
+   },
+   {
+    "id": 62364994,
+    "headline": "Standard Chartered Pushes Back $2 Trillion Stablecoin Target to 2030",
+    "summary": "Standard Chartered delays its $2 trillion stablecoin forecast to 2030 as supply stalls despite record transaction growth.",
+    "source": "benzinga",
+    "created_at_utc": "2026-10-14T17:54:52Z",
+    "symbols": [
+     "AAVEUSD",
+     "ARBUSD",
+     "LINKUSD",
+     "UNIUSD",
+     "USDCUSD",
+     "USDTUSD",
+     "XRPUSD"
+    ],
+    "url": "https://www.benzinga.com/crypto/cryptocurrency/26/10/62364994/standard-chartered-pushes-back-2-trillion-stablecoin-target-to-2030",
+    "after_cutoff": false
+   }
+  ]
+ }
+}
