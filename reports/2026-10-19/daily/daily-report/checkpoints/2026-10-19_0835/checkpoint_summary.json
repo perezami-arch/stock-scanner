@@ -1,0 +1,58 @@
+{
+ "asof_utc": "2026-10-19 05:35:27.358202+00:00",
+ "cp_dir": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-10-19/checkpoints/2026-10-19_0835",
+ "open_before": 13,
+ "checkpoints": [
+  {
+   "ticker": "UNI",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "איבד SMA50"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 2,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": 2.5,
+   "stop": 4.9721,
+   "actions": {
+    "grok": "hold",
+    "pplx": "hold",
+    "claude": "tighten",
+    "gpt": "exit"
+   }
+  },
+  {
+   "ticker": "LINK",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "איבד SMA50"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 1,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": -5.15,
+   "stop": 10.3951,
+   "actions": {
+    "grok": "hold",
+    "pplx": "hold",
+    "claude": "tighten",
+    "gpt": "exit"
+   }
+  }
+ ],
+ "closed": [],
+ "pending_entry": [],
+ "scoreboard": [],
+ "spent_usd": 0.2628,
+ "ledger_rows_written": 10,
+ "llm_positions": 2,
+ "skipped_rows": 0
+}
