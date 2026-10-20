@@ -1,0 +1,2439 @@
+{
+ "budget_usd": 1.0,
+ "spent_usd": 0.98167,
+ "n_calls": 139,
+ "calls": [
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.4,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:32",
+   "pass": 1,
+   "cum_cost_usd": 3e-05,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:32",
+   "pass": 1,
+   "cum_cost_usd": 6e-05,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:32",
+   "pass": 1,
+   "cum_cost_usd": 9e-05,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:32",
+   "pass": 1,
+   "cum_cost_usd": 0.00012,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:33",
+   "pass": 1,
+   "cum_cost_usd": 0.00015,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:33",
+   "pass": 1,
+   "cum_cost_usd": 0.00018,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:33",
+   "pass": 1,
+   "cum_cost_usd": 0.00021,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:33",
+   "pass": 1,
+   "cum_cost_usd": 0.00024,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:33",
+   "pass": 1,
+   "cum_cost_usd": 0.00027,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.8,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:34",
+   "pass": 1,
+   "cum_cost_usd": 0.0003,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:34",
+   "pass": 1,
+   "cum_cost_usd": 0.00033,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.4,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:35",
+   "pass": 1,
+   "cum_cost_usd": 0.00036,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:35",
+   "pass": 1,
+   "cum_cost_usd": 0.00039,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:35",
+   "pass": 1,
+   "cum_cost_usd": 0.00042,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:45:36",
+   "pass": 1,
+   "cum_cost_usd": 0.00045,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 24.3,
+   "cost_usd": 0.04769,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 10208,
+    "output_tokens": 1639,
+    "x_search_calls": 1,
+    "x_posts_fetched": 7,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-10-20T08:46:00",
+   "pass": 1,
+   "cum_cost_usd": 0.04814,
+   "_counted": true
+  },
+  {
+   "platform": "pplx",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 12.3,
+   "cost_usd": 0.02927,
+   "usage": {
+    "model": "perplexity/sonar-pro",
+    "prompt_tokens": 2990,
+    "completion_tokens": 953,
+    "image": true
+   },
+   "ts": "2026-10-20T08:46:13",
+   "pass": 1,
+   "cum_cost_usd": 0.07741,
+   "_counted": true
+  },
+  {
+   "platform": "claude",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 18.2,
+   "cost_usd": 0.02446,
+   "usage": {
+    "model": "anthropic/claude-sonnet-4.5",
+    "prompt_tokens": 4734,
+    "completion_tokens": 684,
+    "role": "analyst",
+    "image": true
+   },
+   "ts": "2026-10-20T08:46:31",
+   "pass": 1,
+   "cum_cost_usd": 0.10187,
+   "_counted": true
+  },
+  {
+   "platform": "gpt",
+   "ticker": "MU",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 8.8,
+   "cost_usd": 0.03313,
+   "usage": {
+    "model": "openai/gpt-5.6-sol",
+    "prompt_tokens": 4819,
+    "completion_tokens": 452,
+    "role": "devils_advocate",
+    "image": true
+   },
+   "ts": "2026-10-20T08:46:40",
+   "pass": 1,
+   "cum_cost_usd": 0.135,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRVL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:46:42",
+   "pass": 1,
+   "cum_cost_usd": 0.13503,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRVL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:46:42",
+   "pass": 1,
+   "cum_cost_usd": 0.13506,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRVL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:46:42",
+   "pass": 1,
+   "cum_cost_usd": 0.13509,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRVL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:46:42",
+   "pass": 1,
+   "cum_cost_usd": 0.13512,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRVL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:46:43",
+   "pass": 1,
+   "cum_cost_usd": 0.13515,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRVL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:46:43",
+   "pass": 1,
+   "cum_cost_usd": 0.13518,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRVL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:46:43",
+   "pass": 1,
+   "cum_cost_usd": 0.13521,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRVL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:46:43",
+   "pass": 1,
+   "cum_cost_usd": 0.13524,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRVL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:46:43",
+   "pass": 1,
+   "cum_cost_usd": 0.13527,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "MRVL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 12.8,
+   "cost_usd": 0.06381,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 11454,
+    "output_tokens": 1465,
+    "x_search_calls": 1,
+    "x_posts_fetched": 10,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-10-20T08:46:57",
+   "pass": 1,
+   "cum_cost_usd": 0.19908,
+   "_counted": true
+  },
+  {
+   "platform": "pplx",
+   "ticker": "MRVL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 11.7,
+   "cost_usd": 0.0306,
+   "usage": {
+    "model": "perplexity/sonar-pro",
+    "prompt_tokens": 2999,
+    "completion_tokens": 1040,
+    "image": true
+   },
+   "ts": "2026-10-20T08:47:08",
+   "pass": 1,
+   "cum_cost_usd": 0.22968,
+   "_counted": true
+  },
+  {
+   "platform": "claude",
+   "ticker": "MRVL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 24.1,
+   "cost_usd": 0.02965,
+   "usage": {
+    "model": "anthropic/claude-sonnet-4.5",
+    "prompt_tokens": 4887,
+    "completion_tokens": 999,
+    "role": "analyst",
+    "image": true
+   },
+   "ts": "2026-10-20T08:47:32",
+   "pass": 1,
+   "cum_cost_usd": 0.25933,
+   "_counted": true
+  },
+  {
+   "platform": "gpt",
+   "ticker": "MRVL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 8.7,
+   "cost_usd": 0.03487,
+   "usage": {
+    "model": "openai/gpt-5.6-sol",
+    "prompt_tokens": 5079,
+    "completion_tokens": 474,
+    "role": "devils_advocate",
+    "image": true
+   },
+   "ts": "2026-10-20T08:47:41",
+   "pass": 1,
+   "cum_cost_usd": 0.2942,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:43",
+   "pass": 1,
+   "cum_cost_usd": 0.29423,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:43",
+   "pass": 1,
+   "cum_cost_usd": 0.29426,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:43",
+   "pass": 1,
+   "cum_cost_usd": 0.29429,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:44",
+   "pass": 1,
+   "cum_cost_usd": 0.29432,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:44",
+   "pass": 1,
+   "cum_cost_usd": 0.29435,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:44",
+   "pass": 1,
+   "cum_cost_usd": 0.29438,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:44",
+   "pass": 1,
+   "cum_cost_usd": 0.29441,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:44",
+   "pass": 1,
+   "cum_cost_usd": 0.29444,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:45",
+   "pass": 1,
+   "cum_cost_usd": 0.29447,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:45",
+   "pass": 1,
+   "cum_cost_usd": 0.2945,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:45",
+   "pass": 1,
+   "cum_cost_usd": 0.29453,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:45",
+   "pass": 1,
+   "cum_cost_usd": 0.29456,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:46",
+   "pass": 1,
+   "cum_cost_usd": 0.29459,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:46",
+   "pass": 1,
+   "cum_cost_usd": 0.29462,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:47:46",
+   "pass": 1,
+   "cum_cost_usd": 0.29465,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 20.7,
+   "cost_usd": 0.05888,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 12251,
+    "output_tokens": 1093,
+    "x_search_calls": 1,
+    "x_posts_fetched": 9,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-10-20T08:48:07",
+   "pass": 1,
+   "cum_cost_usd": 0.35353,
+   "_counted": true
+  },
+  {
+   "platform": "pplx",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 13.9,
+   "cost_usd": 0.02943,
+   "usage": {
+    "model": "perplexity/sonar-pro",
+    "prompt_tokens": 2991,
+    "completion_tokens": 964,
+    "image": true
+   },
+   "ts": "2026-10-20T08:48:21",
+   "pass": 1,
+   "cum_cost_usd": 0.38296,
+   "_counted": true
+  },
+  {
+   "platform": "claude",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 20.0,
+   "cost_usd": 0.02626,
+   "usage": {
+    "model": "anthropic/claude-sonnet-4.5",
+    "prompt_tokens": 4824,
+    "completion_tokens": 786,
+    "role": "analyst",
+    "image": true
+   },
+   "ts": "2026-10-20T08:48:41",
+   "pass": 1,
+   "cum_cost_usd": 0.40922,
+   "_counted": true
+  },
+  {
+   "platform": "gpt",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 14.5,
+   "cost_usd": 0.039,
+   "usage": {
+    "model": "openai/gpt-5.6-sol",
+    "prompt_tokens": 4989,
+    "completion_tokens": 703,
+    "role": "devils_advocate",
+    "image": true
+   },
+   "ts": "2026-10-20T08:48:55",
+   "pass": 1,
+   "cum_cost_usd": 0.44822,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:48:57",
+   "pass": 1,
+   "cum_cost_usd": 0.44825,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:48:57",
+   "pass": 1,
+   "cum_cost_usd": 0.44828,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:48:57",
+   "pass": 1,
+   "cum_cost_usd": 0.44831,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:48:58",
+   "pass": 1,
+   "cum_cost_usd": 0.44834,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:48:58",
+   "pass": 1,
+   "cum_cost_usd": 0.44837,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:48:58",
+   "pass": 1,
+   "cum_cost_usd": 0.4484,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:48:58",
+   "pass": 1,
+   "cum_cost_usd": 0.44843,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:48:59",
+   "pass": 1,
+   "cum_cost_usd": 0.44846,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:48:59",
+   "pass": 1,
+   "cum_cost_usd": 0.44849,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 10.2,
+   "cost_usd": 0.03578,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 9800,
+    "output_tokens": 1079,
+    "x_search_calls": 1,
+    "x_posts_fetched": 5,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-10-20T08:49:09",
+   "pass": 1,
+   "cum_cost_usd": 0.48427,
+   "_counted": true
+  },
+  {
+   "platform": "pplx",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 10.2,
+   "cost_usd": 0.02769,
+   "usage": {
+    "model": "perplexity/sonar-pro",
+    "prompt_tokens": 3011,
+    "completion_tokens": 844,
+    "image": true
+   },
+   "ts": "2026-10-20T08:49:20",
+   "pass": 1,
+   "cum_cost_usd": 0.51196,
+   "_counted": true
+  },
+  {
+   "platform": "claude",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 16.2,
+   "cost_usd": 0.02316,
+   "usage": {
+    "model": "anthropic/claude-sonnet-4.5",
+    "prompt_tokens": 4521,
+    "completion_tokens": 640,
+    "role": "analyst",
+    "image": true
+   },
+   "ts": "2026-10-20T08:49:36",
+   "pass": 1,
+   "cum_cost_usd": 0.53512,
+   "_counted": true
+  },
+  {
+   "platform": "gpt",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 7.3,
+   "cost_usd": 0.03079,
+   "usage": {
+    "model": "openai/gpt-5.6-sol",
+    "prompt_tokens": 4654,
+    "completion_tokens": 376,
+    "role": "devils_advocate",
+    "image": true
+   },
+   "ts": "2026-10-20T08:49:43",
+   "pass": 1,
+   "cum_cost_usd": 0.56591,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "COP",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:49:45",
+   "pass": 1,
+   "cum_cost_usd": 0.56594,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "COP",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:49:45",
+   "pass": 1,
+   "cum_cost_usd": 0.56597,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "COP",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:49:46",
+   "pass": 1,
+   "cum_cost_usd": 0.566,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "COP",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:49:46",
+   "pass": 1,
+   "cum_cost_usd": 0.56603,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "COP",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:49:46",
+   "pass": 1,
+   "cum_cost_usd": 0.56606,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "COP",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:49:46",
+   "pass": 1,
+   "cum_cost_usd": 0.56609,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CMCSA",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:49:48",
+   "pass": 1,
+   "cum_cost_usd": 0.56612,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CMCSA",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:49:48",
+   "pass": 1,
+   "cum_cost_usd": 0.56615,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "CMCSA",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 38.9,
+   "cost_usd": 0.05819,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 11110,
+    "output_tokens": 1388,
+    "x_search_calls": 1,
+    "x_posts_fetched": 9,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-10-20T08:50:28",
+   "pass": 1,
+   "cum_cost_usd": 0.62434,
+   "_counted": true
+  },
+  {
+   "platform": "pplx",
+   "ticker": "CMCSA",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 9.8,
+   "cost_usd": 0.02811,
+   "usage": {
+    "model": "perplexity/sonar-pro",
+    "prompt_tokens": 2956,
+    "completion_tokens": 883,
+    "image": true
+   },
+   "ts": "2026-10-20T08:50:37",
+   "pass": 1,
+   "cum_cost_usd": 0.65245,
+   "_counted": true
+  },
+  {
+   "platform": "claude",
+   "ticker": "CMCSA",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 19.6,
+   "cost_usd": 0.02345,
+   "usage": {
+    "model": "anthropic/claude-sonnet-4.5",
+    "prompt_tokens": 4280,
+    "completion_tokens": 707,
+    "role": "analyst",
+    "image": true
+   },
+   "ts": "2026-10-20T08:50:57",
+   "pass": 1,
+   "cum_cost_usd": 0.6759,
+   "_counted": true
+  },
+  {
+   "platform": "gpt",
+   "ticker": "CMCSA",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 9.0,
+   "cost_usd": 0.03217,
+   "usage": {
+    "model": "openai/gpt-5.6-sol",
+    "prompt_tokens": 4543,
+    "completion_tokens": 473,
+    "role": "devils_advocate",
+    "image": true
+   },
+   "ts": "2026-10-20T08:51:06",
+   "pass": 1,
+   "cum_cost_usd": 0.70807,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.4,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:08",
+   "pass": 1,
+   "cum_cost_usd": 0.7081,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:08",
+   "pass": 1,
+   "cum_cost_usd": 0.70813,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:08",
+   "pass": 1,
+   "cum_cost_usd": 0.70816,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:09",
+   "pass": 1,
+   "cum_cost_usd": 0.70819,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:09",
+   "pass": 1,
+   "cum_cost_usd": 0.70822,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:09",
+   "pass": 1,
+   "cum_cost_usd": 0.70825,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:09",
+   "pass": 1,
+   "cum_cost_usd": 0.70828,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:09",
+   "pass": 1,
+   "cum_cost_usd": 0.70831,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:10",
+   "pass": 1,
+   "cum_cost_usd": 0.70834,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:10",
+   "pass": 1,
+   "cum_cost_usd": 0.70837,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:10",
+   "pass": 1,
+   "cum_cost_usd": 0.7084,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:10",
+   "pass": 1,
+   "cum_cost_usd": 0.70843,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:10",
+   "pass": 1,
+   "cum_cost_usd": 0.70846,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:11",
+   "pass": 1,
+   "cum_cost_usd": 0.70849,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:51:11",
+   "pass": 1,
+   "cum_cost_usd": 0.70852,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 32.3,
+   "cost_usd": 0.03107,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 9324,
+    "output_tokens": 1431,
+    "x_search_calls": 1,
+    "x_posts_fetched": 4,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-10-20T08:51:43",
+   "pass": 1,
+   "cum_cost_usd": 0.73959,
+   "_counted": true
+  },
+  {
+   "platform": "pplx",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 12.2,
+   "cost_usd": 0.03216,
+   "usage": {
+    "model": "perplexity/sonar-pro",
+    "prompt_tokens": 3006,
+    "completion_tokens": 1143,
+    "image": true
+   },
+   "ts": "2026-10-20T08:51:56",
+   "pass": 1,
+   "cum_cost_usd": 0.77175,
+   "_counted": true
+  },
+  {
+   "platform": "claude",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 20.0,
+   "cost_usd": 0.02847,
+   "usage": {
+    "model": "anthropic/claude-sonnet-4.5",
+    "prompt_tokens": 5395,
+    "completion_tokens": 819,
+    "role": "analyst",
+    "image": true
+   },
+   "ts": "2026-10-20T08:52:16",
+   "pass": 1,
+   "cum_cost_usd": 0.80022,
+   "_counted": true
+  },
+  {
+   "platform": "gpt",
+   "ticker": "XOM",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 11.4,
+   "cost_usd": 0.03912,
+   "usage": {
+    "model": "openai/gpt-5.6-sol",
+    "prompt_tokens": 5364,
+    "completion_tokens": 615,
+    "role": "devils_advocate",
+    "image": true
+   },
+   "ts": "2026-10-20T08:52:27",
+   "pass": 1,
+   "cum_cost_usd": 0.83934,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:29",
+   "pass": 1,
+   "cum_cost_usd": 0.83937,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:29",
+   "pass": 1,
+   "cum_cost_usd": 0.8394,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:29",
+   "pass": 1,
+   "cum_cost_usd": 0.83943,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:30",
+   "pass": 1,
+   "cum_cost_usd": 0.83946,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:30",
+   "pass": 1,
+   "cum_cost_usd": 0.83949,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:30",
+   "pass": 1,
+   "cum_cost_usd": 0.83952,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:30",
+   "pass": 1,
+   "cum_cost_usd": 0.83955,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:30",
+   "pass": 1,
+   "cum_cost_usd": 0.83958,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:31",
+   "pass": 1,
+   "cum_cost_usd": 0.83961,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:31",
+   "pass": 1,
+   "cum_cost_usd": 0.83964,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:31",
+   "pass": 1,
+   "cum_cost_usd": 0.83967,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:31",
+   "pass": 1,
+   "cum_cost_usd": 0.8397,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:32",
+   "pass": 1,
+   "cum_cost_usd": 0.83973,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:32",
+   "pass": 1,
+   "cum_cost_usd": 0.83976,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:52:32",
+   "pass": 1,
+   "cum_cost_usd": 0.83979,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 17.2,
+   "cost_usd": 0.05792,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 10824,
+    "output_tokens": 1756,
+    "x_search_calls": 1,
+    "x_posts_fetched": 8,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-10-20T08:52:49",
+   "pass": 1,
+   "cum_cost_usd": 0.89771,
+   "_counted": true
+  },
+  {
+   "platform": "pplx",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 13.0,
+   "cost_usd": 0.02772,
+   "usage": {
+    "model": "perplexity/sonar-pro",
+    "prompt_tokens": 3025,
+    "completion_tokens": 843,
+    "image": true
+   },
+   "ts": "2026-10-20T08:53:02",
+   "pass": 1,
+   "cum_cost_usd": 0.92543,
+   "_counted": true
+  },
+  {
+   "platform": "claude",
+   "ticker": "GOOGL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 18.0,
+   "cost_usd": 0.02655,
+   "usage": {
+    "model": "anthropic/claude-sonnet-4.5",
+    "prompt_tokens": 4786,
+    "completion_tokens": 813,
+    "role": "analyst",
+    "image": true
+   },
+   "ts": "2026-10-20T08:53:21",
+   "pass": 1,
+   "cum_cost_usd": 0.95198,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "KO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:22",
+   "pass": 1,
+   "cum_cost_usd": 0.95201,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "KO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:22",
+   "pass": 1,
+   "cum_cost_usd": 0.95204,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "KO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:23",
+   "pass": 1,
+   "cum_cost_usd": 0.95207,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "KO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:23",
+   "pass": 1,
+   "cum_cost_usd": 0.9521,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "KO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:23",
+   "pass": 1,
+   "cum_cost_usd": 0.95213,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "KO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:23",
+   "pass": 1,
+   "cum_cost_usd": 0.95216,
+   "_counted": true
+  },
+  {
+   "platform": "pplx",
+   "ticker": "KO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 10.7,
+   "cost_usd": 0.02894,
+   "usage": {
+    "model": "perplexity/sonar-pro",
+    "prompt_tokens": 2993,
+    "completion_tokens": 931,
+    "image": true
+   },
+   "ts": "2026-10-20T08:53:35",
+   "pass": 1,
+   "cum_cost_usd": 0.9811,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:36",
+   "pass": 1,
+   "cum_cost_usd": 0.98113,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:37",
+   "pass": 1,
+   "cum_cost_usd": 0.98116,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:37",
+   "pass": 1,
+   "cum_cost_usd": 0.98119,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:37",
+   "pass": 1,
+   "cum_cost_usd": 0.98122,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:37",
+   "pass": 1,
+   "cum_cost_usd": 0.98125,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.4,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:39",
+   "pass": 1,
+   "cum_cost_usd": 0.98128,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:39",
+   "pass": 1,
+   "cum_cost_usd": 0.98131,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:40",
+   "pass": 1,
+   "cum_cost_usd": 0.98134,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:40",
+   "pass": 1,
+   "cum_cost_usd": 0.98137,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:40",
+   "pass": 1,
+   "cum_cost_usd": 0.9814,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:40",
+   "pass": 1,
+   "cum_cost_usd": 0.98143,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:40",
+   "pass": 1,
+   "cum_cost_usd": 0.98146,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:41",
+   "pass": 1,
+   "cum_cost_usd": 0.98149,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:41",
+   "pass": 1,
+   "cum_cost_usd": 0.98152,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:41",
+   "pass": 1,
+   "cum_cost_usd": 0.98155,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:41",
+   "pass": 1,
+   "cum_cost_usd": 0.98158,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:42",
+   "pass": 1,
+   "cum_cost_usd": 0.98161,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:42",
+   "pass": 1,
+   "cum_cost_usd": 0.98164,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-20T08:53:42",
+   "pass": 1,
+   "cum_cost_usd": 0.98167,
+   "_counted": true
+  }
+ ]
+}

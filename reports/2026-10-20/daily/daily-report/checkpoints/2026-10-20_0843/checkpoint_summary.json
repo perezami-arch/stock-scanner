@@ -1,0 +1,242 @@
+{
+ "asof_utc": "2026-10-20 05:43:11.538356+00:00",
+ "cp_dir": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-10-20/checkpoints/2026-10-20_0843",
+ "open_before": 25,
+ "checkpoints": [
+  {
+   "ticker": "MU",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "איבד SMA50",
+    "ספירת אליוט השתנתה (W2 in progress (provisional) → W3 done (in W4))"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": -3.11,
+   "stop": 766.2123,
+   "actions": {
+    "grok": "hold",
+    "pplx": "hold",
+    "claude": "hold",
+    "gpt": "exit"
+   }
+  },
+  {
+   "ticker": "MRVL",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "Jev: 1 כותרות מהותיות בביטחון נמוך/חשודות",
+    "איבד SMA50"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 9,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": -6.48,
+   "stop": 205.5205,
+   "actions": {
+    "grok": "hold",
+    "pplx": "hold",
+    "claude": "hold",
+    "gpt": "exit"
+   }
+  },
+  {
+   "ticker": "ORCL",
+   "direction": "SHORT",
+   "day": 5,
+   "triggers": [
+    "Jev: 2 כותרות מהותיות בביטחון נמוך/חשודות"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": 4.65,
+   "stop": 155.7035,
+   "actions": {
+    "grok": "hold",
+    "pplx": "hold",
+    "claude": "hold",
+    "gpt": "exit"
+   }
+  },
+  {
+   "ticker": "MRK",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "Jev: 1 כותרות מהותיות בביטחון נמוך/חשודות",
+    "איבד SMA50",
+    "VA120: above→inside"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 9,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": -1.52,
+   "stop": 132.6146,
+   "actions": {
+    "grok": "hold",
+    "pplx": "hold",
+    "claude": "hold",
+    "gpt": "exit"
+   }
+  },
+  {
+   "ticker": "COP",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [],
+   "llm_called": false,
+   "jev": {
+    "n_headlines": 6,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": 4.89,
+   "stop": 133.7954,
+   "actions": {}
+  },
+  {
+   "ticker": "CMCSA",
+   "direction": "SHORT",
+   "day": 5,
+   "triggers": [
+    "VA120: below→inside"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 2,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": -4.94,
+   "stop": 23.1166,
+   "actions": {
+    "grok": "hold",
+    "pplx": "hold",
+    "claude": "tighten",
+    "gpt": "exit"
+   }
+  },
+  {
+   "ticker": "XOM",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "Jev: 3 כותרות מהותיות בביטחון נמוך/חשודות",
+    "חצי מומש ביעד"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": 2.78,
+   "stop": 164.8826,
+   "actions": {
+    "grok": "hold",
+    "pplx": "hold",
+    "claude": "tighten",
+    "gpt": "exit"
+   }
+  },
+  {
+   "ticker": "GOOGL",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "Jev: 1 כותרות מהותיות בביטחון נמוך/חשודות",
+    "איבד SMA50",
+    "ספירת אליוט v1 בוטלה"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": -3.38,
+   "stop": 323.3627,
+   "actions": {
+    "grok": "hold",
+    "pplx": "hold",
+    "claude": "tighten"
+   }
+  },
+  {
+   "ticker": "KO",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "הגיע ליעד Fib 1.618",
+    "חצי מומש ביעד",
+    "VA120: inside→above"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 6,
+    "n_material": 0,
+    "sentiment_label": "חיובי"
+   },
+   "unrealized_dir_pct": 3.16,
+   "stop": 88.156,
+   "actions": {
+    "pplx": "hold"
+   }
+  },
+  {
+   "ticker": "AMGN",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [],
+   "llm_called": false,
+   "jev": {
+    "n_headlines": 5,
+    "n_material": 0,
+    "sentiment_label": "שלילי"
+   },
+   "unrealized_dir_pct": 1.09,
+   "stop": 391.657,
+   "actions": {}
+  },
+  {
+   "ticker": "T",
+   "direction": "SHORT",
+   "day": 5,
+   "triggers": [],
+   "llm_called": false,
+   "jev": {
+    "n_headlines": 14,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": -4.18,
+   "stop": 24.7945,
+   "actions": {}
+  }
+ ],
+ "closed": [],
+ "pending_entry": [
+  "AAVE"
+ ],
+ "scoreboard": [],
+ "spent_usd": 0.9817,
+ "ledger_rows_written": 55,
+ "llm_positions": 8,
+ "skipped_rows": 12
+}
