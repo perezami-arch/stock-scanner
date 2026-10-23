@@ -1,0 +1,58 @@
+{
+ "budget_usd": 1.0,
+ "spent_usd": 9e-05,
+ "n_calls": 3,
+ "calls": [
+  {
+   "platform": "jev",
+   "ticker": "UNI",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-23T08:41:13",
+   "pass": 1,
+   "cum_cost_usd": 3e-05,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LINK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-23T08:41:17",
+   "pass": 1,
+   "cum_cost_usd": 6e-05,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LINK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-10-23T08:41:17",
+   "pass": 1,
+   "cum_cost_usd": 9e-05,
+   "_counted": true
+  }
+ ]
+}

@@ -1,0 +1,44 @@
+{
+ "asof_utc": "2026-10-23 05:38:41.399244+00:00",
+ "cp_dir": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-10-23/checkpoints/2026-10-23_0838",
+ "open_before": 25,
+ "checkpoints": [
+  {
+   "ticker": "UNI",
+   "direction": "LONG",
+   "day": 10,
+   "triggers": [],
+   "llm_called": false,
+   "jev": {
+    "n_headlines": 1,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": 0.5,
+   "stop": 4.9721,
+   "actions": {}
+  },
+  {
+   "ticker": "LINK",
+   "direction": "LONG",
+   "day": 10,
+   "triggers": [],
+   "llm_called": false,
+   "jev": {
+    "n_headlines": 2,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": -5.36,
+   "stop": 10.3951,
+   "actions": {}
+  }
+ ],
+ "closed": [],
+ "pending_entry": [],
+ "scoreboard": [],
+ "spent_usd": 0.0001,
+ "ledger_rows_written": 10,
+ "llm_positions": 0,
+ "skipped_rows": 8
+}
