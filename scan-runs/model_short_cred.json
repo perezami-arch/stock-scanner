@@ -1,11 +1,11 @@
 {
  "version": "v3-shortveto-cred (2026-10-16)",
- "cutoff": "2026-10-19 06:11:00+00:00",
+ "cutoff": "2026-10-26 07:08:00+00:00",
  "models": {
   "gpt": {
-   "n_shorts_seen": 20,
-   "share_any_warning": 1.0,
-   "share_strong": 0.3,
+   "n_shorts_seen": 33,
+   "share_any_warning": 0.939,
+   "share_strong": 0.333,
    "levels_counted": [
     "strong"
    ],
@@ -30,19 +30,25 @@
    ]
   },
   "grok": {
-   "n_shorts_seen": 20,
-   "share_any_warning": 0.15,
-   "share_strong": 0.05,
+   "n_shorts_seen": 33,
+   "share_any_warning": 0.182,
+   "share_strong": 0.061,
    "levels_counted": [
     "strong",
     "weak"
    ],
-   "n": 1,
+   "n": 2,
    "hits": 1,
-   "shrunk_hit": 0.5161,
-   "weight": 0.0323,
-   "penalty_pts": 0.32,
+   "shrunk_hit": 0.5,
+   "weight": 0.0,
+   "penalty_pts": 0.0,
    "warnings": [
+    {
+     "key": "ORCL|2026-10-12",
+     "excess_dir": 0.0325,
+     "h": 5,
+     "correct": false
+    },
     {
      "key": "UBER|2026-10-08",
      "excess_dir": -0.0204,
@@ -52,8 +58,8 @@
    ]
   },
   "pplx": {
-   "n_shorts_seen": 20,
-   "share_any_warning": 0.9,
+   "n_shorts_seen": 33,
+   "share_any_warning": 0.818,
    "share_strong": 0.0,
    "levels_counted": [
     "strong"
@@ -66,9 +72,9 @@
    "warnings": []
   },
   "claude": {
-   "n_shorts_seen": 20,
-   "share_any_warning": 0.35,
-   "share_strong": 0.35,
+   "n_shorts_seen": 33,
+   "share_any_warning": 0.303,
+   "share_strong": 0.303,
    "levels_counted": [
     "strong",
     "weak"
@@ -81,9 +87,9 @@
    "warnings": []
   },
   "jev": {
-   "n_shorts_seen": 20,
-   "share_any_warning": 0.2,
-   "share_strong": 0.2,
+   "n_shorts_seen": 33,
+   "share_any_warning": 0.152,
+   "share_strong": 0.152,
    "levels_counted": [
     "strong",
     "weak"
