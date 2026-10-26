@@ -72,7 +72,8 @@ def _num(v):
 # the floor is a flag (--min-score) and is itself measured forward. See the addendum.
 MIN_SCORE_DEFAULT = 60.0
 
-SCORING_VERSION = 'v3-shortveto-cred (2026-10-16) on v2-vix30'   # v1 = momentum percentile only; v2 = + VIX>30 risk-on LONG bonus (vix_regime.vix30_bonus)
+SCORING_VERSION = 'v4-critics (2026-10-26) on v3-shortveto-cred on v2-vix30'   # v4 = model critic weights 1.0 (proposal 08.10 sec 6.5, Ilan OK 26.10)
+_PREV_SCORING = 'v3-shortveto-cred (2026-10-16) on v2-vix30'   # v1 = momentum percentile only; v2 = + VIX>30 risk-on LONG bonus (vix_regime.vix30_bonus)
 def unified_score(c):
     if c.get('asset') == 'crypto':
         v = c.get('momentum_score')
@@ -413,6 +414,20 @@ def main():
         log(f"scoring {SCD.VERSION}: penalties " + ', '.join(f"{m}={v['penalty_pts']}" for m, v in cred.get('models', {}).items()) + f"; veto-blocked {list(veto_blocked)}")
     except Exception as e:
         log('short credibility failed (no penalty applied):', e)
+    # 8c. v4-critics: model weights per proposal 08.10 sec 6.5 (critic_score.py). Earnings block from the bot's own pre-gate = reproduced evidence.
+    try:
+        import critic_score as CS
+        for c, r in zip(cands, res['rows']):
+            eb = bool((c.get('_eg') or {}).get('blocked'))
+            k = CS.score(r, earnings_blocked=eb); c['critic_points'] = k['points']; c['critic_detail'] = k['detail']
+            if c.get('unified_score') is not None and k['points']:
+                c['unified_score'] = round(c['unified_score'] + k['points'], 1)
+            if c.get('_selected') and (k['watch_only'] or (c.get('unified_score') is not None and c['unified_score'] < a.min_score)):
+                c['_selected'] = False; c['_trade_grade'] = False
+                c['blocked_by_critics'] = 'deleted' if k['deleted'] else ('watch_only' if k['watch_only'] else 'below_min_score')
+            if k['points'] or c.get('blocked_by_critics'): log(f"  critics {c['t']} {c['direction']}: {k['points']:+} {k['detail']} -> {c.get('unified_score')} {c.get('blocked_by_critics') or ''}")
+    except Exception as e:
+        log('critic scoring failed (no critic points applied):', e)
     # 4b. post-gate with Perplexity + exception; levels JSON updated (earnings only)
     eg = {}
     for c, r in zip(cands, res['rows']):
