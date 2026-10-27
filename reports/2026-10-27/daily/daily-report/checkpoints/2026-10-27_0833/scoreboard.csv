@@ -1,0 +1,6 @@
+platform,decision_point,n_rows,n_calls,right,wrong,no_call,hit_rate,actions_scored,actions_right,distinct_entry_days,mean_excess_when_with
+claude,d5,1,1,1,0,0,1.0,1,1,1,
+gpt,d5,1,0,0,0,0,,0,0,1,
+grok,d5,1,1,0,1,0,0.0,1,0,1,-0.0612
+jev,d5,1,0,0,0,0,,0,0,1,
+pplx,d5,1,0,0,0,1,,1,0,1,
