@@ -1,0 +1,102 @@
+{
+ "budget_usd": 1.0,
+ "spent_usd": 0.16977,
+ "n_calls": 5,
+ "calls": [
+  {
+   "platform": "grok",
+   "ticker": "AAVE",
+   "attempt": 1,
+   "ok": false,
+   "seconds": 28.8,
+   "cost_usd": 0.0603,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 12472,
+    "output_tokens": 1550,
+    "x_search_calls": 1,
+    "x_posts_fetched": 9,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "error": "invalid JSON from Grok: reason/key points not in Hebrew",
+   "ts": "2026-10-30T08:43:21",
+   "pass": 1,
+   "cum_cost_usd": 0.0603,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "AAVE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 10.9,
+   "cost_usd": 0.05816,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 8185,
+    "output_tokens": 1171,
+    "x_search_calls": 1,
+    "x_posts_fetched": 9,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": false
+   },
+   "ts": "2026-10-30T08:43:32",
+   "pass": 1,
+   "cum_cost_usd": 0.11846,
+   "_counted": true
+  },
+  {
+   "platform": "pplx",
+   "ticker": "AAVE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 13.7,
+   "cost_usd": 0.02823,
+   "usage": {
+    "model": "perplexity/sonar-pro",
+    "prompt_tokens": 3005,
+    "completion_tokens": 881,
+    "image": true
+   },
+   "ts": "2026-10-30T08:43:45",
+   "pass": 1,
+   "cum_cost_usd": 0.14669,
+   "_counted": true
+  },
+  {
+   "platform": "claude",
+   "ticker": "AAVE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 19.5,
+   "cost_usd": 0.02308,
+   "usage": {
+    "model": "anthropic/claude-sonnet-4.5",
+    "prompt_tokens": 4374,
+    "completion_tokens": 664,
+    "role": "analyst",
+    "image": true
+   },
+   "ts": "2026-10-30T08:44:05",
+   "pass": 1,
+   "cum_cost_usd": 0.16977,
+   "_counted": true
+  },
+  {
+   "platform": "gpt",
+   "ticker": "AAVE",
+   "attempt": 1,
+   "ok": false,
+   "seconds": 0.5,
+   "cost_usd": 0.0,
+   "error": "CREDIT: HTTP 402: {\"error\":{\"message\":\"This request requires more credits, or fewer max_tokens. You requested up to 4000 tokens, but can only afford 1669. To increase, visit https://openrouter.ai/workspaces/default/keys/962439c55cd34810f65e2cc322e2d69c1323ff11c8044e78ebb9b5cb99ba1f7c and adjust the ",
+   "ts": "2026-10-30T08:44:05",
+   "pass": 1,
+   "cum_cost_usd": 0.16977,
+   "_counted": true
+  }
+ ]
+}
