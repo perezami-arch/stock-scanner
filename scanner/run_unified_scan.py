@@ -419,7 +419,7 @@ def main():
         import critic_score as CS
         for c, r in zip(cands, res['rows']):
             eb = bool((c.get('_eg') or {}).get('blocked'))
-            k = CS.score(r, earnings_blocked=eb); c['critic_points'] = k['points']; c['critic_detail'] = k['detail']
+            k = CS.score(r, earnings_blocked=eb); c['critic_points'] = k['points']; c['critic_detail'] = k['detail']; c['_critic_cols'] = CS.columns(r, k)
             if c.get('unified_score') is not None and k['points']:
                 c['unified_score'] = round(c['unified_score'] + k['points'], 1)
             if c.get('_selected') and (k['watch_only'] or (c.get('unified_score') is not None and c['unified_score'] < a.min_score)):
@@ -444,7 +444,7 @@ def main():
     ci = json.load(open(ci_path)) if os.path.exists(ci_path) else []
     rec = LF.reconcile(run_dir, cands, report_numbers, trows, ci)
     for t_ in trows: t_['recon_status'] = 'תואם' if not rec.get((t_['ticker'], t_['direction'])) else 'לא תואם'
-    for t_, c in zip(trows, cands): t_['trade_grade'] = bool(c.get('_trade_grade')); t_['research_only'] = any(c is x for x in extra); t_['blocked_by_veto'] = c.get('blocked_by_veto', ''); t_['short_penalty'] = c.get('short_penalty', 0.0)
+    for t_, c in zip(trows, cands): t_['trade_grade'] = bool(c.get('_trade_grade')); t_['research_only'] = any(c is x for x in extra); t_['blocked_by_veto'] = c.get('blocked_by_veto', ''); t_['short_penalty'] = c.get('short_penalty', 0.0); t_.update(c.get('_critic_cols') or {}); t_['blocked_by_critics'] = c.get('blocked_by_critics', '')
     pd.DataFrame(trows).to_csv(f'{run_dir}/tracker_rows.csv', index=False, encoding='utf-8-sig')
     json.dump({f'{k[0]}|{k[1]}': v for k, v in rec.items()}, open(f'{run_dir}/reconciliation.json', 'w'), ensure_ascii=False, indent=1)
     log('reconciliation:', sum(not v for v in rec.values()), 'תואם /', sum(bool(v) for v in rec.values()), 'לא תואם')

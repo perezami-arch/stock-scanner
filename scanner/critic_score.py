@@ -42,3 +42,21 @@ def score(row, earnings_blocked=False, weights=None):
     conf = min(conf, CONFIRM_CAP)
     return dict(version=VERSION, points=round(conf + flags, 2), confirm_pts=round(conf, 2), flag_pts=round(flags, 2),
                 deleted=deleted, watch_only=deleted or flags <= WATCH_ONLY_AT, detail=detail)
+
+
+MODELS = ('grok', 'pplx', 'claude', 'gpt', 'jev')
+_RAWKEY = {'grok': 'grok_verdict', 'pplx': 'pplx_verdict', 'gpt': 'gpt_verdict', 'claude': 'claude_direction_view', 'jev': 'jev_news_sentiment'}
+
+def columns(row, k=None, weights=None):
+    """Flat per-model columns for the tracker: critic_<m>_verdict (raw model output) and critic_<m>_pts
+    (points this model contributed, pre-cap; 'deleted (V1)' kept as text). jev always 0 (weight 0)."""
+    w = WEIGHTS if weights is None else weights
+    d = (k or {}).get('detail', {}) if k else score(row, weights=w)['detail']
+    out = {}
+    for m in MODELS:
+        v = row.get(_RAWKEY[m]) if hasattr(row, 'get') else None
+        out[f'critic_{m}_verdict'] = '' if v is None or str(v).lower() == 'nan' else str(v)
+        out[f'critic_{m}_pts'] = d.get(m, 0.0)
+        out[f'critic_{m}_weight'] = float(w.get(m, 0.0))
+    if k: out.update(critic_points=k['points'], critic_version=k['version'])
+    return out

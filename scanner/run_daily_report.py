@@ -96,7 +96,7 @@ def main():
     w(f"- **OpenBB:** {'עודכן' if ob[0] == 0 else 'נכשל' if ob[0] not in (None, 0) else ''} {ob[1]}")
     w(f"- **עלות המודלים בריצה:** \u200e${s['spent_usd']:.3f} · שורות ביומן: {s['ledger_rows_written']} (מתוכן {s['skipped_rows']} 'אין שינוי מהותי') · "
       f"פוזיציות שהפעילו מודלים בתשלום: {s['llm_positions']}")
-    w('- כל עמודות המודלים: משקל 0, מדידה קדימה בלבד מ-12.10.2026.\n')
+    w('- משקלי המודלים (critic_score v4, פעיל מ-29.10.2026): Grok, ‏Perplexity, ‏Claude, ‏GPT במשקל 1.0 · Jev במשקל 0. עמודות מחקר ניסיוניות נשארות במשקל 0.\n')
     # 1. open positions
     op = reg[reg.status == 'open']
     w(f'## 1. פוזיציות פתוחות ({len(op)})')
