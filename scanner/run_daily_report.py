@@ -27,7 +27,7 @@ def openbb():
 
 def update_paper(asof, path=None):
     """paper_trades_ledger.csv from real closes: entry = open of entry_session, stop = the same rule as positions (scanner_stops.stop_status:
-    stock 4xATR chandelier on closes, crypto fixed 3xATR), half at the stock-long target, exit at the stop close or day 20; cum_d1..20 =
+    stock 4xATR chandelier, intraday touch from 01.11 with fill = worse of stop and open; crypto fixed 3xATR on closes), half at the stock-long target, exit at the stop close or day 20; cum_d1..20 =
     direction-adjusted close return vs the fill. Paper rows never become positions and never enter the reports beyond one line."""
     import scanner_stops as ST
     path = path or os.environ.get('PAPER_LEDGER', (_SCANNER_ROOT + '/scan-runs/paper_trades_ledger.csv'))

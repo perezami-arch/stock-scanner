@@ -106,7 +106,7 @@ def run(asof, registry, ledger, out_dir, budget_usd=1.0, no_models=False, max_ll
         done = set(filter(None, str(T.get('checkpoints_done') or '').split(',')))
         prev = json.loads(T['last_state']) if isinstance(T.get('last_state'), str) and T['last_state'].startswith('{') else {}
         last_dec = T.get('last_decision_utc') or T.get('cutoff_utc')
-        # --- exit (stop rule on closes, or the 20th session close)
+        # --- exit (stop rule: intraday touch for stocks from 01.11, close-checked otherwise; or the 20th session close)
         stp = ST.stop_status(x, asset, d, T['entry_session'], fill, tp_half=tp)
         exit_date = exit_px = reason = None
         if stp.get('stopped') and stp.get('stop_date'):

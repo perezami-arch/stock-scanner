@@ -36,8 +36,9 @@ exec(_p[_p.index("def cci"):_p.index("cache={}")]); exec(_p[_p.index("def feats"
 
 ZZ = 2.0                                   # zigzag reversal threshold in ATRs (backtest value)
 RET = [0.382, 0.5, 0.618, 0.786]; EXT = [1.272, 1.618, 2.618]
-RULES = {("stock", "LONG"):  dict(stop_type="chandelier_close", stop_atr_mult=4.0, trailing=True),
-         ("stock", "SHORT"): dict(stop_type="chandelier_close", stop_atr_mult=4.0, trailing=True),   # v2 08.10: 4x (was 3x)
+# 01.11.2026 (Ilan): stock stops trigger on an INTRADAY TOUCH (long: Low<=level, short: High>=level), fill = worse of level and Open.
+RULES = {("stock", "LONG"):  dict(stop_type="chandelier_touch", stop_atr_mult=4.0, trailing=True),
+         ("stock", "SHORT"): dict(stop_type="chandelier_touch", stop_atr_mult=4.0, trailing=True),   # v2 08.10: 4x (was 3x)
          ("crypto", "LONG"): dict(stop_type="fixed_close", stop_atr_mult=3.0, trailing=False)}
 FIB_TOL = 0.10                             # a wave ratio "deviates" if it is >10% (relative) away from every allowed Fib ratio
 W2_R = [0.382, 0.5, 0.618, 0.786]; W3_X = [1.0, 1.272, 1.618, 2.618]; W4_R = [0.236, 0.382, 0.5]; W5_X = [0.618, 1.0, 1.618]
@@ -125,6 +126,11 @@ def _ratchet(sgn, prev, raw):
     """never loosen: longs keep the higher of the previous live level and the new chandelier value, shorts the lower."""
     return max(prev, raw) if sgn == 1 else min(prev, raw)
 
+def _touch(sgn, o, h, l, lv):
+    """Intraday-touch exit price or None: long hit if Low<=lv, short if High>=lv; fill = worse of lv and the bar Open (gap)."""
+    if sgn == 1: return float(min(o, lv)) if l <= lv else None
+    return float(max(o, lv)) if h >= lv else None
+
 def stop_status(x, asset, direction, entry_date, entry_price, tp_half=None):
     """Live monitoring of an open trade, same semantics as the backtest close mode (sim_chand 'c' / sim_fib atr3 'c'):
     entry bar k = first bar on/after entry_date; first check at the close of k+2; exit at that close.
@@ -134,6 +140,8 @@ def stop_status(x, asset, direction, entry_date, entry_price, tp_half=None):
     loosen it). The raw, un-ratcheted chandelier value is returned as next_level_raw for audit.
     Stock longs with tp_half: 1/2 exits at the first close >= tp_half (stop checked first on the same close, as sim_targets 'c');
     the remaining half stays under the same stop.
+    stop_type '*_touch' (stocks from 01.11.2026): checked from the entry bar on Low/High, fill = worse of level and Open;
+    stop_close then holds that fill price (kept for caller compatibility), plus exit_price / exit_mode.
     Returns dict(next_level, initial_stop, stopped, stop_date, stop_close[, half_taken, half_date, half_price]).
     next_level applies to the NEXT close."""
     direction = direction.upper(); sgn = 1 if direction == "LONG" else -1
@@ -152,13 +160,29 @@ def stop_status(x, asset, direction, entry_date, entry_price, tp_half=None):
         for j in range(k + 2, len(C)):
             if sgn * (C[j] - lv) <= 0: return dict(next_level=round(lv, 4), initial_stop=round(init, 4), stopped=True, stop_date=str(x.index[j].date()), stop_close=float(C[j]))
         return dict(next_level=round(lv, 4), initial_stop=round(init, 4), stopped=False)
+    touch = rule["stop_type"].endswith("_touch")
+    O = x.Open.values
+    lv = init                                 # live level; ratchets from the initial stop, never loosens
+    if touch:                                 # intraday rule: the stop is live from the entry bar itself
+        for j in (k, k + 1):
+            if j >= len(C): break
+            if j == k + 1 and np.isfinite(A[k]): lv = _ratchet(sgn, lv, C[k] - sgn * K * A[k])
+            hit = _touch(sgn, O[j], H[j], L[j], lv)
+            if hit is not None:
+                return dict(next_level=round(lv, 4), initial_stop=round(init, 4), stopped=True, stop_date=str(x.index[j].date()),
+                            stop_close=hit, exit_price=hit, exit_mode="touch", **half)
     ext = C[k]
     if k + 1 < len(C): ext = max(ext, C[k + 1]) if sgn == 1 else min(ext, C[k + 1])
-    lv = init                                 # live level; ratchets from the initial stop, never loosens
     for j in range(k + 2, len(C)):
         if np.isfinite(A[j - 1]): lv = _ratchet(sgn, lv, ext - sgn * K * A[j - 1])
-        if sgn * (C[j] - lv) <= 0:
-            return dict(next_level=round(lv, 4), initial_stop=round(init, 4), stopped=True, stop_date=str(x.index[j].date()), stop_close=float(C[j]), **half)
+        if touch:
+            hit = _touch(sgn, O[j], H[j], L[j], lv)
+            if hit is not None:
+                return dict(next_level=round(lv, 4), initial_stop=round(init, 4), stopped=True, stop_date=str(x.index[j].date()),
+                            stop_close=hit, exit_price=hit, exit_mode="touch", **half)
+        elif sgn * (C[j] - lv) <= 0:
+            return dict(next_level=round(lv, 4), initial_stop=round(init, 4), stopped=True, stop_date=str(x.index[j].date()),
+                        stop_close=float(C[j]), exit_price=float(C[j]), exit_mode="close", **half)
         if has_tp and not half["half_taken"] and sgn * (C[j] - tp_half) >= 0:
             half.update(half_taken=True, half_date=str(x.index[j].date()), half_price=float(C[j]))
         ext = max(ext, C[j]) if sgn == 1 else min(ext, C[j])
