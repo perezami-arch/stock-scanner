@@ -11,6 +11,7 @@ STATE = [  # globs relative to the scanner root
     'scan-runs/positions_registry.csv',
     'scan-runs/platform_verdicts_ledger.csv', 'scan-runs/platform_verdicts_ledger_trial.csv',
     'scan-runs/paper_trades_ledger.csv', 'scan-runs/model_short_cred.json', 'scan-runs/frozen_crypto_shorts.csv',
+    'scan-runs/archive/crypto/*.csv',   # 01.11.2026 crypto rows moved out of the live ledgers
     'scan-runs/checkpoints/**/*.csv', 'scan-runs/checkpoints/**/*.json',
     'prompts/*',
     'x-cache/*/*.json',

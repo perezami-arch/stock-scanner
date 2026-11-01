@@ -272,7 +272,8 @@ def main():
     SP.MAX_PER_SECTOR = a.sector_cap
     for c in full: c['asset'] = 'stock'
     crypto = []
-    if not a.no_crypto:
+    import crypto_policy as CP
+    if not a.no_crypto and CP.crypto_enabled():   # 01.11.2026: crypto OFF unless SCANNER_ENABLE_CRYPTO=1
         try:
             import scanner_crypto as SCR
             crypto, cdall = SCR.scan(run_dir, cut, top=100)

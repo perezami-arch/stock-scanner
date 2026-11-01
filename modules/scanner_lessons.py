@@ -42,6 +42,9 @@ def active_prompt(platform):
 # ------------------------------------------------------------------ registry
 def load_registry(path=REGISTRY):
     if not os.path.exists(path): return pd.DataFrame(columns=REG_COLS)
+    try:   # 01.11.2026: crypto out of this scanner -> rows MOVED to scan-runs/archive/crypto/ first (never deleted), see crypto_policy
+        import crypto_policy as CP; CP.archive_crypto_rows(path)
+    except ImportError: pass
     d = pd.read_csv(path, dtype=object)
     for k in REG_COLS:
         if k not in d: d[k] = None

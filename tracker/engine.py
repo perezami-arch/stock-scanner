@@ -41,6 +41,8 @@ def run():
         r.update(cum=[],daily=[],ndays=0,opt=None,stop_hit=None,tp_hit=[None]*3,trig_dt=None,outcome='אין נתונים',mfe=None,mae=None,rule=None,atr=None,mcap=None)
         others=[x for x in app.get(t,[]) if x[0]!=a['alert_date'] or x[2]!=a['source'] or x[3]!=a.get('cat','')]
         r['rep']=(f"{len(others)} — "+', '.join(f"{fdot(x[0])} ({x[1] or '?'}, {SRC[x[2]]}{(' '+x[3]) if x[3] else ''})" for x in sorted(others))) if others else ''
+        if a.get('ttype')=='קריפטו' and os.environ.get('SCANNER_ENABLE_CRYPTO','0')!='1':
+            continue   # 01.11.2026: crypto removed from this scanner (Ilan); historical crypto rows archived in archive/crypto/
         if a.get('ttype')=='קריפטו':
             run_crypto(a,r,notes); r['notes']=notes; rows.append(r); continue
         cdate=a.get('calc_date') or a['alert_date']
