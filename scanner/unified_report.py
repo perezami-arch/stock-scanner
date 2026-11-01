@@ -112,9 +112,11 @@ def write_report(run_dir, res):
         w('')
     table(stock_recs, f'## 3. המלצות – מניות ({len(stock_recs)})')
     w('_דירוג: הציון האחיד 0–100 (אחוזון מומנטום 12-1, הפוך בשורט). Grok בסוגריים: סנטימנט 2- עד 2+. Claude: ביטחון 0–100 ועמדה. "חולקים על הגרף": כמה מודלים אמרו שספירת האליוט/פיבו/תמיכה שצוירו לא נראית נכונה. הכל במשקל 0._\n')
-    # ---- 4 crypto
+    # ---- 4 crypto (01.11.2026: crypto removed from this scanner; a separate crypto scanner will be built)
+    import crypto_policy as CP
     w(f'## 4. קריפטו – לונג בלבד ({len(crypto_recs)})')
-    if crypto_recs:
+    if not CP.crypto_enabled(): w('הקריפטו הוצא מהסורק הזה (החלטת אילן, 01.11.2026). נתוני העבר בארכיון archive/crypto/.\n')
+    elif crypto_recs:
         w('_Grok הוא פלטפורמת הסנטימנט הראשית לקריפטו. סטופ קבוע 3×ATR14 על סגירה יומית UTC, בלי יעד._\n')
         table(crypto_recs, '')
     else: w('אין שם קריפטו שעבר את מסנן המגמה בריצה הזו.\n')

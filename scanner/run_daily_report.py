@@ -89,6 +89,10 @@ def main():
     out = f"{a.out}/{asof.tz_convert('Asia/Jerusalem'):%Y-%m-%d}"; os.makedirs(out, exist_ok=True)
     ob = (None, 'דולג (--no-openbb)') if a.no_openbb else openbb()
     ledger = a.ledger or SP.LEDGER
+    import crypto_policy as CP   # 01.11.2026: crypto rows move to scan-runs/archive/crypto/ (never deleted)
+    for f_ in (a.registry, ledger, ledger.replace('.csv', '_trial.csv'), os.environ.get('PAPER_LEDGER', _SCANNER_ROOT + '/scan-runs/paper_trades_ledger.csv')):
+        try: CP.archive_crypto_rows(f_)
+        except Exception as e: print('crypto archive failed:', f_, e)
     s = RC.run(asof, a.registry, ledger, f'{out}/checkpoints', budget_usd=a.budget, no_models=a.no_models)
     reg = SLS.load_registry(a.registry)
     L = []; w = L.append
