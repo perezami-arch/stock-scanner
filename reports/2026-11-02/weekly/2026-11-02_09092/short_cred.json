@@ -1,0 +1,401 @@
+{
+ "cred": {
+  "version": "v3-shortveto-cred (2026-10-16)",
+  "cutoff": "2026-11-02 07:09:00+00:00",
+  "models": {
+   "gpt": {
+    "n_shorts_seen": 47,
+    "share_any_warning": 0.66,
+    "share_strong": 0.234,
+    "levels_counted": [
+     "strong",
+     "weak"
+    ],
+    "n": 20,
+    "hits": 12,
+    "shrunk_hit": 0.54,
+    "weight": 0.08,
+    "penalty_pts": 0.8,
+    "warnings": [
+     {
+      "key": "ORCL|2026-10-12",
+      "excess_dir": 0.0325,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "CMCSA|2026-10-12",
+      "excess_dir": -0.0633,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "T|2026-10-12",
+      "excess_dir": -0.0557,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "ORCL|2026-10-19",
+      "excess_dir": 0.0184,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "UBER|2026-10-19",
+      "excess_dir": 0.0411,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "AVGO|2026-10-19",
+      "excess_dir": 0.0138,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "SCHW|2026-10-19",
+      "excess_dir": -0.0021,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "BAC|2026-10-19",
+      "excess_dir": -0.0074,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "GS|2026-10-19",
+      "excess_dir": -0.0269,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "MS|2026-10-19",
+      "excess_dir": -0.0343,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "C|2026-10-19",
+      "excess_dir": 0.0006,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "CAT|2026-10-19",
+      "excess_dir": 0.0259,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "KLAC|2026-10-19",
+      "excess_dir": 0.0926,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "AMAT|2026-10-19",
+      "excess_dir": 0.0437,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "TSLA|2026-10-19",
+      "excess_dir": -0.0583,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "SBUX|2026-10-08",
+      "excess_dir": -0.0475,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "CMCSA|2026-10-08",
+      "excess_dir": -0.0479,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "NKE|2026-10-08",
+      "excess_dir": -0.0798,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "UBER|2026-10-08",
+      "excess_dir": -0.0204,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "HON|2026-10-08",
+      "excess_dir": -0.0246,
+      "h": 5,
+      "correct": true
+     }
+    ]
+   },
+   "grok": {
+    "n_shorts_seen": 47,
+    "share_any_warning": 0.17,
+    "share_strong": 0.043,
+    "levels_counted": [
+     "strong",
+     "weak"
+    ],
+    "n": 3,
+    "hits": 1,
+    "shrunk_hit": 0.4848,
+    "weight": 0.0,
+    "penalty_pts": 0.0,
+    "warnings": [
+     {
+      "key": "ORCL|2026-10-12",
+      "excess_dir": 0.0325,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "AVGO|2026-10-19",
+      "excess_dir": 0.0138,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "UBER|2026-10-08",
+      "excess_dir": -0.0204,
+      "h": 5,
+      "correct": true
+     }
+    ]
+   },
+   "pplx": {
+    "n_shorts_seen": 47,
+    "share_any_warning": 0.574,
+    "share_strong": 0.0,
+    "levels_counted": [
+     "strong",
+     "weak"
+    ],
+    "n": 18,
+    "hits": 11,
+    "shrunk_hit": 0.5417,
+    "weight": 0.0833,
+    "penalty_pts": 0.83,
+    "warnings": [
+     {
+      "key": "ORCL|2026-10-12",
+      "excess_dir": 0.0325,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "CMCSA|2026-10-12",
+      "excess_dir": -0.0633,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "T|2026-10-12",
+      "excess_dir": -0.0557,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "ORCL|2026-10-19",
+      "excess_dir": 0.0184,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "UBER|2026-10-19",
+      "excess_dir": 0.0411,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "SCHW|2026-10-19",
+      "excess_dir": -0.0021,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "BAC|2026-10-19",
+      "excess_dir": -0.0074,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "GS|2026-10-19",
+      "excess_dir": -0.0269,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "MS|2026-10-19",
+      "excess_dir": -0.0343,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "C|2026-10-19",
+      "excess_dir": 0.0006,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "CAT|2026-10-19",
+      "excess_dir": 0.0259,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "KLAC|2026-10-19",
+      "excess_dir": 0.0926,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "AMAT|2026-10-19",
+      "excess_dir": 0.0437,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "TSLA|2026-10-19",
+      "excess_dir": -0.0583,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "SBUX|2026-10-08",
+      "excess_dir": -0.0475,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "CMCSA|2026-10-08",
+      "excess_dir": -0.0479,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "UBER|2026-10-08",
+      "excess_dir": -0.0204,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "HON|2026-10-08",
+      "excess_dir": -0.0246,
+      "h": 5,
+      "correct": true
+     }
+    ]
+   },
+   "claude": {
+    "n_shorts_seen": 47,
+    "share_any_warning": 0.213,
+    "share_strong": 0.213,
+    "levels_counted": [
+     "strong",
+     "weak"
+    ],
+    "n": 7,
+    "hits": 3,
+    "shrunk_hit": 0.4865,
+    "weight": 0.0,
+    "penalty_pts": 0.0,
+    "warnings": [
+     {
+      "key": "UBER|2026-10-19",
+      "excess_dir": 0.0411,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "GS|2026-10-19",
+      "excess_dir": -0.0269,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "MS|2026-10-19",
+      "excess_dir": -0.0343,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "CAT|2026-10-19",
+      "excess_dir": 0.0259,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "KLAC|2026-10-19",
+      "excess_dir": 0.0926,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "AMAT|2026-10-19",
+      "excess_dir": 0.0437,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "TSLA|2026-10-19",
+      "excess_dir": -0.0583,
+      "h": 5,
+      "correct": true
+     }
+    ]
+   },
+   "jev": {
+    "n_shorts_seen": 47,
+    "share_any_warning": 0.106,
+    "share_strong": 0.106,
+    "levels_counted": [
+     "strong",
+     "weak"
+    ],
+    "n": 4,
+    "hits": 2,
+    "shrunk_hit": 0.5,
+    "weight": 0.0,
+    "penalty_pts": 0.0,
+    "warnings": [
+     {
+      "key": "C|2026-10-19",
+      "excess_dir": 0.0006,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "AMAT|2026-10-19",
+      "excess_dir": 0.0437,
+      "h": 5,
+      "correct": false
+     },
+     {
+      "key": "UBER|2026-10-08",
+      "excess_dir": -0.0204,
+      "h": 5,
+      "correct": true
+     },
+     {
+      "key": "HON|2026-10-08",
+      "excess_dir": -0.0246,
+      "h": 5,
+      "correct": true
+     }
+    ]
+   }
+  }
+ },
+ "veto_blocked": {}
+}
