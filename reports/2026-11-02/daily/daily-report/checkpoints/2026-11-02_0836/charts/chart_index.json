@@ -1,0 +1,4826 @@
+[
+ {
+  "symbol": "ORCL",
+  "direction": "SHORT",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/ORCL_short.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/ORCL.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 128.23,
+   "stop": 151.0962,
+   "target": null,
+   "fib_v2": {
+    "origin": 153.034,
+    "end": 131.0951,
+    "0 (end)": 131.0951,
+    "1 (origin)": 153.034,
+    "0.382": 139.4758,
+    "0.5": 142.0646,
+    "0.618": 144.6534,
+    "0.786": 148.3391,
+    "1.272": 125.1278,
+    "1.618": 117.5369
+   },
+   "fib_v1": {
+    "origin": 146.3985,
+    "end": 122.76,
+    "0 (end)": 122.76,
+    "1 (origin)": 146.3985,
+    "0.382": 131.7899,
+    "0.5": 134.5793,
+    "0.618": 137.3686,
+    "0.786": 141.3399,
+    "1.272": 116.3303,
+    "1.618": 108.1514
+   },
+   "vp120": {
+    "poc": 142.299,
+    "vah": 154.3937,
+    "val": 119.4535
+   },
+   "sr": [
+    {
+     "price": 115.6662,
+     "tf": "W",
+     "strength": 3.826,
+     "side": "support"
+    },
+    {
+     "price": 122.76,
+     "tf": "D",
+     "strength": 1.641,
+     "side": "support"
+    },
+    {
+     "price": 132.7941,
+     "tf": "W",
+     "strength": 10.575,
+     "side": "resistance"
+    },
+    {
+     "price": 137.6493,
+     "tf": "D",
+     "strength": 5.951,
+     "side": "resistance"
+    },
+    {
+     "price": 148.3121,
+     "tf": "D",
+     "strength": 6.862,
+     "side": "resistance"
+    },
+    {
+     "price": 160.3289,
+     "tf": "W",
+     "strength": 9.682,
+     "side": "resistance"
+    },
+    {
+     "price": 172.5147,
+     "tf": "D",
+     "strength": 6.041,
+     "side": "resistance"
+    }
+   ],
+   "elliott_v2": [],
+   "elliott_v2_other_view": "W2 in progress (provisional)",
+   "elliott_v1": [],
+   "tentative": {
+    "kind": "L",
+    "price": 129.0,
+    "date": "2026-10-30"
+   },
+   "zigzag_pivots": 18,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-04-30",
+     "volume": 167236200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-07",
+     "volume": 142808400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-12",
+     "volume": 60172300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-14",
+     "volume": 38334300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-20",
+     "volume": 68096300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-01",
+     "volume": 162789700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-28",
+     "volume": 1367811900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-13",
+     "volume": 389076900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-19",
+     "volume": 88278700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-28",
+     "volume": 128784900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-02",
+     "volume": 63468900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-08",
+     "volume": 89275800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-16",
+     "volume": 272806700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-22",
+     "volume": 120745600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-28",
+     "volume": 139042800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-06",
+     "volume": 167010900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-22",
+     "volume": 364995800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-28",
+     "volume": 150192400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 80343200.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-04-30",
+     "volume": 167236200.0
+    },
+    {
+     "end_date": "2026-05-08",
+     "volume": 163966700.0
+    },
+    {
+     "end_date": "2026-05-12",
+     "volume": 39014000.0
+    },
+    {
+     "end_date": "2026-05-14",
+     "volume": 38334300.0
+    },
+    {
+     "end_date": "2026-05-19",
+     "volume": 51579100.0
+    },
+    {
+     "end_date": "2026-06-01",
+     "volume": 179306900.0
+    },
+    {
+     "end_date": "2026-06-11",
+     "volume": 256007900.0
+    },
+    {
+     "end_date": "2026-06-15",
+     "volume": 49842200.0
+    },
+    {
+     "end_date": "2026-07-14",
+     "volume": 686217100.0
+    },
+    {
+     "end_date": "2026-07-15",
+     "volume": 48520400.0
+    },
+    {
+     "end_date": "2026-07-20",
+     "volume": 131491200.0
+    },
+    {
+     "end_date": "2026-07-21",
+     "volume": 27748100.0
+    },
+    {
+     "end_date": "2026-07-24",
+     "volume": 98403000.0
+    },
+    {
+     "end_date": "2026-08-10",
+     "volume": 360597700.0
+    },
+    {
+     "end_date": "2026-08-11",
+     "volume": 28761800.0
+    },
+    {
+     "end_date": "2026-08-13",
+     "volume": 69299400.0
+    },
+    {
+     "end_date": "2026-08-20",
+     "volume": 103463100.0
+    },
+    {
+     "end_date": "2026-08-27",
+     "volume": 95800500.0
+    },
+    {
+     "end_date": "2026-09-01",
+     "volume": 59362200.0
+    },
+    {
+     "end_date": "2026-09-08",
+     "volume": 111182500.0
+    },
+    {
+     "end_date": "2026-09-15",
+     "volume": 238440300.0
+    },
+    {
+     "end_date": "2026-09-17",
+     "volume": 62108800.0
+    },
+    {
+     "end_date": "2026-09-28",
+     "volume": 232046000.0
+    },
+    {
+     "end_date": "2026-10-06",
+     "volume": 167010900.0
+    },
+    {
+     "end_date": "2026-10-08",
+     "volume": 58152000.0
+    },
+    {
+     "end_date": "2026-10-13",
+     "volume": 73388800.0
+    },
+    {
+     "end_date": "2026-10-14",
+     "volume": 52513600.0
+    },
+    {
+     "end_date": "2026-10-15",
+     "volume": 31382100.0
+    },
+    {
+     "end_date": "2026-10-22",
+     "volume": 149559300.0
+    },
+    {
+     "end_date": "2026-10-28",
+     "volume": 150192400.0
+    }
+   ],
+   "divergences": [
+    {
+     "indicator": "rsi14",
+     "type": "regular_bullish",
+     "p1": {
+      "date": "2026-09-28",
+      "price": 131.0951,
+      "value": 37.276
+     },
+     "p2": {
+      "date": "2026-10-22",
+      "price": 122.76,
+      "value": 38.677
+     }
+    }
+   ],
+   "off_chart": [],
+   "notes": [
+    "Fib v1 leg stale (origin 146.40 broken) -> v2 re-anchored 2026-09-22..2026-09-28",
+    "SHORT: no fixed target - 4xATR14 chandelier on close (approved rule)"
+   ],
+   "reference_lines": [],
+   "elliott_v2_label": "no valid count",
+   "elliott_v1_label": "no valid count"
+  }
+ },
+ {
+  "symbol": "MRK",
+  "direction": "LONG",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/MRK_long.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/MRK.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 145.95,
+   "stop": 134.2164,
+   "target": 160.5225,
+   "fib_v2": {
+    "origin": 138.8,
+    "end": 152.34,
+    "0 (end)": 152.34,
+    "1 (origin)": 138.8,
+    "0.382": 147.1677,
+    "0.5": 145.57,
+    "0.618": 143.9723,
+    "0.786": 141.6976,
+    "1.272": 156.0229,
+    "1.618": 160.7077
+   },
+   "fib_v1": {
+    "origin": 143.53,
+    "end": 154.02,
+    "0 (end)": 154.02,
+    "1 (origin)": 143.53,
+    "0.382": 150.0128,
+    "0.5": 148.775,
+    "0.618": 147.5372,
+    "0.786": 145.7749,
+    "1.272": 156.8733,
+    "1.618": 160.5028
+   },
+   "vp120": {
+    "poc": 147.1646,
+    "vah": 155.9992,
+    "val": 123.4508
+   },
+   "sr": [
+    {
+     "price": 113.9585,
+     "tf": "D",
+     "strength": 1.214,
+     "side": "support"
+    },
+    {
+     "price": 121.3608,
+     "tf": "W",
+     "strength": 8.109,
+     "side": "support"
+    },
+    {
+     "price": 124.7288,
+     "tf": "D",
+     "strength": 1.386,
+     "side": "support"
+    },
+    {
+     "price": 130.2462,
+     "tf": "D",
+     "strength": 1.495,
+     "side": "support"
+    },
+    {
+     "price": 140.5031,
+     "tf": "W",
+     "strength": 4.615,
+     "side": "support"
+    },
+    {
+     "price": 153.9978,
+     "tf": "W",
+     "strength": 8.084,
+     "side": "resistance"
+    }
+   ],
+   "elliott_v2": [
+    {
+     "label": "0",
+     "date": "2026-10-05",
+     "price": 138.8,
+     "provisional": false
+    },
+    {
+     "label": "1",
+     "date": "2026-10-15",
+     "price": 152.34,
+     "provisional": false
+    },
+    {
+     "label": "A",
+     "date": "2026-10-19",
+     "price": 143.53,
+     "provisional": false
+    },
+    {
+     "label": "B",
+     "date": "2026-10-22",
+     "price": 154.02,
+     "provisional": false
+    },
+    {
+     "label": "C",
+     "date": "2026-10-28",
+     "price": 139.21,
+     "provisional": false
+    }
+   ],
+   "elliott_v2_other_view": "W2 in progress (provisional)",
+   "elliott_v1": [],
+   "tentative": {
+    "kind": "H",
+    "price": 151.35,
+    "date": "2026-10-30"
+   },
+   "zigzag_pivots": 19,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-04-29",
+     "volume": 131944300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-26",
+     "volume": 162150000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-01",
+     "volume": 42423900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-05",
+     "volume": 48437700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-18",
+     "volume": 122433200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-30",
+     "volume": 85825700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-14",
+     "volume": 76700100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-17",
+     "volume": 35565300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-21",
+     "volume": 15073800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-28",
+     "volume": 39648100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-04",
+     "volume": 46080100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-25",
+     "volume": 176218000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-15",
+     "volume": 117727700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-22",
+     "volume": 68612000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-05",
+     "volume": 81421500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-15",
+     "volume": 72179300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-19",
+     "volume": 21680700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-22",
+     "volume": 37955000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-28",
+     "volume": 38780400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 25789000.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-04-30",
+     "volume": 85277600.0
+    },
+    {
+     "end_date": "2026-05-22",
+     "volume": 135010100.0
+    },
+    {
+     "end_date": "2026-06-03",
+     "volume": 68969200.0
+    },
+    {
+     "end_date": "2026-06-05",
+     "volume": 31901100.0
+    },
+    {
+     "end_date": "2026-06-18",
+     "volume": 122433200.0
+    },
+    {
+     "end_date": "2026-06-29",
+     "volume": 73988500.0
+    },
+    {
+     "end_date": "2026-07-01",
+     "volume": 22598700.0
+    },
+    {
+     "end_date": "2026-07-02",
+     "volume": 7832200.0
+    },
+    {
+     "end_date": "2026-07-14",
+     "volume": 58106400.0
+    },
+    {
+     "end_date": "2026-07-28",
+     "volume": 90287200.0
+    },
+    {
+     "end_date": "2026-08-03",
+     "volume": 34263200.0
+    },
+    {
+     "end_date": "2026-08-25",
+     "volume": 188034900.0
+    },
+    {
+     "end_date": "2026-08-31",
+     "volume": 36341900.0
+    },
+    {
+     "end_date": "2026-09-03",
+     "volume": 25333100.0
+    },
+    {
+     "end_date": "2026-09-11",
+     "volume": 40348600.0
+    },
+    {
+     "end_date": "2026-09-22",
+     "volume": 84316100.0
+    },
+    {
+     "end_date": "2026-10-05",
+     "volume": 81421500.0
+    },
+    {
+     "end_date": "2026-10-21",
+     "volume": 112790400.0
+    },
+    {
+     "end_date": "2026-10-26",
+     "volume": 40507600.0
+    }
+   ],
+   "divergences": [],
+   "off_chart": [],
+   "notes": [
+    "Fib v1 leg stale (origin 143.53 broken) -> v2 re-anchored 2026-10-05..2026-10-15"
+   ],
+   "reference_lines": [],
+   "elliott_v2_label": "W2 correction expanded flat: C done -> W3 may start",
+   "elliott_v1_label": "no valid count"
+  }
+ },
+ {
+  "symbol": "LLY",
+  "direction": "LONG",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/LLY_long.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/LLY.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 1257.03,
+   "stop": 1237.901,
+   "target": 1319.8414,
+   "fib_v2": {
+    "origin": 1113.29,
+    "end": 1215.0,
+    "0 (end)": 1215.0,
+    "1 (origin)": 1113.29,
+    "0.382": 1176.1468,
+    "0.5": 1164.145,
+    "0.618": 1152.1432,
+    "0.786": 1135.056,
+    "1.272": 1242.6651,
+    "1.618": 1277.8568
+   },
+   "fib_v1": {
+    "origin": 1136.66,
+    "end": 1206.63,
+    "0 (end)": 1206.63,
+    "1 (origin)": 1136.66,
+    "0.382": 1179.9015,
+    "0.5": 1171.645,
+    "0.618": 1163.3886,
+    "0.786": 1151.6336,
+    "1.272": 1225.6618,
+    "1.618": 1249.8714
+   },
+   "vp120": {
+    "poc": 1155.9307,
+    "vah": 1237.7953,
+    "val": 1102.9595
+   },
+   "sr": [
+    {
+     "price": 1064.8642,
+     "tf": "D",
+     "strength": 2.734,
+     "side": "support"
+    },
+    {
+     "price": 1109.2213,
+     "tf": "W",
+     "strength": 10.693,
+     "side": "support"
+    },
+    {
+     "price": 1142.3088,
+     "tf": "D",
+     "strength": 4.778,
+     "side": "support"
+    },
+    {
+     "price": 1200.1144,
+     "tf": "D",
+     "strength": 3.291,
+     "side": "support"
+    },
+    {
+     "price": 1243.3636,
+     "tf": "W",
+     "strength": 4.165,
+     "side": "support"
+    }
+   ],
+   "elliott_v2": [
+    {
+     "label": "0",
+     "date": "2026-09-11",
+     "price": 1113.29,
+     "provisional": false
+    },
+    {
+     "label": "1",
+     "date": "2026-09-30",
+     "price": 1215.0,
+     "provisional": false
+    },
+    {
+     "label": "A",
+     "date": "2026-10-02",
+     "price": 1136.66,
+     "provisional": false
+    },
+    {
+     "label": "B",
+     "date": "2026-10-07",
+     "price": 1206.63,
+     "provisional": false
+    },
+    {
+     "label": "C",
+     "date": "2026-10-08",
+     "price": 1131.21,
+     "provisional": false
+    }
+   ],
+   "elliott_v2_other_view": "W3 done (in W4)",
+   "elliott_v1": [],
+   "tentative": {
+    "kind": "H",
+    "price": 1449.6801,
+    "date": "2026-10-30"
+   },
+   "zigzag_pivots": 15,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-04-29",
+     "volume": 39177900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-28",
+     "volume": 69981900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-02",
+     "volume": 9702700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-08",
+     "volume": 15332900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-23",
+     "volume": 30338900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-07",
+     "volume": 32098600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-15",
+     "volume": 13974700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-28",
+     "volume": 19702000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-03",
+     "volume": 11017200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-19",
+     "volume": 36990200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-11",
+     "volume": 38175000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-30",
+     "volume": 30390900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-02",
+     "volume": 4224800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-07",
+     "volume": 6411100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-08",
+     "volume": 3090500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 41174400.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-04-29",
+     "volume": 41136800.0
+    },
+    {
+     "end_date": "2026-05-05",
+     "volume": 19241500.0
+    },
+    {
+     "end_date": "2026-05-08",
+     "volume": 10975300.0
+    },
+    {
+     "end_date": "2026-05-28",
+     "volume": 39765100.0
+    },
+    {
+     "end_date": "2026-06-02",
+     "volume": 9702700.0
+    },
+    {
+     "end_date": "2026-06-11",
+     "volume": 24620400.0
+    },
+    {
+     "end_date": "2026-06-18",
+     "volume": 14720100.0
+    },
+    {
+     "end_date": "2026-06-29",
+     "volume": 23407200.0
+    },
+    {
+     "end_date": "2026-07-01",
+     "volume": 6444000.0
+    },
+    {
+     "end_date": "2026-07-07",
+     "volume": 8578700.0
+    },
+    {
+     "end_date": "2026-07-20",
+     "volume": 22167500.0
+    },
+    {
+     "end_date": "2026-07-28",
+     "volume": 11509200.0
+    },
+    {
+     "end_date": "2026-08-04",
+     "volume": 15114400.0
+    },
+    {
+     "end_date": "2026-08-10",
+     "volume": 15778500.0
+    },
+    {
+     "end_date": "2026-08-14",
+     "volume": 8256600.0
+    },
+    {
+     "end_date": "2026-08-19",
+     "volume": 8857900.0
+    },
+    {
+     "end_date": "2026-09-11",
+     "volume": 38175000.0
+    },
+    {
+     "end_date": "2026-09-28",
+     "volume": 25325100.0
+    },
+    {
+     "end_date": "2026-10-02",
+     "volume": 9290600.0
+    }
+   ],
+   "divergences": [
+    {
+     "indicator": "rsi14",
+     "type": "hidden_bearish",
+     "p1": {
+      "date": "2026-09-30",
+      "price": 1215.0,
+      "value": 47.043
+     },
+     "p2": {
+      "date": "2026-10-07",
+      "price": 1206.63,
+      "value": 57.705
+     }
+    },
+    {
+     "indicator": "rsi14",
+     "type": "regular_bullish",
+     "p1": {
+      "date": "2026-10-02",
+      "price": 1136.66,
+      "value": 43.049
+     },
+     "p2": {
+      "date": "2026-10-08",
+      "price": 1131.21,
+      "value": 51.602
+     }
+    },
+    {
+     "indicator": "cci20",
+     "type": "hidden_bearish",
+     "p1": {
+      "date": "2026-09-30",
+      "price": 1215.0,
+      "value": 88.445
+     },
+     "p2": {
+      "date": "2026-10-07",
+      "price": 1206.63,
+      "value": 130.516
+     }
+    },
+    {
+     "indicator": "cci20",
+     "type": "regular_bullish",
+     "p1": {
+      "date": "2026-10-02",
+      "price": 1136.66,
+      "value": -17.536
+     },
+     "p2": {
+      "date": "2026-10-08",
+      "price": 1131.21,
+      "value": 16.021
+     }
+    }
+   ],
+   "off_chart": [],
+   "notes": [
+    "Fib v1 leg stale (origin 1,136.66 broken) -> v2 re-anchored 2026-09-11..2026-09-30"
+   ],
+   "reference_lines": [],
+   "elliott_v2_label": "W2 correction zigzag: C done -> W3 may start",
+   "elliott_v1_label": "no valid count"
+  }
+ },
+ {
+  "symbol": "ABNB",
+  "direction": "LONG",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/ABNB_long.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/ABNB.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 173.7,
+   "stop": 159.7591,
+   "target": 229.132,
+   "fib_v2": {},
+   "fib_v1": {
+    "origin": 149.0,
+    "end": 179.13,
+    "0 (end)": 179.13,
+    "1 (origin)": 149.0,
+    "0.382": 167.6203,
+    "0.5": 164.065,
+    "0.618": 160.5097,
+    "0.786": 155.4478,
+    "1.272": 187.3254,
+    "1.618": 197.7503
+   },
+   "vp120": {
+    "poc": 133.1901,
+    "vah": 172.2616,
+    "val": 129.8789
+   },
+   "sr": [
+    {
+     "price": 131.2917,
+     "tf": "D",
+     "strength": 0.694,
+     "side": "support"
+    },
+    {
+     "price": 136.03,
+     "tf": "D",
+     "strength": 3.498,
+     "side": "support"
+    },
+    {
+     "price": 139.4213,
+     "tf": "W",
+     "strength": 7.402,
+     "side": "support"
+    },
+    {
+     "price": 143.66,
+     "tf": "D",
+     "strength": 0.915,
+     "side": "support"
+    },
+    {
+     "price": 148.5585,
+     "tf": "W",
+     "strength": 9.523,
+     "side": "support"
+    },
+    {
+     "price": 165.0648,
+     "tf": "W",
+     "strength": 1.946,
+     "side": "resistance"
+    },
+    {
+     "price": 169.6,
+     "tf": "D",
+     "strength": 1.035,
+     "side": "resistance"
+    },
+    {
+     "price": 178.985,
+     "tf": "D",
+     "strength": 1.336,
+     "side": "resistance"
+    },
+    {
+     "price": 187.12,
+     "tf": "D",
+     "strength": 1.424,
+     "side": "resistance"
+    },
+    {
+     "price": 193.453,
+     "tf": "W",
+     "strength": 2.712,
+     "side": "resistance"
+    }
+   ],
+   "elliott_v2": [
+    {
+     "label": "0",
+     "date": "2026-09-23",
+     "price": 149.0,
+     "provisional": false
+    },
+    {
+     "label": "1",
+     "date": "2026-10-20",
+     "price": 179.13,
+     "provisional": false
+    },
+    {
+     "label": "2",
+     "date": "2026-10-30",
+     "price": 164.1,
+     "provisional": true
+    }
+   ],
+   "elliott_v2_other_view": "W2 correction zigzag: B in progress (provisional)",
+   "elliott_v1": [],
+   "tentative": {
+    "kind": "L",
+    "price": 164.1,
+    "date": "2026-10-30"
+   },
+   "zigzag_pivots": 10,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-04-29",
+     "volume": 15858600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-08",
+     "volume": 31134600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-20",
+     "volume": 32573900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-01",
+     "volume": 26190400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-11",
+     "volume": 29281400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-16",
+     "volume": 86045800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-23",
+     "volume": 16976100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-24",
+     "volume": 116245100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-23",
+     "volume": 102959700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-20",
+     "volume": 76202500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 23823700.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-05-19",
+     "volume": 73018600.0
+    },
+    {
+     "end_date": "2026-06-01",
+     "volume": 32738900.0
+    },
+    {
+     "end_date": "2026-06-10",
+     "volume": 25326200.0
+    },
+    {
+     "end_date": "2026-07-02",
+     "volume": 61746800.0
+    },
+    {
+     "end_date": "2026-07-08",
+     "volume": 7827200.0
+    },
+    {
+     "end_date": "2026-07-10",
+     "volume": 6103700.0
+    },
+    {
+     "end_date": "2026-07-23",
+     "volume": 31299400.0
+    },
+    {
+     "end_date": "2026-08-13",
+     "volume": 83882400.0
+    },
+    {
+     "end_date": "2026-08-17",
+     "volume": 7708600.0
+    },
+    {
+     "end_date": "2026-08-25",
+     "volume": 29158600.0
+    },
+    {
+     "end_date": "2026-09-23",
+     "volume": 98455200.0
+    },
+    {
+     "end_date": "2026-10-20",
+     "volume": 76202500.0
+    }
+   ],
+   "divergences": [
+    {
+     "indicator": "rsi14",
+     "type": "hidden_bullish",
+     "p1": {
+      "date": "2026-07-23",
+      "price": 135.72,
+      "value": 40.338
+     },
+     "p2": {
+      "date": "2026-09-23",
+      "price": 149.0,
+      "value": 26.493
+     }
+    },
+    {
+     "indicator": "cci20",
+     "type": "hidden_bearish",
+     "p1": {
+      "date": "2026-08-24",
+      "price": 193.453,
+      "value": 87.256
+     },
+     "p2": {
+      "date": "2026-10-20",
+      "price": 179.13,
+      "value": 175.905
+     }
+    }
+   ],
+   "off_chart": [],
+   "notes": [],
+   "reference_lines": [],
+   "elliott_v2_label": "W2 in progress (provisional)",
+   "elliott_v1_label": "no valid count"
+  }
+ },
+ {
+  "symbol": "AVGO",
+  "direction": "SHORT",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/AVGO_short.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/AVGO.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 328.75,
+   "stop": 366.4719,
+   "target": null,
+   "fib_v2": {},
+   "fib_v1": {
+    "origin": 380.84,
+    "end": 320.23,
+    "0 (end)": 320.23,
+    "1 (origin)": 380.84,
+    "0.382": 343.383,
+    "0.5": 350.535,
+    "0.618": 357.687,
+    "0.786": 367.8695,
+    "1.272": 303.7441,
+    "1.618": 282.773
+   },
+   "vp120": {
+    "poc": 362.8049,
+    "vah": 399.349,
+    "val": 336.7019
+   },
+   "sr": [
+    {
+     "price": 291.7173,
+     "tf": "W",
+     "strength": 4.508,
+     "side": "support"
+    },
+    {
+     "price": 309.4441,
+     "tf": "D",
+     "strength": 2.223,
+     "side": "support"
+    },
+    {
+     "price": 324.0116,
+     "tf": "W",
+     "strength": 9.871,
+     "side": "support"
+    },
+    {
+     "price": 338.4968,
+     "tf": "D",
+     "strength": 6.087,
+     "side": "resistance"
+    },
+    {
+     "price": 354.1722,
+     "tf": "D",
+     "strength": 6.371,
+     "side": "resistance"
+    },
+    {
+     "price": 367.2575,
+     "tf": "W",
+     "strength": 11.324,
+     "side": "resistance"
+    },
+    {
+     "price": 401.5442,
+     "tf": "D",
+     "strength": 3.559,
+     "side": "resistance"
+    },
+    {
+     "price": 419.1266,
+     "tf": "W",
+     "strength": 3.776,
+     "side": "resistance"
+    }
+   ],
+   "elliott_v2": [
+    {
+     "label": "0",
+     "date": "2026-10-06",
+     "price": 380.84,
+     "provisional": false
+    },
+    {
+     "label": "1",
+     "date": "2026-10-23",
+     "price": 320.23,
+     "provisional": false
+    },
+    {
+     "label": "2",
+     "date": "2026-10-28",
+     "price": 352.4,
+     "provisional": false
+    },
+    {
+     "label": "3",
+     "date": "2026-10-30",
+     "price": 319.3,
+     "provisional": true
+    }
+   ],
+   "elliott_v2_other_view": "no valid count",
+   "elliott_v1": [
+    {
+     "label": "0",
+     "date": "2026-10-06",
+     "price": 380.84
+    },
+    {
+     "label": "1",
+     "date": "2026-10-23",
+     "price": 320.23
+    },
+    {
+     "label": "2",
+     "date": "2026-10-28",
+     "price": 352.4
+    }
+   ],
+   "tentative": {
+    "kind": "L",
+    "price": 319.3,
+    "date": "2026-10-30"
+   },
+   "zigzag_pivots": 20,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-04-28",
+     "volume": 65461900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-06",
+     "volume": 106689300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-13",
+     "volume": 98164100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-14",
+     "volume": 19733800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-19",
+     "volume": 57472500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-03",
+     "volume": 266101300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-09",
+     "volume": 206251400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-22",
+     "volume": 276435200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-02",
+     "volume": 224518600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-09",
+     "volume": 108358800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-17",
+     "volume": 119012600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-10",
+     "volume": 290631200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-03",
+     "volume": 422423700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-08",
+     "volume": 63328200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-16",
+     "volume": 151678600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-22",
+     "volume": 115491800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-01",
+     "volume": 145623700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-06",
+     "volume": 76955500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-23",
+     "volume": 271650500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-28",
+     "volume": 66932100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 53515000.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-04-28",
+     "volume": 42970800.0
+    },
+    {
+     "end_date": "2026-05-05",
+     "volume": 85982300.0
+    },
+    {
+     "end_date": "2026-05-07",
+     "volume": 43498700.0
+    },
+    {
+     "end_date": "2026-05-08",
+     "volume": 22561400.0
+    },
+    {
+     "end_date": "2026-05-13",
+     "volume": 52811000.0
+    },
+    {
+     "end_date": "2026-05-14",
+     "volume": 19733800.0
+    },
+    {
+     "end_date": "2026-05-19",
+     "volume": 57472500.0
+    },
+    {
+     "end_date": "2026-06-02",
+     "volume": 215974900.0
+    },
+    {
+     "end_date": "2026-06-10",
+     "volume": 294571300.0
+    },
+    {
+     "end_date": "2026-06-15",
+     "volume": 95182700.0
+    },
+    {
+     "end_date": "2026-06-16",
+     "volume": 31573700.0
+    },
+    {
+     "end_date": "2026-06-18",
+     "volume": 85081600.0
+    },
+    {
+     "end_date": "2026-06-26",
+     "volume": 147657600.0
+    },
+    {
+     "end_date": "2026-06-30",
+     "volume": 52802600.0
+    },
+    {
+     "end_date": "2026-07-02",
+     "volume": 50462100.0
+    },
+    {
+     "end_date": "2026-07-09",
+     "volume": 108358800.0
+    },
+    {
+     "end_date": "2026-07-17",
+     "volume": 119012600.0
+    },
+    {
+     "end_date": "2026-07-22",
+     "volume": 48677800.0
+    },
+    {
+     "end_date": "2026-07-29",
+     "volume": 91703000.0
+    },
+    {
+     "end_date": "2026-08-07",
+     "volume": 136396300.0
+    },
+    {
+     "end_date": "2026-08-26",
+     "volume": 257997600.0
+    },
+    {
+     "end_date": "2026-08-27",
+     "volume": 21330000.0
+    },
+    {
+     "end_date": "2026-09-03",
+     "volume": 156950200.0
+    },
+    {
+     "end_date": "2026-09-08",
+     "volume": 63328200.0
+    },
+    {
+     "end_date": "2026-09-15",
+     "volume": 128526100.0
+    },
+    {
+     "end_date": "2026-09-22",
+     "volume": 138644300.0
+    },
+    {
+     "end_date": "2026-10-01",
+     "volume": 145623700.0
+    },
+    {
+     "end_date": "2026-10-07",
+     "volume": 95001600.0
+    },
+    {
+     "end_date": "2026-10-23",
+     "volume": 253604400.0
+    },
+    {
+     "end_date": "2026-10-28",
+     "volume": 66932100.0
+    }
+   ],
+   "divergences": [],
+   "off_chart": [
+    "SR 245.1861",
+    "SR 264.0755"
+   ],
+   "notes": [
+    "SHORT: no fixed target - 4xATR14 chandelier on close (approved rule)"
+   ],
+   "reference_lines": [],
+   "elliott_v2_label": "W3 in progress (provisional)",
+   "elliott_v1_label": "in_W3 (W2 done)"
+  }
+ },
+ {
+  "symbol": "NFLX",
+  "direction": "SHORT",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/NFLX_short.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/NFLX.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 65.85,
+   "stop": 69.8047,
+   "target": null,
+   "fib_v2": {},
+   "fib_v1": {
+    "origin": 81.02,
+    "end": 66.54,
+    "0 (end)": 66.54,
+    "1 (origin)": 81.02,
+    "0.382": 72.0714,
+    "0.5": 73.78,
+    "0.618": 75.4886,
+    "0.786": 77.9213,
+    "1.272": 62.6014,
+    "1.618": 57.5914
+   },
+   "vp120": {
+    "poc": 73.1251,
+    "vah": 80.0458,
+    "val": 65.0008
+   },
+   "sr": [
+    {
+     "price": 65.08,
+     "tf": "W",
+     "strength": 4.233,
+     "side": "resistance"
+    },
+    {
+     "price": 66.54,
+     "tf": "D",
+     "strength": 0.914,
+     "side": "resistance"
+    },
+    {
+     "price": 70.485,
+     "tf": "D",
+     "strength": 3.289,
+     "side": "resistance"
+    },
+    {
+     "price": 72.9789,
+     "tf": "W",
+     "strength": 8.091,
+     "side": "resistance"
+    },
+    {
+     "price": 75.09,
+     "tf": "D",
+     "strength": 1.592,
+     "side": "resistance"
+    }
+   ],
+   "elliott_v2": [
+    {
+     "label": "0",
+     "date": "2026-09-14",
+     "price": 81.02,
+     "provisional": false
+    },
+    {
+     "label": "1",
+     "date": "2026-10-05",
+     "price": 66.54,
+     "provisional": false
+    },
+    {
+     "label": "2",
+     "date": "2026-10-15",
+     "price": 73.07,
+     "provisional": false
+    },
+    {
+     "label": "3",
+     "date": "2026-10-29",
+     "price": 61.39,
+     "provisional": true
+    }
+   ],
+   "elliott_v2_other_view": "no valid count",
+   "elliott_v1": [
+    {
+     "label": "0",
+     "date": "2026-09-14",
+     "price": 81.02
+    },
+    {
+     "label": "1",
+     "date": "2026-10-05",
+     "price": 66.54
+    },
+    {
+     "label": "2",
+     "date": "2026-10-15",
+     "price": 73.07
+    }
+   ],
+   "tentative": {
+    "kind": "L",
+    "price": 61.39,
+    "date": "2026-10-29"
+   },
+   "zigzag_pivots": 12,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-05-11",
+     "volume": 742117700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-19",
+     "volume": 206470300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-25",
+     "volume": 1038406200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-29",
+     "volume": 117419900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-30",
+     "volume": 49240900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-02",
+     "volume": 99298300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-17",
+     "volume": 516509600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-03",
+     "volume": 1145098100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-10",
+     "volume": 116884100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-14",
+     "volume": 53182900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-05",
+     "volume": 582950500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-15",
+     "volume": 273118200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 585851400.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-05-11",
+     "volume": 742117700.0
+    },
+    {
+     "end_date": "2026-05-18",
+     "volume": 171924600.0
+    },
+    {
+     "end_date": "2026-06-25",
+     "volume": 1072951900.0
+    },
+    {
+     "end_date": "2026-06-26",
+     "volume": 74990300.0
+    },
+    {
+     "end_date": "2026-06-30",
+     "volume": 91670500.0
+    },
+    {
+     "end_date": "2026-07-02",
+     "volume": 99298300.0
+    },
+    {
+     "end_date": "2026-07-20",
+     "volume": 577178700.0
+    },
+    {
+     "end_date": "2026-09-02",
+     "volume": 1060422600.0
+    },
+    {
+     "end_date": "2026-09-10",
+     "volume": 140890500.0
+    },
+    {
+     "end_date": "2026-09-14",
+     "volume": 53182900.0
+    },
+    {
+     "end_date": "2026-10-02",
+     "volume": 546130300.0
+    },
+    {
+     "end_date": "2026-10-15",
+     "volume": 309938400.0
+    },
+    {
+     "end_date": "2026-10-21",
+     "volume": 246546300.0
+    },
+    {
+     "end_date": "2026-10-22",
+     "volume": 58748800.0
+    }
+   ],
+   "divergences": [
+    {
+     "indicator": "cci20",
+     "type": "hidden_bearish",
+     "p1": {
+      "date": "2026-09-14",
+      "price": 81.02,
+      "value": 15.745
+     },
+     "p2": {
+      "date": "2026-10-15",
+      "price": 73.07,
+      "value": 99.026
+     }
+    },
+    {
+     "indicator": "cci20",
+     "type": "regular_bullish",
+     "p1": {
+      "date": "2026-09-10",
+      "price": 75.03,
+      "value": -140.467
+     },
+     "p2": {
+      "date": "2026-10-05",
+      "price": 66.54,
+      "value": -122.039
+     }
+    }
+   ],
+   "off_chart": [],
+   "notes": [
+    "SHORT: no fixed target - 4xATR14 chandelier on close (approved rule)"
+   ],
+   "reference_lines": [],
+   "elliott_v2_label": "W3 in progress (provisional)",
+   "elliott_v1_label": "in_W3 (W2 done)"
+  }
+ },
+ {
+  "symbol": "CRWD",
+  "direction": "LONG",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/CRWD_long.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/CRWD.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 257.57,
+   "stop": 218.8417,
+   "target": 340.379,
+   "fib_v2": {},
+   "fib_v1": {
+    "origin": 221.36,
+    "end": 272.29,
+    "0 (end)": 272.29,
+    "1 (origin)": 221.36,
+    "0.382": 252.8347,
+    "0.5": 246.825,
+    "0.618": 240.8153,
+    "0.786": 232.259,
+    "1.272": 286.143,
+    "1.618": 303.7648
+   },
+   "vp120": {
+    "poc": 168.6102,
+    "vah": 234.7184,
+    "val": 154.7736
+   },
+   "sr": [
+    {
+     "price": 155.4745,
+     "tf": "W",
+     "strength": 2.707,
+     "side": "support"
+    },
+    {
+     "price": 177.8528,
+     "tf": "W",
+     "strength": 5.965,
+     "side": "support"
+    },
+    {
+     "price": 198.577,
+     "tf": "W",
+     "strength": 4.525,
+     "side": "support"
+    },
+    {
+     "price": 221.5297,
+     "tf": "W",
+     "strength": 3.572,
+     "side": "support"
+    },
+    {
+     "price": 232.365,
+     "tf": "D",
+     "strength": 2.38,
+     "side": "support"
+    },
+    {
+     "price": 286.99,
+     "tf": "W",
+     "strength": 1.878,
+     "side": "resistance"
+    }
+   ],
+   "elliott_v2": [
+    {
+     "label": "0",
+     "date": "2026-10-20",
+     "price": 221.36,
+     "provisional": false
+    },
+    {
+     "label": "1",
+     "date": "2026-10-28",
+     "price": 272.29,
+     "provisional": false
+    },
+    {
+     "label": "2",
+     "date": "2026-10-30",
+     "price": 245.15,
+     "provisional": true
+    }
+   ],
+   "elliott_v2_other_view": "W2 correction zigzag: B in progress (provisional)",
+   "elliott_v1": [],
+   "tentative": {
+    "kind": "L",
+    "price": 245.15,
+    "date": "2026-10-30"
+   },
+   "zigzag_pivots": 13,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-06-01",
+     "volume": 436137600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-09",
+     "volume": 116794000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-06",
+     "volume": 203632700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-13",
+     "volume": 39560400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-15",
+     "volume": 24142300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-28",
+     "volume": 70896700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-14",
+     "volume": 96788000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-26",
+     "volume": 70366100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-31",
+     "volume": 55995000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-02",
+     "volume": 26126700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-06",
+     "volume": 236583400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-20",
+     "volume": 89015400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-28",
+     "volume": 56244400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 21902100.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-05-26",
+     "volume": 259807200.0
+    },
+    {
+     "end_date": "2026-05-27",
+     "volume": 13091600.0
+    },
+    {
+     "end_date": "2026-06-01",
+     "volume": 47106400.0
+    },
+    {
+     "end_date": "2026-06-09",
+     "volume": 116794000.0
+    },
+    {
+     "end_date": "2026-07-06",
+     "volume": 203632700.0
+    },
+    {
+     "end_date": "2026-07-08",
+     "volume": 17531800.0
+    },
+    {
+     "end_date": "2026-07-09",
+     "volume": 6283500.0
+    },
+    {
+     "end_date": "2026-07-10",
+     "volume": 9269800.0
+    },
+    {
+     "end_date": "2026-07-14",
+     "volume": 18614800.0
+    },
+    {
+     "end_date": "2026-07-29",
+     "volume": 90052000.0
+    },
+    {
+     "end_date": "2026-08-13",
+     "volume": 82885200.0
+    },
+    {
+     "end_date": "2026-08-25",
+     "volume": 63496500.0
+    },
+    {
+     "end_date": "2026-08-27",
+     "volume": 37063100.0
+    },
+    {
+     "end_date": "2026-08-28",
+     "volume": 14728300.0
+    },
+    {
+     "end_date": "2026-08-31",
+     "volume": 17823500.0
+    },
+    {
+     "end_date": "2026-09-02",
+     "volume": 26126700.0
+    },
+    {
+     "end_date": "2026-09-03",
+     "volume": 12070100.0
+    },
+    {
+     "end_date": "2026-09-11",
+     "volume": 36376900.0
+    },
+    {
+     "end_date": "2026-09-17",
+     "volume": 66698500.0
+    },
+    {
+     "end_date": "2026-09-18",
+     "volume": 19469000.0
+    },
+    {
+     "end_date": "2026-09-23",
+     "volume": 35516900.0
+    },
+    {
+     "end_date": "2026-09-25",
+     "volume": 16040900.0
+    },
+    {
+     "end_date": "2026-10-06",
+     "volume": 50411100.0
+    },
+    {
+     "end_date": "2026-10-08",
+     "volume": 18190500.0
+    },
+    {
+     "end_date": "2026-10-09",
+     "volume": 7072000.0
+    },
+    {
+     "end_date": "2026-10-20",
+     "volume": 63752900.0
+    },
+    {
+     "end_date": "2026-10-27",
+     "volume": 48682000.0
+    }
+   ],
+   "divergences": [
+    {
+     "indicator": "rsi14",
+     "type": "hidden_bullish",
+     "p1": {
+      "date": "2026-09-02",
+      "price": 200.6,
+      "value": 49.26
+     },
+     "p2": {
+      "date": "2026-10-20",
+      "price": 221.36,
+      "value": 39.109
+     }
+    },
+    {
+     "indicator": "cci20",
+     "type": "hidden_bullish",
+     "p1": {
+      "date": "2026-09-02",
+      "price": 200.6,
+      "value": -23.227
+     },
+     "p2": {
+      "date": "2026-10-20",
+      "price": 221.36,
+      "value": -188.235
+     }
+    }
+   ],
+   "off_chart": [],
+   "notes": [],
+   "reference_lines": [],
+   "elliott_v2_label": "W2 in progress (provisional)",
+   "elliott_v1_label": "no valid count"
+  }
+ },
+ {
+  "symbol": "UBER",
+  "direction": "SHORT",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/UBER_short.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/UBER.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 66.7,
+   "stop": 71.9988,
+   "target": null,
+   "fib_v2": {},
+   "fib_v1": {
+    "origin": 82.365,
+    "end": 67.22,
+    "0 (end)": 67.22,
+    "1 (origin)": 82.365,
+    "0.382": 73.0054,
+    "0.5": 74.7925,
+    "0.618": 76.5796,
+    "0.786": 79.124,
+    "1.272": 63.1006,
+    "1.618": 57.8604
+   },
+   "vp120": {
+    "poc": 71.5532,
+    "vah": 75.4015,
+    "val": 68.438
+   },
+   "sr": [
+    {
+     "price": 60.1486,
+     "tf": "W",
+     "strength": 0.817,
+     "side": "support"
+    },
+    {
+     "price": 66.34,
+     "tf": "W",
+     "strength": 5.271,
+     "side": "resistance"
+    },
+    {
+     "price": 67.521,
+     "tf": "D",
+     "strength": 4.88,
+     "side": "resistance"
+    },
+    {
+     "price": 69.359,
+     "tf": "W",
+     "strength": 6.509,
+     "side": "resistance"
+    },
+    {
+     "price": 72.0254,
+     "tf": "W",
+     "strength": 9.125,
+     "side": "resistance"
+    },
+    {
+     "price": 78.6535,
+     "tf": "D",
+     "strength": 5.006,
+     "side": "resistance"
+    }
+   ],
+   "elliott_v2": [
+    {
+     "label": "0",
+     "date": "2026-08-26",
+     "price": 82.365,
+     "provisional": false
+    },
+    {
+     "label": "1",
+     "date": "2026-10-02",
+     "price": 67.22,
+     "provisional": false
+    },
+    {
+     "label": "2",
+     "date": "2026-10-09",
+     "price": 72.08,
+     "provisional": false
+    },
+    {
+     "label": "3",
+     "date": "2026-10-29",
+     "price": 64.04,
+     "provisional": true
+    }
+   ],
+   "elliott_v2_other_view": "W2 correction zigzag: B done, C in progress",
+   "elliott_v1": [
+    {
+     "label": "0",
+     "date": "2026-08-26",
+     "price": 82.365
+    },
+    {
+     "label": "1",
+     "date": "2026-10-02",
+     "price": 67.22
+    },
+    {
+     "label": "2",
+     "date": "2026-10-09",
+     "price": 72.08
+    }
+   ],
+   "tentative": {
+    "kind": "L",
+    "price": 64.04,
+    "date": "2026-10-29"
+   },
+   "zigzag_pivots": 14,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-05-05",
+     "volume": 154498800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-07",
+     "volume": 62755300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-28",
+     "volume": 246703900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-01",
+     "volume": 74414500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-11",
+     "volume": 155684800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-16",
+     "volume": 61941400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-23",
+     "volume": 85968700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-29",
+     "volume": 140307300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-27",
+     "volume": 318570900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-04",
+     "volume": 92198100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-05",
+     "volume": 50131900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-26",
+     "volume": 277359400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-02",
+     "volume": 465380900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-09",
+     "volume": 75174900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 249362700.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-05-05",
+     "volume": 166196900.0
+    },
+    {
+     "end_date": "2026-05-06",
+     "volume": 35783000.0
+    },
+    {
+     "end_date": "2026-05-26",
+     "volume": 231388900.0
+    },
+    {
+     "end_date": "2026-06-01",
+     "volume": 116701800.0
+    },
+    {
+     "end_date": "2026-06-10",
+     "volume": 130689400.0
+    },
+    {
+     "end_date": "2026-06-16",
+     "volume": 86936800.0
+    },
+    {
+     "end_date": "2026-06-23",
+     "volume": 85968700.0
+    },
+    {
+     "end_date": "2026-06-26",
+     "volume": 114086600.0
+    },
+    {
+     "end_date": "2026-06-30",
+     "volume": 54026800.0
+    },
+    {
+     "end_date": "2026-07-10",
+     "volume": 90448200.0
+    },
+    {
+     "end_date": "2026-07-24",
+     "volume": 174593700.0
+    },
+    {
+     "end_date": "2026-08-04",
+     "volume": 117921000.0
+    },
+    {
+     "end_date": "2026-08-05",
+     "volume": 50131900.0
+    },
+    {
+     "end_date": "2026-08-11",
+     "volume": 110554700.0
+    },
+    {
+     "end_date": "2026-08-18",
+     "volume": 76608000.0
+    },
+    {
+     "end_date": "2026-08-25",
+     "volume": 75672700.0
+    },
+    {
+     "end_date": "2026-10-01",
+     "volume": 464329500.0
+    },
+    {
+     "end_date": "2026-10-09",
+     "volume": 90750300.0
+    }
+   ],
+   "divergences": [
+    {
+     "indicator": "rsi14",
+     "type": "hidden_bullish",
+     "p1": {
+      "date": "2026-08-05",
+      "price": 66.735,
+      "value": 41.69
+     },
+     "p2": {
+      "date": "2026-10-02",
+      "price": 67.22,
+      "value": 36.831
+     }
+    },
+    {
+     "indicator": "cci20",
+     "type": "hidden_bullish",
+     "p1": {
+      "date": "2026-08-05",
+      "price": 66.735,
+      "value": -116.857
+     },
+     "p2": {
+      "date": "2026-10-02",
+      "price": 67.22,
+      "value": -121.569
+     }
+    }
+   ],
+   "off_chart": [],
+   "notes": [
+    "SHORT: no fixed target - 4xATR14 chandelier on close (approved rule)"
+   ],
+   "reference_lines": [],
+   "elliott_v2_label": "W3 in progress (provisional)",
+   "elliott_v1_label": "in_W3 (W2 done)"
+  }
+ },
+ {
+  "symbol": "TXN",
+  "direction": "LONG",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/TXN_long.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/TXN.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 284.69,
+   "stop": 274.8498,
+   "target": 330.0332,
+   "fib_v2": {},
+   "fib_v1": {
+    "origin": 246.9248,
+    "end": 297.2989,
+    "0 (end)": 297.2989,
+    "1 (origin)": 246.9248,
+    "0.382": 278.056,
+    "0.5": 272.1119,
+    "0.618": 266.1677,
+    "0.786": 257.7049,
+    "1.272": 311.0007,
+    "1.618": 328.4301
+   },
+   "vp120": {
+    "poc": 279.6027,
+    "vah": 308.929,
+    "val": 272.0616
+   },
+   "sr": [
+    {
+     "price": 227.0218,
+     "tf": "W",
+     "strength": 2.462,
+     "side": "support"
+    },
+    {
+     "price": 246.9248,
+     "tf": "W",
+     "strength": 1.712,
+     "side": "support"
+    },
+    {
+     "price": 272.445,
+     "tf": "W",
+     "strength": 7.359,
+     "side": "support"
+    },
+    {
+     "price": 286.0813,
+     "tf": "D",
+     "strength": 3.792,
+     "side": "support"
+    },
+    {
+     "price": 294.0292,
+     "tf": "W",
+     "strength": 3.723,
+     "side": "support"
+    },
+    {
+     "price": 309.7099,
+     "tf": "D",
+     "strength": 1.04,
+     "side": "resistance"
+    },
+    {
+     "price": 329.4668,
+     "tf": "W",
+     "strength": 5.003,
+     "side": "resistance"
+    }
+   ],
+   "elliott_v2": [
+    {
+     "label": "0",
+     "date": "2026-09-03",
+     "price": 246.9248,
+     "provisional": false
+    },
+    {
+     "label": "1",
+     "date": "2026-10-06",
+     "price": 297.2989,
+     "provisional": false
+    },
+    {
+     "label": "2",
+     "date": "2026-10-20",
+     "price": 270.6888,
+     "provisional": false
+    },
+    {
+     "label": "3",
+     "date": "2026-10-29",
+     "price": 311.5494,
+     "provisional": true
+    }
+   ],
+   "elliott_v2_other_view": "no valid count",
+   "elliott_v1": [
+    {
+     "label": "0",
+     "date": "2026-09-03",
+     "price": 246.9248
+    },
+    {
+     "label": "1",
+     "date": "2026-10-06",
+     "price": 297.2989
+    },
+    {
+     "label": "2",
+     "date": "2026-10-20",
+     "price": 270.6888
+    }
+   ],
+   "tentative": {
+    "kind": "H",
+    "price": 311.5494,
+    "date": "2026-10-29"
+   },
+   "zigzag_pivots": 11,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-04-28",
+     "volume": 18332100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-27",
+     "volume": 147524200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-09",
+     "volume": 86733000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-22",
+     "volume": 75704800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-29",
+     "volume": 71163900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-09",
+     "volume": 57225300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-03",
+     "volume": 141445200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-12",
+     "volume": 41487500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-03",
+     "volume": 88830800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-06",
+     "volume": 124308400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-20",
+     "volume": 63001000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 73581700.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-04-28",
+     "volume": 32275700.0
+    },
+    {
+     "end_date": "2026-05-14",
+     "volume": 91378500.0
+    },
+    {
+     "end_date": "2026-05-21",
+     "volume": 33796000.0
+    },
+    {
+     "end_date": "2026-05-26",
+     "volume": 15609100.0
+    },
+    {
+     "end_date": "2026-06-01",
+     "volume": 39033200.0
+    },
+    {
+     "end_date": "2026-06-03",
+     "volume": 17866900.0
+    },
+    {
+     "end_date": "2026-06-10",
+     "volume": 43898900.0
+    },
+    {
+     "end_date": "2026-06-15",
+     "volume": 22690200.0
+    },
+    {
+     "end_date": "2026-06-17",
+     "volume": 14805000.0
+    },
+    {
+     "end_date": "2026-06-22",
+     "volume": 30884200.0
+    },
+    {
+     "end_date": "2026-06-26",
+     "volume": 58181300.0
+    },
+    {
+     "end_date": "2026-07-06",
+     "volume": 49156400.0
+    },
+    {
+     "end_date": "2026-07-07",
+     "volume": 8287400.0
+    },
+    {
+     "end_date": "2026-07-10",
+     "volume": 16905600.0
+    },
+    {
+     "end_date": "2026-07-17",
+     "volume": 34595700.0
+    },
+    {
+     "end_date": "2026-07-22",
+     "volume": 26158400.0
+    },
+    {
+     "end_date": "2026-08-03",
+     "volume": 76549600.0
+    },
+    {
+     "end_date": "2026-08-07",
+     "volume": 26902000.0
+    },
+    {
+     "end_date": "2026-08-13",
+     "volume": 19913200.0
+    },
+    {
+     "end_date": "2026-08-17",
+     "volume": 10756200.0
+    },
+    {
+     "end_date": "2026-09-01",
+     "volume": 64567500.0
+    },
+    {
+     "end_date": "2026-09-11",
+     "volume": 33208100.0
+    },
+    {
+     "end_date": "2026-09-17",
+     "volume": 21435400.0
+    },
+    {
+     "end_date": "2026-10-06",
+     "volume": 77844300.0
+    },
+    {
+     "end_date": "2026-10-19",
+     "volume": 55341300.0
+    },
+    {
+     "end_date": "2026-10-29",
+     "volume": 68243100.0
+    }
+   ],
+   "divergences": [],
+   "off_chart": [],
+   "notes": [],
+   "reference_lines": [],
+   "elliott_v2_label": "W3 in progress (provisional)",
+   "elliott_v1_label": "in_W3 (W2 done)"
+  }
+ },
+ {
+  "symbol": "ADI",
+  "direction": "LONG",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/ADI_long.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/ADI.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 391.07,
+   "stop": 380.1249,
+   "target": 468.8161,
+   "fib_v2": {},
+   "fib_v1": {
+    "origin": 348.0,
+    "end": 422.67,
+    "0 (end)": 422.67,
+    "1 (origin)": 348.0,
+    "0.382": 394.1461,
+    "0.5": 385.335,
+    "0.618": 376.5239,
+    "0.786": 363.9794,
+    "1.272": 442.9803,
+    "1.618": 468.8161
+   },
+   "vp120": {
+    "poc": 393.3811,
+    "vah": 419.4511,
+    "val": 369.2422
+   },
+   "sr": [
+    {
+     "price": 353.8036,
+     "tf": "W",
+     "strength": 8.441,
+     "side": "support"
+    },
+    {
+     "price": 365.6061,
+     "tf": "D",
+     "strength": 2.597,
+     "side": "support"
+    },
+    {
+     "price": 381.1205,
+     "tf": "W",
+     "strength": 8.086,
+     "side": "support"
+    },
+    {
+     "price": 397.9599,
+     "tf": "W",
+     "strength": 4.522,
+     "side": "support"
+    },
+    {
+     "price": 415.18,
+     "tf": "D",
+     "strength": 0.712,
+     "side": "support"
+    },
+    {
+     "price": 422.67,
+     "tf": "D",
+     "strength": 0.581,
+     "side": "resistance"
+    },
+    {
+     "price": 435.3427,
+     "tf": "W",
+     "strength": 9.012,
+     "side": "resistance"
+    }
+   ],
+   "elliott_v2": [
+    {
+     "label": "0",
+     "date": "2026-09-03",
+     "price": 348.0,
+     "provisional": false
+    },
+    {
+     "label": "1",
+     "date": "2026-10-06",
+     "price": 422.67,
+     "provisional": false
+    },
+    {
+     "label": "2",
+     "date": "2026-10-23",
+     "price": 382.0,
+     "provisional": false
+    },
+    {
+     "label": "3",
+     "date": "2026-10-29",
+     "price": 433.39,
+     "provisional": true
+    }
+   ],
+   "elliott_v2_other_view": "no valid count",
+   "elliott_v1": [
+    {
+     "label": "0",
+     "date": "2026-09-03",
+     "price": 348.0
+    },
+    {
+     "label": "1",
+     "date": "2026-10-06",
+     "price": 422.67
+    },
+    {
+     "label": "2",
+     "date": "2026-10-23",
+     "price": 382.0
+    }
+   ],
+   "tentative": {
+    "kind": "H",
+    "price": 433.39,
+    "date": "2026-10-29"
+   },
+   "zigzag_pivots": 13,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-04-28",
+     "volume": 11122600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-13",
+     "volume": 37805900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-21",
+     "volume": 32596400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-27",
+     "volume": 16832100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-01",
+     "volume": 14899100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-03",
+     "volume": 10654800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-09",
+     "volume": 21175100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-22",
+     "volume": 40355700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-29",
+     "volume": 123510800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-17",
+     "volume": 44007300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-03",
+     "volume": 52403300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-06",
+     "volume": 68968100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-23",
+     "volume": 45924000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 22812500.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-04-28",
+     "volume": 11122600.0
+    },
+    {
+     "end_date": "2026-05-13",
+     "volume": 37805900.0
+    },
+    {
+     "end_date": "2026-05-21",
+     "volume": 32596400.0
+    },
+    {
+     "end_date": "2026-05-26",
+     "volume": 12736700.0
+    },
+    {
+     "end_date": "2026-06-01",
+     "volume": 18994500.0
+    },
+    {
+     "end_date": "2026-06-03",
+     "volume": 10654800.0
+    },
+    {
+     "end_date": "2026-06-10",
+     "volume": 25043700.0
+    },
+    {
+     "end_date": "2026-06-15",
+     "volume": 12374600.0
+    },
+    {
+     "end_date": "2026-06-17",
+     "volume": 7954400.0
+    },
+    {
+     "end_date": "2026-06-22",
+     "volume": 16158100.0
+    },
+    {
+     "end_date": "2026-07-02",
+     "volume": 54672500.0
+    },
+    {
+     "end_date": "2026-07-10",
+     "volume": 17302500.0
+    },
+    {
+     "end_date": "2026-07-20",
+     "volume": 20436700.0
+    },
+    {
+     "end_date": "2026-07-22",
+     "volume": 7400600.0
+    },
+    {
+     "end_date": "2026-07-29",
+     "volume": 23698500.0
+    },
+    {
+     "end_date": "2026-08-17",
+     "volume": 44007300.0
+    },
+    {
+     "end_date": "2026-09-01",
+     "volume": 45286800.0
+    },
+    {
+     "end_date": "2026-09-11",
+     "volume": 22030200.0
+    },
+    {
+     "end_date": "2026-09-14",
+     "volume": 4731000.0
+    },
+    {
+     "end_date": "2026-10-06",
+     "volume": 49323400.0
+    },
+    {
+     "end_date": "2026-10-22",
+     "volume": 43439500.0
+    },
+    {
+     "end_date": "2026-10-29",
+     "volume": 17419800.0
+    }
+   ],
+   "divergences": [
+    {
+     "indicator": "cci20",
+     "type": "hidden_bullish",
+     "p1": {
+      "date": "2026-09-03",
+      "price": 348.0,
+      "value": -144.188
+     },
+     "p2": {
+      "date": "2026-10-23",
+      "price": 382.0,
+      "value": -147.27
+     }
+    }
+   ],
+   "off_chart": [],
+   "notes": [],
+   "reference_lines": [],
+   "elliott_v2_label": "W3 in progress (provisional)",
+   "elliott_v1_label": "in_W3 (W2 done)"
+  }
+ },
+ {
+  "symbol": "OXY",
+  "direction": "LONG",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/OXY_long.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/OXY.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 64.17,
+   "stop": 58.0377,
+   "target": 67.7826,
+   "fib_v2": {
+    "origin": 53.4149,
+    "end": 61.8661,
+    "0 (end)": 61.8661,
+    "1 (origin)": 53.4149,
+    "0.382": 58.6378,
+    "0.5": 57.6405,
+    "0.618": 56.6433,
+    "0.786": 55.2235,
+    "1.272": 64.1649,
+    "1.618": 67.089
+   },
+   "fib_v1": {
+    "origin": 57.2772,
+    "end": 63.77,
+    "0 (end)": 63.77,
+    "1 (origin)": 57.2772,
+    "0.382": 61.2897,
+    "0.5": 60.5236,
+    "0.618": 59.7574,
+    "0.786": 58.6666,
+    "1.272": 65.536,
+    "1.618": 67.7826
+   },
+   "vp120": {
+    "poc": 57.4745,
+    "vah": 61.8265,
+    "val": 54.1669
+   },
+   "sr": [
+    {
+     "price": 55.1432,
+     "tf": "W",
+     "strength": 6.354,
+     "side": "support"
+    },
+    {
+     "price": 56.7655,
+     "tf": "D",
+     "strength": 1.975,
+     "side": "support"
+    },
+    {
+     "price": 59.0656,
+     "tf": "D",
+     "strength": 4.461,
+     "side": "support"
+    },
+    {
+     "price": 60.4918,
+     "tf": "W",
+     "strength": 9.132,
+     "side": "support"
+    },
+    {
+     "price": 63.77,
+     "tf": "W",
+     "strength": 2.747,
+     "side": "support"
+    },
+    {
+     "price": 64.96,
+     "tf": "D",
+     "strength": 1.191,
+     "side": "resistance"
+    },
+    {
+     "price": 66.8332,
+     "tf": "W",
+     "strength": 3.246,
+     "side": "resistance"
+    }
+   ],
+   "elliott_v2": [],
+   "elliott_v2_other_view": "no valid count",
+   "elliott_v1": [],
+   "tentative": {
+    "kind": "H",
+    "price": 64.96,
+    "date": "2026-10-23"
+   },
+   "zigzag_pivots": 14,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-04-29",
+     "volume": 88035200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-08",
+     "volume": 98525300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-20",
+     "volume": 94200300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-27",
+     "volume": 43878400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-03",
+     "volume": 55944300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-01",
+     "volume": 186177600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-23",
+     "volume": 141876200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-28",
+     "volume": 24519100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-31",
+     "volume": 22679200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-05",
+     "volume": 26312000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-20",
+     "volume": 95379200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-26",
+     "volume": 26412300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-15",
+     "volume": 96452700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-29",
+     "volume": 100193400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 198974000.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-04-29",
+     "volume": 88035200.0
+    },
+    {
+     "end_date": "2026-05-08",
+     "volume": 98525300.0
+    },
+    {
+     "end_date": "2026-05-19",
+     "volume": 81724000.0
+    },
+    {
+     "end_date": "2026-05-29",
+     "volume": 81661100.0
+    },
+    {
+     "end_date": "2026-06-03",
+     "volume": 30637900.0
+    },
+    {
+     "end_date": "2026-07-01",
+     "volume": 186177600.0
+    },
+    {
+     "end_date": "2026-07-23",
+     "volume": 141876200.0
+    },
+    {
+     "end_date": "2026-07-28",
+     "volume": 24519100.0
+    },
+    {
+     "end_date": "2026-07-31",
+     "volume": 22679200.0
+    },
+    {
+     "end_date": "2026-08-05",
+     "volume": 26312000.0
+    },
+    {
+     "end_date": "2026-08-20",
+     "volume": 95379200.0
+    },
+    {
+     "end_date": "2026-08-25",
+     "volume": 20207800.0
+    },
+    {
+     "end_date": "2026-09-15",
+     "volume": 102657200.0
+    },
+    {
+     "end_date": "2026-09-22",
+     "volume": 54070200.0
+    },
+    {
+     "end_date": "2026-09-24",
+     "volume": 17753300.0
+    },
+    {
+     "end_date": "2026-09-29",
+     "volume": 28369900.0
+    }
+   ],
+   "divergences": [],
+   "off_chart": [],
+   "notes": [
+    "Fib v1 leg stale (origin 57.28 broken) -> v2 re-anchored 2026-08-05..2026-08-20"
+   ],
+   "reference_lines": [],
+   "elliott_v2_label": "no valid count",
+   "elliott_v1_label": "no valid count"
+  }
+ },
+ {
+  "symbol": "AMGN",
+  "direction": "LONG",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/AMGN_long.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/AMGN.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 439.26,
+   "stop": 420.0812,
+   "target": 458.8063,
+   "fib_v2": {},
+   "fib_v1": {
+    "origin": 374.46,
+    "end": 426.59,
+    "0 (end)": 426.59,
+    "1 (origin)": 374.46,
+    "0.382": 406.6763,
+    "0.5": 400.525,
+    "0.618": 394.3737,
+    "0.786": 385.6158,
+    "1.272": 440.7694,
+    "1.618": 458.8063
+   },
+   "vp120": {
+    "poc": 380.1576,
+    "vah": 447.4719,
+    "val": 353.545
+   },
+   "sr": [
+    {
+     "price": 377.2438,
+     "tf": "W",
+     "strength": 8.365,
+     "side": "support"
+    },
+    {
+     "price": 395.8488,
+     "tf": "D",
+     "strength": 1.714,
+     "side": "support"
+    },
+    {
+     "price": 419.3394,
+     "tf": "D",
+     "strength": 0.604,
+     "side": "support"
+    },
+    {
+     "price": 426.295,
+     "tf": "D",
+     "strength": 1.881,
+     "side": "support"
+    },
+    {
+     "price": 446.5386,
+     "tf": "W",
+     "strength": 5.465,
+     "side": "support"
+    }
+   ],
+   "elliott_v2": [
+    {
+     "label": "0",
+     "date": "2026-09-16",
+     "price": 374.46,
+     "provisional": false
+    },
+    {
+     "label": "1",
+     "date": "2026-09-30",
+     "price": 426.59,
+     "provisional": false
+    },
+    {
+     "label": "2",
+     "date": "2026-10-06",
+     "price": 396.01,
+     "provisional": false
+    },
+    {
+     "label": "3",
+     "date": "2026-10-30",
+     "price": 475.65,
+     "provisional": true
+    }
+   ],
+   "elliott_v2_other_view": "W2 correction zigzag: B done, C in progress / beyond target",
+   "elliott_v1": [
+    {
+     "label": "0",
+     "date": "2026-09-16",
+     "price": 374.46
+    },
+    {
+     "label": "1",
+     "date": "2026-09-30",
+     "price": 426.59
+    },
+    {
+     "label": "2",
+     "date": "2026-10-06",
+     "price": 396.01
+    }
+   ],
+   "tentative": {
+    "kind": "H",
+    "price": 475.65,
+    "date": "2026-10-30"
+   },
+   "zigzag_pivots": 21,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-04-29",
+     "volume": 32811700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-04-30",
+     "volume": 3592600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-05",
+     "volume": 10623500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-22",
+     "volume": 34037600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-02",
+     "volume": 12581800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-05",
+     "volume": 8647200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-10",
+     "volume": 8876800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-11",
+     "volume": 4727100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-18",
+     "volume": 22239300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-07",
+     "volume": 27431600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-15",
+     "volume": 10885000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-17",
+     "volume": 5217000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-23",
+     "volume": 9284200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-28",
+     "volume": 8809000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-03",
+     "volume": 11406300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-25",
+     "volume": 42282200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-31",
+     "volume": 8129700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-03",
+     "volume": 6486000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-16",
+     "volume": 24823300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-30",
+     "volume": 35713600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-06",
+     "volume": 11151100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 47130600.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-05-04",
+     "volume": 43706400.0
+    },
+    {
+     "end_date": "2026-05-22",
+     "volume": 37359000.0
+    },
+    {
+     "end_date": "2026-06-02",
+     "volume": 12581800.0
+    },
+    {
+     "end_date": "2026-06-05",
+     "volume": 8647200.0
+    },
+    {
+     "end_date": "2026-06-10",
+     "volume": 8876800.0
+    },
+    {
+     "end_date": "2026-06-12",
+     "volume": 7457200.0
+    },
+    {
+     "end_date": "2026-06-18",
+     "volume": 19509200.0
+    },
+    {
+     "end_date": "2026-07-02",
+     "volume": 22609900.0
+    },
+    {
+     "end_date": "2026-07-14",
+     "volume": 13868900.0
+    },
+    {
+     "end_date": "2026-07-28",
+     "volume": 25148000.0
+    },
+    {
+     "end_date": "2026-08-03",
+     "volume": 11406300.0
+    },
+    {
+     "end_date": "2026-08-24",
+     "volume": 40181300.0
+    },
+    {
+     "end_date": "2026-08-31",
+     "volume": 10230600.0
+    },
+    {
+     "end_date": "2026-09-03",
+     "volume": 6486000.0
+    },
+    {
+     "end_date": "2026-09-15",
+     "volume": 22422000.0
+    },
+    {
+     "end_date": "2026-09-29",
+     "volume": 34985400.0
+    },
+    {
+     "end_date": "2026-10-06",
+     "volume": 14280600.0
+    }
+   ],
+   "divergences": [],
+   "off_chart": [],
+   "notes": [],
+   "reference_lines": [],
+   "elliott_v2_label": "W3 in progress (provisional)",
+   "elliott_v1_label": "in_W3 (W2 done)"
+  }
+ },
+ {
+  "symbol": "AAPL",
+  "direction": "LONG",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/AAPL_long.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/AAPL.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 347.73,
+   "stop": 323.8409,
+   "target": 367.2419,
+   "fib_v2": {},
+   "fib_v1": {
+    "origin": 325.81,
+    "end": 351.73,
+    "0 (end)": 351.73,
+    "1 (origin)": 325.81,
+    "0.382": 341.8286,
+    "0.5": 338.77,
+    "0.618": 335.7114,
+    "0.786": 331.3569,
+    "1.272": 358.7803,
+    "1.618": 367.7486
+   },
+   "vp120": {
+    "poc": 310.2756,
+    "vah": 336.0868,
+    "val": 292.2859
+   },
+   "sr": [
+    {
+     "price": 301.2898,
+     "tf": "W",
+     "strength": 6.68,
+     "side": "support"
+    },
+    {
+     "price": 309.9,
+     "tf": "D",
+     "strength": 1.174,
+     "side": "support"
+    },
+    {
+     "price": 317.8078,
+     "tf": "W",
+     "strength": 4.372,
+     "side": "support"
+    },
+    {
+     "price": 325.81,
+     "tf": "W",
+     "strength": 2.152,
+     "side": "support"
+    },
+    {
+     "price": 336.5404,
+     "tf": "D",
+     "strength": 2.587,
+     "side": "support"
+    },
+    {
+     "price": 344.988,
+     "tf": "W",
+     "strength": 6.408,
+     "side": "resistance"
+    },
+    {
+     "price": 351.73,
+     "tf": "D",
+     "strength": 0.838,
+     "side": "resistance"
+    }
+   ],
+   "elliott_v2": [
+    {
+     "label": "0",
+     "date": "2026-10-01",
+     "price": 325.81,
+     "provisional": false
+    },
+    {
+     "label": "1",
+     "date": "2026-10-23",
+     "price": 351.73,
+     "provisional": false
+    },
+    {
+     "label": "2",
+     "date": "2026-10-30",
+     "price": 334.35,
+     "provisional": true
+    }
+   ],
+   "elliott_v2_other_view": "no valid count",
+   "elliott_v1": [
+    {
+     "label": "0",
+     "date": "2026-09-09",
+     "price": 309.9
+    },
+    {
+     "label": "1",
+     "date": "2026-09-22",
+     "price": 345.34
+    },
+    {
+     "label": "2",
+     "date": "2026-10-01",
+     "price": 325.81
+    },
+    {
+     "label": "3",
+     "date": "2026-10-23",
+     "price": 351.73
+    }
+   ],
+   "tentative": {
+    "kind": "L",
+    "price": 334.35,
+    "date": "2026-10-30"
+   },
+   "zigzag_pivots": 11,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-06-08",
+     "volume": 2058348200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-10",
+     "volume": 122902100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-22",
+     "volume": 340508800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-25",
+     "volume": 212106500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-29",
+     "volume": 1384857000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-31",
+     "volume": 207306900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-03",
+     "volume": 1026578800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-09",
+     "volume": 140724000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-22",
+     "volume": 426726500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-01",
+     "volume": 243988100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-23",
+     "volume": 612626500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 228821900.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-06-02",
+     "volume": 2031807600.0
+    },
+    {
+     "end_date": "2026-06-25",
+     "volume": 914482800.0
+    },
+    {
+     "end_date": "2026-07-17",
+     "volume": 1005409900.0
+    },
+    {
+     "end_date": "2026-07-23",
+     "volume": 174403600.0
+    },
+    {
+     "end_date": "2026-07-28",
+     "volume": 148952700.0
+    },
+    {
+     "end_date": "2026-08-03",
+     "volume": 338449700.0
+    },
+    {
+     "end_date": "2026-08-07",
+     "volume": 198016900.0
+    },
+    {
+     "end_date": "2026-08-12",
+     "volume": 123947000.0
+    },
+    {
+     "end_date": "2026-09-03",
+     "volume": 629562900.0
+    },
+    {
+     "end_date": "2026-09-09",
+     "volume": 140724000.0
+    },
+    {
+     "end_date": "2026-09-25",
+     "volume": 513120900.0
+    },
+    {
+     "end_date": "2026-09-29",
+     "volume": 71298800.0
+    }
+   ],
+   "divergences": [
+    {
+     "indicator": "rsi14",
+     "type": "regular_bearish",
+     "p1": {
+      "date": "2026-09-22",
+      "price": 345.34,
+      "value": 66.923
+     },
+     "p2": {
+      "date": "2026-10-23",
+      "price": 351.73,
+      "value": 63.928
+     }
+    },
+    {
+     "indicator": "cci20",
+     "type": "regular_bearish",
+     "p1": {
+      "date": "2026-09-22",
+      "price": 345.34,
+      "value": 135.436
+     },
+     "p2": {
+      "date": "2026-10-23",
+      "price": 351.73,
+      "value": 133.954
+     }
+    },
+    {
+     "indicator": "cci20",
+     "type": "hidden_bullish",
+     "p1": {
+      "date": "2026-09-09",
+      "price": 309.9,
+      "value": 9.461
+     },
+     "p2": {
+      "date": "2026-10-01",
+      "price": 325.81,
+      "value": -24.545
+     }
+    }
+   ],
+   "off_chart": [],
+   "notes": [],
+   "reference_lines": [],
+   "elliott_v2_label": "W2 in progress (provisional)",
+   "elliott_v1_label": "in_W4 (W3 done)"
+  }
+ },
+ {
+  "symbol": "T",
+  "direction": "SHORT",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/T_short.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/T.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 20.93,
+   "stop": 23.5979,
+   "target": null,
+   "fib_v2": {},
+   "fib_v1": {
+    "origin": 24.6909,
+    "end": 21.96,
+    "0 (end)": 21.96,
+    "1 (origin)": 24.6909,
+    "0.382": 23.0032,
+    "0.5": 23.3254,
+    "0.618": 23.6477,
+    "0.786": 24.1065,
+    "1.272": 21.2172,
+    "1.618": 20.2723
+   },
+   "vp120": {
+    "poc": 21.9352,
+    "vah": 24.607,
+    "val": 20.852
+   },
+   "sr": [
+    {
+     "price": 19.4078,
+     "tf": "D",
+     "strength": 1.884,
+     "side": "support"
+    },
+    {
+     "price": 19.8865,
+     "tf": "W",
+     "strength": 3.61,
+     "side": "support"
+    },
+    {
+     "price": 21.8394,
+     "tf": "D",
+     "strength": 5.742,
+     "side": "resistance"
+    },
+    {
+     "price": 22.837,
+     "tf": "W",
+     "strength": 9.578,
+     "side": "resistance"
+    },
+    {
+     "price": 24.2481,
+     "tf": "D",
+     "strength": 5.363,
+     "side": "resistance"
+    },
+    {
+     "price": 25.0309,
+     "tf": "W",
+     "strength": 13.659,
+     "side": "resistance"
+    },
+    {
+     "price": 26.1048,
+     "tf": "D",
+     "strength": 4.943,
+     "side": "resistance"
+    }
+   ],
+   "elliott_v2": [
+    {
+     "label": "0",
+     "date": "2026-10-08",
+     "price": 24.6909,
+     "provisional": false
+    },
+    {
+     "label": "1",
+     "date": "2026-10-09",
+     "price": 21.96,
+     "provisional": false
+    },
+    {
+     "label": "2",
+     "date": "2026-10-16",
+     "price": 23.85,
+     "provisional": false
+    },
+    {
+     "label": "3",
+     "date": "2026-10-28",
+     "price": 20.52,
+     "provisional": true
+    }
+   ],
+   "elliott_v2_other_view": "no valid count",
+   "elliott_v1": [
+    {
+     "label": "0",
+     "date": "2026-10-08",
+     "price": 24.6909
+    },
+    {
+     "label": "1",
+     "date": "2026-10-09",
+     "price": 21.96
+    },
+    {
+     "label": "2",
+     "date": "2026-10-16",
+     "price": 23.85
+    }
+   ],
+   "tentative": {
+    "kind": "L",
+    "price": 20.52,
+    "date": "2026-10-28"
+   },
+   "zigzag_pivots": 14,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-05-18",
+     "volume": 575210100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-22",
+     "volume": 140810900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-09",
+     "volume": 543567900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-12",
+     "volume": 127649400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-02",
+     "volume": 1057539600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-28",
+     "volume": 1434226200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-05",
+     "volume": 361505600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-02",
+     "volume": 646424500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-09",
+     "volume": 150211600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-15",
+     "volume": 153237900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-06",
+     "volume": 558968600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-08",
+     "volume": 85146700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-09",
+     "volume": 150534900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-16",
+     "volume": 256047900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 571648000.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-05-15",
+     "volume": 536229100.0
+    },
+    {
+     "end_date": "2026-05-21",
+     "volume": 154520800.0
+    },
+    {
+     "end_date": "2026-06-08",
+     "volume": 516278000.0
+    },
+    {
+     "end_date": "2026-06-12",
+     "volume": 180210400.0
+    },
+    {
+     "end_date": "2026-06-18",
+     "volume": 246683800.0
+    },
+    {
+     "end_date": "2026-06-23",
+     "volume": 142074200.0
+    },
+    {
+     "end_date": "2026-07-01",
+     "volume": 539481200.0
+    },
+    {
+     "end_date": "2026-07-28",
+     "volume": 1563526600.0
+    },
+    {
+     "end_date": "2026-08-05",
+     "volume": 361505600.0
+    },
+    {
+     "end_date": "2026-09-03",
+     "volume": 679264300.0
+    },
+    {
+     "end_date": "2026-09-09",
+     "volume": 117371800.0
+    },
+    {
+     "end_date": "2026-09-15",
+     "volume": 153237900.0
+    },
+    {
+     "end_date": "2026-10-09",
+     "volume": 794650200.0
+    },
+    {
+     "end_date": "2026-10-15",
+     "volume": 203047700.0
+    },
+    {
+     "end_date": "2026-10-21",
+     "volume": 211943200.0
+    },
+    {
+     "end_date": "2026-10-22",
+     "volume": 54447200.0
+    },
+    {
+     "end_date": "2026-10-28",
+     "volume": 259616700.0
+    }
+   ],
+   "divergences": [],
+   "off_chart": [],
+   "notes": [
+    "SHORT: no fixed target - 4xATR14 chandelier on close (approved rule)"
+   ],
+   "reference_lines": [],
+   "elliott_v2_label": "W3 in progress (provisional)",
+   "elliott_v1_label": "in_W3 (W2 done)"
+  }
+ },
+ {
+  "symbol": "PFE",
+  "direction": "LONG",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/PFE_long.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/PFE.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 30.03,
+   "stop": 28.2218,
+   "target": 31.7006,
+   "fib_v2": {},
+   "fib_v1": {
+    "origin": 27.12,
+    "end": 30.44,
+    "0 (end)": 30.44,
+    "1 (origin)": 27.12,
+    "0.382": 29.1718,
+    "0.5": 28.78,
+    "0.618": 28.3882,
+    "0.786": 27.8305,
+    "1.272": 31.343,
+    "1.618": 32.4918
+   },
+   "vp120": {
+    "poc": 25.3762,
+    "vah": 27.6876,
+    "val": 23.2139
+   },
+   "sr": [
+    {
+     "price": 25.9598,
+     "tf": "W",
+     "strength": 4.476,
+     "side": "support"
+    },
+    {
+     "price": 26.7237,
+     "tf": "D",
+     "strength": 2.941,
+     "side": "support"
+    },
+    {
+     "price": 27.2409,
+     "tf": "W",
+     "strength": 7.301,
+     "side": "support"
+    },
+    {
+     "price": 28.4033,
+     "tf": "D",
+     "strength": 2.328,
+     "side": "support"
+    },
+    {
+     "price": 29.1483,
+     "tf": "W",
+     "strength": 2.685,
+     "side": "support"
+    }
+   ],
+   "elliott_v2": [
+    {
+     "label": "0",
+     "date": "2026-10-05",
+     "price": 27.12,
+     "provisional": false
+    },
+    {
+     "label": "1",
+     "date": "2026-10-22",
+     "price": 30.44,
+     "provisional": false
+    },
+    {
+     "label": "2",
+     "date": "2026-10-28",
+     "price": 29.22,
+     "provisional": false
+    },
+    {
+     "label": "3",
+     "date": "2026-10-30",
+     "price": 30.67,
+     "provisional": true
+    }
+   ],
+   "elliott_v2_other_view": "no valid count",
+   "elliott_v1": [
+    {
+     "label": "0",
+     "date": "2026-10-05",
+     "price": 27.12
+    },
+    {
+     "label": "1",
+     "date": "2026-10-22",
+     "price": 30.44
+    },
+    {
+     "label": "2",
+     "date": "2026-10-28",
+     "price": 29.22
+    }
+   ],
+   "tentative": {
+    "kind": "H",
+    "price": 30.67,
+    "date": "2026-10-30"
+   },
+   "zigzag_pivots": 11,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-05-18",
+     "volume": 762480500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-27",
+     "volume": 187221800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-02",
+     "volume": 140785300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-12",
+     "volume": 286167600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-06",
+     "volume": 804304900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-03",
+     "volume": 1646411700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-15",
+     "volume": 208045100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-30",
+     "volume": 374308400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-05",
+     "volume": 98507500.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-22",
+     "volume": 375387400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-28",
+     "volume": 107987700.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 79736300.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-05-18",
+     "volume": 1129282700.0
+    },
+    {
+     "end_date": "2026-05-27",
+     "volume": 187221800.0
+    },
+    {
+     "end_date": "2026-06-03",
+     "volume": 171742400.0
+    },
+    {
+     "end_date": "2026-06-12",
+     "volume": 255210500.0
+    },
+    {
+     "end_date": "2026-06-25",
+     "volume": 475705900.0
+    },
+    {
+     "end_date": "2026-09-02",
+     "volume": 1948286400.0
+    },
+    {
+     "end_date": "2026-09-16",
+     "volume": 260810300.0
+    },
+    {
+     "end_date": "2026-09-29",
+     "volume": 314638400.0
+    },
+    {
+     "end_date": "2026-10-05",
+     "volume": 132136600.0
+    },
+    {
+     "end_date": "2026-10-22",
+     "volume": 375387400.0
+    },
+    {
+     "end_date": "2026-10-28",
+     "volume": 107987700.0
+    }
+   ],
+   "divergences": [],
+   "off_chart": [],
+   "notes": [],
+   "reference_lines": [],
+   "elliott_v2_label": "W3 in progress (provisional)",
+   "elliott_v1_label": "in_W3 (W2 done)"
+  }
+ },
+ {
+  "symbol": "TMO",
+  "direction": "LONG",
+  "png": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/charts/TMO_long.png",
+  "levels_schema": "levels-1.0",
+  "levels_generated_by": "scanner_charts.build_levels (reference producer)",
+  "levels_file": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-02/checkpoints/2026-11-02_0836/levels/TMO.json",
+  "cutoff_utc": "2026-10-30T20:05:00+00:00",
+  "last_bar": "2026-10-30",
+  "window": [
+   "2026-04-28",
+   "2026-10-30"
+  ],
+  "drawn": {
+   "entry": 673.82,
+   "stop": 630.5504,
+   "target": 749.3404,
+   "fib_v2": {},
+   "fib_v1": {
+    "origin": 635.32,
+    "end": 705.79,
+    "0 (end)": 705.79,
+    "1 (origin)": 635.32,
+    "0.382": 678.8704,
+    "0.5": 670.555,
+    "0.618": 662.2395,
+    "0.786": 650.4006,
+    "1.272": 724.9578,
+    "1.618": 749.3404
+   },
+   "vp120": {
+    "poc": 659.1537,
+    "vah": 711.85,
+    "val": 501.0648
+   },
+   "sr": [
+    {
+     "price": 598.5245,
+     "tf": "W",
+     "strength": 5.883,
+     "side": "support"
+    },
+    {
+     "price": 628.0347,
+     "tf": "D",
+     "strength": 2.194,
+     "side": "support"
+    },
+    {
+     "price": 641.9798,
+     "tf": "W",
+     "strength": 4.686,
+     "side": "support"
+    },
+    {
+     "price": 662.435,
+     "tf": "D",
+     "strength": 3.534,
+     "side": "support"
+    },
+    {
+     "price": 683.305,
+     "tf": "D",
+     "strength": 1.843,
+     "side": "support"
+    },
+    {
+     "price": 701.3733,
+     "tf": "D",
+     "strength": 4.805,
+     "side": "resistance"
+    }
+   ],
+   "elliott_v2": [
+    {
+     "label": "0",
+     "date": "2026-10-08",
+     "price": 635.32,
+     "provisional": false
+    },
+    {
+     "label": "1",
+     "date": "2026-10-21",
+     "price": 705.79,
+     "provisional": false
+    },
+    {
+     "label": "2",
+     "date": "2026-10-23",
+     "price": 662.5,
+     "provisional": false
+    },
+    {
+     "label": "3",
+     "date": "2026-10-29",
+     "price": 711.85,
+     "provisional": true
+    }
+   ],
+   "elliott_v2_other_view": "no valid count",
+   "elliott_v1": [
+    {
+     "label": "0",
+     "date": "2026-10-08",
+     "price": 635.32
+    },
+    {
+     "label": "1",
+     "date": "2026-10-21",
+     "price": 705.79
+    },
+    {
+     "label": "2",
+     "date": "2026-10-23",
+     "price": 662.5
+    }
+   ],
+   "tentative": {
+    "kind": "H",
+    "price": 711.85,
+    "date": "2026-10-29"
+   },
+   "zigzag_pivots": 13,
+   "waves_zigzag": [
+    {
+     "end_date": "2026-05-18",
+     "volume": 47731000.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-05-29",
+     "volume": 23426900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-06-17",
+     "volume": 27258800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-16",
+     "volume": 40577600.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-07-21",
+     "volume": 6591900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-08-25",
+     "volume": 52251100.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-10",
+     "volume": 17994900.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-09-30",
+     "volume": 34768200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-05",
+     "volume": 6167400.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-06",
+     "volume": 2748200.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-08",
+     "volume": 4410800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-21",
+     "volume": 23800300.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-23",
+     "volume": 5639800.0,
+     "done": true
+    },
+    {
+     "end_date": "2026-10-30",
+     "volume": 8989100.0,
+     "done": false
+    }
+   ],
+   "waves_weis": [
+    {
+     "end_date": "2026-05-15",
+     "volume": 52764600.0
+    },
+    {
+     "end_date": "2026-06-01",
+     "volume": 28529800.0
+    },
+    {
+     "end_date": "2026-06-08",
+     "volume": 9622900.0
+    },
+    {
+     "end_date": "2026-06-09",
+     "volume": 2791000.0
+    },
+    {
+     "end_date": "2026-06-17",
+     "volume": 11650500.0
+    },
+    {
+     "end_date": "2026-07-16",
+     "volume": 40577600.0
+    },
+    {
+     "end_date": "2026-07-21",
+     "volume": 6591900.0
+    },
+    {
+     "end_date": "2026-08-11",
+     "volume": 35529000.0
+    },
+    {
+     "end_date": "2026-08-17",
+     "volume": 4924800.0
+    },
+    {
+     "end_date": "2026-08-26",
+     "volume": 13640300.0
+    },
+    {
+     "end_date": "2026-09-01",
+     "volume": 5297600.0
+    },
+    {
+     "end_date": "2026-09-29",
+     "volume": 43299000.0
+    },
+    {
+     "end_date": "2026-10-01",
+     "volume": 4698800.0
+    },
+    {
+     "end_date": "2026-10-05",
+     "volume": 3792100.0
+    },
+    {
+     "end_date": "2026-10-08",
+     "volume": 7159000.0
+    },
+    {
+     "end_date": "2026-10-15",
+     "volume": 11713100.0
+    },
+    {
+     "end_date": "2026-10-23",
+     "volume": 17727000.0
+    }
+   ],
+   "divergences": [],
+   "off_chart": [],
+   "notes": [],
+   "reference_lines": [],
+   "elliott_v2_label": "W3 in progress (provisional)",
+   "elliott_v1_label": "in_W3 (W2 done)"
+  }
+ }
+]

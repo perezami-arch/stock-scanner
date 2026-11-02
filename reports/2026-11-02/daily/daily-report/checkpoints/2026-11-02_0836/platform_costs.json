@@ -1,0 +1,4635 @@
+{
+ "budget_usd": 1.0,
+ "spent_usd": 0.62428,
+ "n_calls": 269,
+ "calls": [
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:46",
+   "pass": 1,
+   "cum_cost_usd": 3e-05,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:46",
+   "pass": 1,
+   "cum_cost_usd": 6e-05,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:46",
+   "pass": 1,
+   "cum_cost_usd": 9e-05,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:47",
+   "pass": 1,
+   "cum_cost_usd": 0.00012,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:47",
+   "pass": 1,
+   "cum_cost_usd": 0.00015,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:47",
+   "pass": 1,
+   "cum_cost_usd": 0.00018,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:47",
+   "pass": 1,
+   "cum_cost_usd": 0.00021,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:48",
+   "pass": 1,
+   "cum_cost_usd": 0.00024,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:48",
+   "pass": 1,
+   "cum_cost_usd": 0.00027,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:48",
+   "pass": 1,
+   "cum_cost_usd": 0.0003,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:48",
+   "pass": 1,
+   "cum_cost_usd": 0.00033,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:48",
+   "pass": 1,
+   "cum_cost_usd": 0.00036,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:49",
+   "pass": 1,
+   "cum_cost_usd": 0.00039,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:49",
+   "pass": 1,
+   "cum_cost_usd": 0.00042,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:38:49",
+   "pass": 1,
+   "cum_cost_usd": 0.00045,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 38.4,
+   "cost_usd": 0.05412,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 10781,
+    "output_tokens": 1926,
+    "x_search_calls": 1,
+    "x_posts_fetched": 8,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-11-02T08:39:28",
+   "pass": 1,
+   "cum_cost_usd": 0.05457,
+   "_counted": true
+  },
+  {
+   "platform": "pplx",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 14.8,
+   "cost_usd": 0.03069,
+   "usage": {
+    "model": "perplexity/sonar-pro",
+    "prompt_tokens": 3025,
+    "completion_tokens": 1041,
+    "image": true
+   },
+   "ts": "2026-11-02T08:39:43",
+   "pass": 1,
+   "cum_cost_usd": 0.08526,
+   "_counted": true
+  },
+  {
+   "platform": "claude",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": false,
+   "seconds": 0.3,
+   "cost_usd": 0.0,
+   "error": "CREDIT: HTTP 402: {\"error\":{\"message\":\"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.\",\"code\":402,\"metadata\":{\"reason\":\"in_flight_budget_exhausted\",\"limit_source\":\"openrouter_in_flight_budget\",\"remedy_hin",
+   "ts": "2026-11-02T08:39:43",
+   "pass": 1,
+   "cum_cost_usd": 0.08526,
+   "_counted": true
+  },
+  {
+   "platform": "gpt",
+   "ticker": "ORCL",
+   "attempt": 1,
+   "ok": false,
+   "seconds": 0.4,
+   "cost_usd": 0.0,
+   "error": "CREDIT: HTTP 402: {\"error\":{\"message\":\"This request requires more credits, or fewer max_tokens. You requested up to 4000 tokens, but can only afford 1151. To increase, visit https://openrouter.ai/workspaces/default/keys/962439c55cd34810f65e2cc322e2d69c1323ff11c8044e78ebb9b5cb99ba1f7c and adjust the ",
+   "ts": "2026-11-02T08:39:43",
+   "pass": 1,
+   "cum_cost_usd": 0.08526,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:45",
+   "pass": 1,
+   "cum_cost_usd": 0.08529,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:45",
+   "pass": 1,
+   "cum_cost_usd": 0.08532,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:45",
+   "pass": 1,
+   "cum_cost_usd": 0.08535,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:45",
+   "pass": 1,
+   "cum_cost_usd": 0.08538,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:46",
+   "pass": 1,
+   "cum_cost_usd": 0.08541,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:46",
+   "pass": 1,
+   "cum_cost_usd": 0.08544,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:46",
+   "pass": 1,
+   "cum_cost_usd": 0.08547,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:46",
+   "pass": 1,
+   "cum_cost_usd": 0.0855,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:46",
+   "pass": 1,
+   "cum_cost_usd": 0.08553,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:47",
+   "pass": 1,
+   "cum_cost_usd": 0.08556,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:47",
+   "pass": 1,
+   "cum_cost_usd": 0.08559,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:47",
+   "pass": 1,
+   "cum_cost_usd": 0.08562,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:47",
+   "pass": 1,
+   "cum_cost_usd": 0.08565,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:47",
+   "pass": 1,
+   "cum_cost_usd": 0.08568,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:48",
+   "pass": 1,
+   "cum_cost_usd": 0.08571,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:49",
+   "pass": 1,
+   "cum_cost_usd": 0.08574,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:49",
+   "pass": 1,
+   "cum_cost_usd": 0.08577,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:49",
+   "pass": 1,
+   "cum_cost_usd": 0.0858,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:49",
+   "pass": 1,
+   "cum_cost_usd": 0.08583,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:49",
+   "pass": 1,
+   "cum_cost_usd": 0.08586,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:50",
+   "pass": 1,
+   "cum_cost_usd": 0.08589,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:50",
+   "pass": 1,
+   "cum_cost_usd": 0.08592,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:50",
+   "pass": 1,
+   "cum_cost_usd": 0.08595,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:50",
+   "pass": 1,
+   "cum_cost_usd": 0.08598,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:51",
+   "pass": 1,
+   "cum_cost_usd": 0.08601,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:51",
+   "pass": 1,
+   "cum_cost_usd": 0.08604,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:51",
+   "pass": 1,
+   "cum_cost_usd": 0.08607,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:51",
+   "pass": 1,
+   "cum_cost_usd": 0.0861,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:51",
+   "pass": 1,
+   "cum_cost_usd": 0.08613,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:39:52",
+   "pass": 1,
+   "cum_cost_usd": 0.08616,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 25.5,
+   "cost_usd": 0.05741,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 11521,
+    "output_tokens": 1688,
+    "x_search_calls": 1,
+    "x_posts_fetched": 8,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-11-02T08:40:17",
+   "pass": 1,
+   "cum_cost_usd": 0.14357,
+   "_counted": true
+  },
+  {
+   "platform": "pplx",
+   "ticker": "MRK",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 13.4,
+   "cost_usd": 0.03064,
+   "usage": {
+    "model": "perplexity/sonar-pro",
+    "prompt_tokens": 3123,
+    "completion_tokens": 1018,
+    "image": true
+   },
+   "ts": "2026-11-02T08:40:31",
+   "pass": 1,
+   "cum_cost_usd": 0.17421,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ADI",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:32",
+   "pass": 1,
+   "cum_cost_usd": 0.17424,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ADI",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:32",
+   "pass": 1,
+   "cum_cost_usd": 0.17427,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ADI",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:33",
+   "pass": 1,
+   "cum_cost_usd": 0.1743,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "OXY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:34",
+   "pass": 1,
+   "cum_cost_usd": 0.17433,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "OXY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:34",
+   "pass": 1,
+   "cum_cost_usd": 0.17436,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "OXY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:34",
+   "pass": 1,
+   "cum_cost_usd": 0.17439,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "OXY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:35",
+   "pass": 1,
+   "cum_cost_usd": 0.17442,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "OXY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:35",
+   "pass": 1,
+   "cum_cost_usd": 0.17445,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "OXY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:35",
+   "pass": 1,
+   "cum_cost_usd": 0.17448,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "OXY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:35",
+   "pass": 1,
+   "cum_cost_usd": 0.17451,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:37",
+   "pass": 1,
+   "cum_cost_usd": 0.17454,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:37",
+   "pass": 1,
+   "cum_cost_usd": 0.17457,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:37",
+   "pass": 1,
+   "cum_cost_usd": 0.1746,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:37",
+   "pass": 1,
+   "cum_cost_usd": 0.17463,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:38",
+   "pass": 1,
+   "cum_cost_usd": 0.17466,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:38",
+   "pass": 1,
+   "cum_cost_usd": 0.17469,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:38",
+   "pass": 1,
+   "cum_cost_usd": 0.17472,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:38",
+   "pass": 1,
+   "cum_cost_usd": 0.17475,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:39",
+   "pass": 1,
+   "cum_cost_usd": 0.17478,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:39",
+   "pass": 1,
+   "cum_cost_usd": 0.17481,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:39",
+   "pass": 1,
+   "cum_cost_usd": 0.17484,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:39",
+   "pass": 1,
+   "cum_cost_usd": 0.17487,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:39",
+   "pass": 1,
+   "cum_cost_usd": 0.1749,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:39",
+   "pass": 1,
+   "cum_cost_usd": 0.17493,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:40:40",
+   "pass": 1,
+   "cum_cost_usd": 0.17496,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 28.7,
+   "cost_usd": 0.06001,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 11321,
+    "output_tokens": 1472,
+    "x_search_calls": 1,
+    "x_posts_fetched": 9,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-11-02T08:41:09",
+   "pass": 1,
+   "cum_cost_usd": 0.23497,
+   "_counted": true
+  },
+  {
+   "platform": "pplx",
+   "ticker": "LLY",
+   "attempt": 1,
+   "ok": false,
+   "seconds": 0.2,
+   "cost_usd": 0.0,
+   "error": "CREDIT: HTTP 402: {\"error\":{\"message\":\"This request would exceed your available credits given your current in-flight requests. Retry after in-flight requests settle, or add credits.\",\"code\":402,\"metadata\":{\"reason\":\"in_flight_budget_exhausted\",\"limit_source\":\"openrouter_in_flight_budget\",\"remedy_hin",
+   "ts": "2026-11-02T08:41:09",
+   "pass": 1,
+   "cum_cost_usd": 0.23497,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:10",
+   "pass": 1,
+   "cum_cost_usd": 0.235,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:10",
+   "pass": 1,
+   "cum_cost_usd": 0.23503,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:10",
+   "pass": 1,
+   "cum_cost_usd": 0.23506,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:11",
+   "pass": 1,
+   "cum_cost_usd": 0.23509,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:11",
+   "pass": 1,
+   "cum_cost_usd": 0.23512,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:11",
+   "pass": 1,
+   "cum_cost_usd": 0.23515,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:11",
+   "pass": 1,
+   "cum_cost_usd": 0.23518,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:11",
+   "pass": 1,
+   "cum_cost_usd": 0.23521,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:12",
+   "pass": 1,
+   "cum_cost_usd": 0.23524,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:12",
+   "pass": 1,
+   "cum_cost_usd": 0.23527,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:12",
+   "pass": 1,
+   "cum_cost_usd": 0.2353,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:12",
+   "pass": 1,
+   "cum_cost_usd": 0.23533,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:13",
+   "pass": 1,
+   "cum_cost_usd": 0.23536,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:13",
+   "pass": 1,
+   "cum_cost_usd": 0.23539,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:13",
+   "pass": 1,
+   "cum_cost_usd": 0.23542,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ABNB",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:14",
+   "pass": 1,
+   "cum_cost_usd": 0.23545,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ABNB",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.6,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:15",
+   "pass": 1,
+   "cum_cost_usd": 0.23548,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ABNB",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:15",
+   "pass": 1,
+   "cum_cost_usd": 0.23551,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ABNB",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:15",
+   "pass": 1,
+   "cum_cost_usd": 0.23554,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "ABNB",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 13.2,
+   "cost_usd": 0.01558,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 8873,
+    "output_tokens": 1464,
+    "x_search_calls": 1,
+    "x_posts_fetched": 1,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-11-02T08:41:29",
+   "pass": 1,
+   "cum_cost_usd": 0.25112,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:30",
+   "pass": 1,
+   "cum_cost_usd": 0.25115,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:30",
+   "pass": 1,
+   "cum_cost_usd": 0.25118,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:30",
+   "pass": 1,
+   "cum_cost_usd": 0.25121,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:30",
+   "pass": 1,
+   "cum_cost_usd": 0.25124,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:31",
+   "pass": 1,
+   "cum_cost_usd": 0.25127,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:31",
+   "pass": 1,
+   "cum_cost_usd": 0.2513,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:31",
+   "pass": 1,
+   "cum_cost_usd": 0.25133,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:31",
+   "pass": 1,
+   "cum_cost_usd": 0.25136,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:31",
+   "pass": 1,
+   "cum_cost_usd": 0.25139,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:32",
+   "pass": 1,
+   "cum_cost_usd": 0.25142,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:32",
+   "pass": 1,
+   "cum_cost_usd": 0.25145,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:32",
+   "pass": 1,
+   "cum_cost_usd": 0.25148,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:32",
+   "pass": 1,
+   "cum_cost_usd": 0.25151,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:32",
+   "pass": 1,
+   "cum_cost_usd": 0.25154,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AVGO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.4,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:33",
+   "pass": 1,
+   "cum_cost_usd": 0.25157,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:34",
+   "pass": 1,
+   "cum_cost_usd": 0.2516,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:34",
+   "pass": 1,
+   "cum_cost_usd": 0.25163,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:34",
+   "pass": 1,
+   "cum_cost_usd": 0.25166,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:34",
+   "pass": 1,
+   "cum_cost_usd": 0.25169,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:35",
+   "pass": 1,
+   "cum_cost_usd": 0.25172,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:35",
+   "pass": 1,
+   "cum_cost_usd": 0.25175,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:35",
+   "pass": 1,
+   "cum_cost_usd": 0.25178,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:35",
+   "pass": 1,
+   "cum_cost_usd": 0.25181,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:35",
+   "pass": 1,
+   "cum_cost_usd": 0.25184,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:36",
+   "pass": 1,
+   "cum_cost_usd": 0.25187,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:36",
+   "pass": 1,
+   "cum_cost_usd": 0.2519,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:36",
+   "pass": 1,
+   "cum_cost_usd": 0.25193,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:41:36",
+   "pass": 1,
+   "cum_cost_usd": 0.25196,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 25.5,
+   "cost_usd": 0.01407,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 8832,
+    "output_tokens": 1524,
+    "x_search_calls": 1,
+    "x_posts_fetched": 1,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-11-02T08:42:02",
+   "pass": 1,
+   "cum_cost_usd": 0.26603,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.4,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:04",
+   "pass": 1,
+   "cum_cost_usd": 0.26606,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:04",
+   "pass": 1,
+   "cum_cost_usd": 0.26609,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:04",
+   "pass": 1,
+   "cum_cost_usd": 0.26612,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:05",
+   "pass": 1,
+   "cum_cost_usd": 0.26615,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:05",
+   "pass": 1,
+   "cum_cost_usd": 0.26618,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:05",
+   "pass": 1,
+   "cum_cost_usd": 0.26621,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:05",
+   "pass": 1,
+   "cum_cost_usd": 0.26624,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:06",
+   "pass": 1,
+   "cum_cost_usd": 0.26627,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:06",
+   "pass": 1,
+   "cum_cost_usd": 0.2663,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:06",
+   "pass": 1,
+   "cum_cost_usd": 0.26633,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:06",
+   "pass": 1,
+   "cum_cost_usd": 0.26636,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:07",
+   "pass": 1,
+   "cum_cost_usd": 0.26639,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:07",
+   "pass": 1,
+   "cum_cost_usd": 0.26642,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 13.6,
+   "cost_usd": 0.0539,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 10985,
+    "output_tokens": 1735,
+    "x_search_calls": 1,
+    "x_posts_fetched": 8,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-11-02T08:42:21",
+   "pass": 1,
+   "cum_cost_usd": 0.32032,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:22",
+   "pass": 1,
+   "cum_cost_usd": 0.32035,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:22",
+   "pass": 1,
+   "cum_cost_usd": 0.32038,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:22",
+   "pass": 1,
+   "cum_cost_usd": 0.32041,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:22",
+   "pass": 1,
+   "cum_cost_usd": 0.32044,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:22",
+   "pass": 1,
+   "cum_cost_usd": 0.32047,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:23",
+   "pass": 1,
+   "cum_cost_usd": 0.3205,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:23",
+   "pass": 1,
+   "cum_cost_usd": 0.32053,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:23",
+   "pass": 1,
+   "cum_cost_usd": 0.32056,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:23",
+   "pass": 1,
+   "cum_cost_usd": 0.32059,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:24",
+   "pass": 1,
+   "cum_cost_usd": 0.32062,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:24",
+   "pass": 1,
+   "cum_cost_usd": 0.32065,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:24",
+   "pass": 1,
+   "cum_cost_usd": 0.32068,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:24",
+   "pass": 1,
+   "cum_cost_usd": 0.32071,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:24",
+   "pass": 1,
+   "cum_cost_usd": 0.32074,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:25",
+   "pass": 1,
+   "cum_cost_usd": 0.32077,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "NFLX",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 22.8,
+   "cost_usd": 0.01381,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 8764,
+    "output_tokens": 1453,
+    "x_search_calls": 1,
+    "x_posts_fetched": 1,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-11-02T08:42:48",
+   "pass": 1,
+   "cum_cost_usd": 0.33458,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:49",
+   "pass": 1,
+   "cum_cost_usd": 0.33461,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:49",
+   "pass": 1,
+   "cum_cost_usd": 0.33464,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:49",
+   "pass": 1,
+   "cum_cost_usd": 0.33467,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:49",
+   "pass": 1,
+   "cum_cost_usd": 0.3347,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:49",
+   "pass": 1,
+   "cum_cost_usd": 0.33473,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:49",
+   "pass": 1,
+   "cum_cost_usd": 0.33476,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:50",
+   "pass": 1,
+   "cum_cost_usd": 0.33479,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:50",
+   "pass": 1,
+   "cum_cost_usd": 0.33482,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:50",
+   "pass": 1,
+   "cum_cost_usd": 0.33485,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:50",
+   "pass": 1,
+   "cum_cost_usd": 0.33488,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:51",
+   "pass": 1,
+   "cum_cost_usd": 0.33491,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:51",
+   "pass": 1,
+   "cum_cost_usd": 0.33494,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:51",
+   "pass": 1,
+   "cum_cost_usd": 0.33497,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:51",
+   "pass": 1,
+   "cum_cost_usd": 0.335,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:42:51",
+   "pass": 1,
+   "cum_cost_usd": 0.33503,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "CRWD",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 25.4,
+   "cost_usd": 0.06293,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 12011,
+    "output_tokens": 1812,
+    "x_search_calls": 1,
+    "x_posts_fetched": 9,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-11-02T08:43:17",
+   "pass": 1,
+   "cum_cost_usd": 0.39796,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:18",
+   "pass": 1,
+   "cum_cost_usd": 0.39799,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:18",
+   "pass": 1,
+   "cum_cost_usd": 0.39802,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:18",
+   "pass": 1,
+   "cum_cost_usd": 0.39805,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:19",
+   "pass": 1,
+   "cum_cost_usd": 0.39808,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:19",
+   "pass": 1,
+   "cum_cost_usd": 0.39811,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:19",
+   "pass": 1,
+   "cum_cost_usd": 0.39814,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:19",
+   "pass": 1,
+   "cum_cost_usd": 0.39817,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:19",
+   "pass": 1,
+   "cum_cost_usd": 0.3982,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:20",
+   "pass": 1,
+   "cum_cost_usd": 0.39823,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:20",
+   "pass": 1,
+   "cum_cost_usd": 0.39826,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:20",
+   "pass": 1,
+   "cum_cost_usd": 0.39829,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:20",
+   "pass": 1,
+   "cum_cost_usd": 0.39832,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:20",
+   "pass": 1,
+   "cum_cost_usd": 0.39835,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:21",
+   "pass": 1,
+   "cum_cost_usd": 0.39838,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "UBER",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:21",
+   "pass": 1,
+   "cum_cost_usd": 0.39841,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "TXN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:22",
+   "pass": 1,
+   "cum_cost_usd": 0.39844,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "TXN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:22",
+   "pass": 1,
+   "cum_cost_usd": 0.39847,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "TXN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:23",
+   "pass": 1,
+   "cum_cost_usd": 0.3985,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "TXN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:23",
+   "pass": 1,
+   "cum_cost_usd": 0.39853,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "TXN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:23",
+   "pass": 1,
+   "cum_cost_usd": 0.39856,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "TXN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:23",
+   "pass": 1,
+   "cum_cost_usd": 0.39859,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "TXN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:23",
+   "pass": 1,
+   "cum_cost_usd": 0.39862,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "TXN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:24",
+   "pass": 1,
+   "cum_cost_usd": 0.39865,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "TXN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:24",
+   "pass": 1,
+   "cum_cost_usd": 0.39868,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "TXN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 13.8,
+   "cost_usd": 0.05868,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 11025,
+    "output_tokens": 1627,
+    "x_search_calls": 1,
+    "x_posts_fetched": 9,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-11-02T08:43:38",
+   "pass": 1,
+   "cum_cost_usd": 0.45736,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ADI",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:39",
+   "pass": 1,
+   "cum_cost_usd": 0.45739,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ADI",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:39",
+   "pass": 1,
+   "cum_cost_usd": 0.45742,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "ADI",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:39",
+   "pass": 1,
+   "cum_cost_usd": 0.45745,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "OXY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:40",
+   "pass": 1,
+   "cum_cost_usd": 0.45748,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "OXY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:40",
+   "pass": 1,
+   "cum_cost_usd": 0.45751,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "OXY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:41",
+   "pass": 1,
+   "cum_cost_usd": 0.45754,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "OXY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:41",
+   "pass": 1,
+   "cum_cost_usd": 0.45757,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "OXY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:41",
+   "pass": 1,
+   "cum_cost_usd": 0.4576,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "OXY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:41",
+   "pass": 1,
+   "cum_cost_usd": 0.45763,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "OXY",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:41",
+   "pass": 1,
+   "cum_cost_usd": 0.45766,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:42",
+   "pass": 1,
+   "cum_cost_usd": 0.45769,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:42",
+   "pass": 1,
+   "cum_cost_usd": 0.45772,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:43",
+   "pass": 1,
+   "cum_cost_usd": 0.45775,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:43",
+   "pass": 1,
+   "cum_cost_usd": 0.45778,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:43",
+   "pass": 1,
+   "cum_cost_usd": 0.45781,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:43",
+   "pass": 1,
+   "cum_cost_usd": 0.45784,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:43",
+   "pass": 1,
+   "cum_cost_usd": 0.45787,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:44",
+   "pass": 1,
+   "cum_cost_usd": 0.4579,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:44",
+   "pass": 1,
+   "cum_cost_usd": 0.45793,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:44",
+   "pass": 1,
+   "cum_cost_usd": 0.45796,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:44",
+   "pass": 1,
+   "cum_cost_usd": 0.45799,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:44",
+   "pass": 1,
+   "cum_cost_usd": 0.45802,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "AMGN",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 9.0,
+   "cost_usd": 0.01661,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 8793,
+    "output_tokens": 892,
+    "x_search_calls": 1,
+    "x_posts_fetched": 1,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-11-02T08:43:53",
+   "pass": 1,
+   "cum_cost_usd": 0.47463,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:54",
+   "pass": 1,
+   "cum_cost_usd": 0.47466,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:55",
+   "pass": 1,
+   "cum_cost_usd": 0.47469,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:55",
+   "pass": 1,
+   "cum_cost_usd": 0.47472,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:55",
+   "pass": 1,
+   "cum_cost_usd": 0.47475,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:55",
+   "pass": 1,
+   "cum_cost_usd": 0.47478,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:56",
+   "pass": 1,
+   "cum_cost_usd": 0.47481,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:56",
+   "pass": 1,
+   "cum_cost_usd": 0.47484,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.9,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:57",
+   "pass": 1,
+   "cum_cost_usd": 0.47487,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:57",
+   "pass": 1,
+   "cum_cost_usd": 0.4749,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:57",
+   "pass": 1,
+   "cum_cost_usd": 0.47493,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:57",
+   "pass": 1,
+   "cum_cost_usd": 0.47496,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:57",
+   "pass": 1,
+   "cum_cost_usd": 0.47499,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:58",
+   "pass": 1,
+   "cum_cost_usd": 0.47502,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:58",
+   "pass": 1,
+   "cum_cost_usd": 0.47505,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "AAPL",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:58",
+   "pass": 1,
+   "cum_cost_usd": 0.47508,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:59",
+   "pass": 1,
+   "cum_cost_usd": 0.47511,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:43:59",
+   "pass": 1,
+   "cum_cost_usd": 0.47514,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:00",
+   "pass": 1,
+   "cum_cost_usd": 0.47517,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:00",
+   "pass": 1,
+   "cum_cost_usd": 0.4752,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:00",
+   "pass": 1,
+   "cum_cost_usd": 0.47523,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:00",
+   "pass": 1,
+   "cum_cost_usd": 0.47526,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:00",
+   "pass": 1,
+   "cum_cost_usd": 0.47529,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:01",
+   "pass": 1,
+   "cum_cost_usd": 0.47532,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:01",
+   "pass": 1,
+   "cum_cost_usd": 0.47535,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:01",
+   "pass": 1,
+   "cum_cost_usd": 0.47538,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:01",
+   "pass": 1,
+   "cum_cost_usd": 0.47541,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:01",
+   "pass": 1,
+   "cum_cost_usd": 0.47544,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:02",
+   "pass": 1,
+   "cum_cost_usd": 0.47547,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:02",
+   "pass": 1,
+   "cum_cost_usd": 0.4755,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "T",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 20.5,
+   "cost_usd": 0.06215,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 11726,
+    "output_tokens": 1307,
+    "x_search_calls": 1,
+    "x_posts_fetched": 10,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-11-02T08:44:22",
+   "pass": 1,
+   "cum_cost_usd": 0.53765,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:23",
+   "pass": 1,
+   "cum_cost_usd": 0.53768,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:24",
+   "pass": 1,
+   "cum_cost_usd": 0.53771,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:24",
+   "pass": 1,
+   "cum_cost_usd": 0.53774,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.3,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:24",
+   "pass": 1,
+   "cum_cost_usd": 0.53777,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:24",
+   "pass": 1,
+   "cum_cost_usd": 0.5378,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:24",
+   "pass": 1,
+   "cum_cost_usd": 0.53783,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:25",
+   "pass": 1,
+   "cum_cost_usd": 0.53786,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:25",
+   "pass": 1,
+   "cum_cost_usd": 0.53789,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:25",
+   "pass": 1,
+   "cum_cost_usd": 0.53792,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:25",
+   "pass": 1,
+   "cum_cost_usd": 0.53795,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:25",
+   "pass": 1,
+   "cum_cost_usd": 0.53798,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:26",
+   "pass": 1,
+   "cum_cost_usd": 0.53801,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "PFE",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 24.8,
+   "cost_usd": 0.04634,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 10605,
+    "output_tokens": 1716,
+    "x_search_calls": 1,
+    "x_posts_fetched": 6,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-11-02T08:44:50",
+   "pass": 1,
+   "cum_cost_usd": 0.58435,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "TMO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:52",
+   "pass": 1,
+   "cum_cost_usd": 0.58438,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "TMO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:52",
+   "pass": 1,
+   "cum_cost_usd": 0.58441,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "TMO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:52",
+   "pass": 1,
+   "cum_cost_usd": 0.58444,
+   "_counted": true
+  },
+  {
+   "platform": "jev",
+   "ticker": "TMO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 0.2,
+   "cost_usd": 3e-05,
+   "usage": {
+    "model": "typesafe/jev-1.13-20260917",
+    "prompt_tokens": null,
+    "completion_tokens": null
+   },
+   "ts": "2026-11-02T08:44:52",
+   "pass": 1,
+   "cum_cost_usd": 0.58447,
+   "_counted": true
+  },
+  {
+   "platform": "grok",
+   "ticker": "TMO",
+   "attempt": 1,
+   "ok": true,
+   "seconds": 12.7,
+   "cost_usd": 0.03981,
+   "usage": {
+    "model": "grok-4.3",
+    "input_tokens": 10237,
+    "output_tokens": 1452,
+    "x_search_calls": 1,
+    "x_posts_fetched": 5,
+    "source": "x_search",
+    "cached_posts": 0,
+    "image": true
+   },
+   "ts": "2026-11-02T08:45:05",
+   "pass": 1,
+   "cum_cost_usd": 0.62428,
+   "_counted": true
+  }
+ ]
+}
