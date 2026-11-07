@@ -2,7 +2,7 @@
 checkpoint triggers (cost gate), right/wrong scoring with real prices, per-platform scoreboard, weekly versioned prompts.
   * Positions = recommendations of the weekly unified scan (tracker_rows.csv: recon 'תואם', not earnings-blocked). Paper trades and
     trial rows are NEVER positions. Entry = next session open after the scan (PIT; fallback the scan's entry ref).
-  * Exit for measurement = the bot's own stop rule (scanner_stops.stop_status, close-checked) or day 20, whichever first.
+  * Exit for measurement = the bot's own stop rule (scanner_stops.stop_status: stock intraday touch, long 5xATR14 / short 4xATR14, fill = worse of stop and open; crypto fixed 3x on the close) or day 20, whichever first.
   * Scoring (verdict vs the direction-adjusted excess return vs SPY/BTC from the decision date to the exit = excess_dir):
       approve / supports / Claude conviction >= 60 / Grok & Jev sentiment with the trade  -> right if excess_dir > 0
       veto / opposes / conviction < 45 / sentiment against the trade                        -> right if excess_dir < 0

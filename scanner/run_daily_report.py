@@ -27,9 +27,10 @@ def openbb():
 
 def update_paper(asof, path=None):
     """paper_trades_ledger.csv from real closes: entry = open of entry_session, stop = the same rule as positions (scanner_stops.stop_status:
-    stock 4xATR chandelier, intraday touch from 01.11 with fill = worse of stop and open; crypto fixed 3xATR on closes), half at the stock-long target, exit at the stop close or day 20; cum_d1..20 =
+    stock long 5xATR14 / short 4xATR14 chandelier, intraday touch, fill = worse of stop and open, level known before the session;
+    crypto fixed 3xATR on closes), half at the stock-long target, exit at the stop fill or day 20; cum_d1..20 =
     direction-adjusted close return vs the fill. Paper rows never become positions and never enter the reports beyond one line."""
-    import scanner_stops as ST
+    import scanner_stops as ST, stop_policy as SPOL
     path = path or os.environ.get('PAPER_LEDGER', (_SCANNER_ROOT + '/scan-runs/paper_trades_ledger.csv'))
     if not os.path.exists(path): return 0
     d = pd.read_csv(path, dtype=object); n = 0; cache = {}
@@ -45,10 +46,11 @@ def update_paper(asof, path=None):
         fill = float(s.Open.iloc[0]); sgn = 1 if r.direction == 'LONG' else -1
         tp = float(r.target_level) if (r.asset == 'stock' and r.direction == 'LONG' and pd.notna(r.target_level) and str(r.target_level) not in ('', 'nan')) else None
         st = ST.stop_status(x, r.asset, r.direction, r.entry_session, fill, tp_half=tp)
-        if st.get('next_level') is None: d.loc[i, 'status'] = 'no active rule'; continue
-        k0 = x.index.searchsorted(pd.Timestamp(r.entry_session)); A = ST.atr14(x.High.values, x.Low.values, x.Close.values)
-        init = fill - sgn * float(r.stop_atr_mult) * float(A[k0 - 1] if k0 > 0 else A[-1])
-        d.loc[i, ['entry_price', 'stop', 'status']] = [round(fill, 6), round(init, 6), 'open']
+        if st.get('next_level') is None and not st.get('stopped'): d.loc[i, 'status'] = 'no active rule'; continue
+        mult = SPOL.stop_atr_mult(r.asset, r.direction)
+        init = st.get('initial_stop')
+        d.loc[i, ['entry_price', 'stop', 'status']] = [round(fill, 6), None if init is None else round(float(init), 6), 'open']
+        if mult is not None: d.loc[i, 'stop_atr_mult'] = mult
         for j in range(min(20, len(s))): d.loc[i, f'cum_d{j + 1}'] = round(sgn * (float(s.Close.iloc[j]) / fill - 1), 6)
         ex = None
         if st.get('stopped') and (s.index <= pd.Timestamp(st['stop_date'])).sum() <= 20: ex = (st['stop_date'], st['stop_close'], 'stop')

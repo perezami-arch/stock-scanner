@@ -10,14 +10,20 @@ DEFINITIONS REUSED FROM THE RESEARCHER'S BACKTEST (/workspace/trading-frameworks
     crypto = Yahoo UTC daily bars (same source as the backtest frames), bar D usable once D+1 00:00 UTC <= scan time.
 
 ACTIVE RULES
-  1. US stock LONG : chandelier close-based. level_j = max(level_{j-1}, max(close since entry through j-1) - 4*ATR14[j-1]),
-                     starting at the initial stop (17.10: ratchet - never loosens, never below the initial stop); exit at the close that
-                     is <= level. Initial stop = entry - 4*ATR14 (ATR of the last completed bar before the scan).
-     + ACTIVE partial exit (v2, 08.10 13:28): take 1/2 at the Fib 1.618 extension of the last confirmed 2xATR zigzag leg
-                     (sim_targets.py HY2: origin + 1.618*(end-origin); if already behind entry -> the next extension 2.618), close-checked;
-                     the rest stays under the 4xATR chandelier. No confirmed swing / no extension beyond entry -> pure chandelier + flag.
-  2. US stock SHORT: only if it passes the short rule (ck_score>=3 & close<SMA200). level_j = min(level_{j-1}, min(close since entry) + 4*ATR14[j-1])
-                     (v2: 4x, was 3x). Initial = entry + 4*ATR14. Shorts failing the rule get NO stop and short_rule_pass=False.
+  1. US stock LONG : chandelier, intraday touch, 5xATR14 (Ilan: 5x with the 01.11 touch approval; was 4x).
+                     The level judged on bar j uses only closes and ATR through j-1. The level computed from bar j's own
+                     close is next_level for bar j+1 and is NOT applied to bar j's low. level_j = max(level_{j-1},
+                     max(close since entry through j-1) - 5*ATR14[j-1]), starting at the initial stop (17.10: ratchet -
+                     never loosens, never below the initial stop). Exit when Low <= level; fill = worse of level and Open.
+                     Initial stop = entry - 5*ATR14 (ATR of the last completed bar before the entry).
+     + ACTIVE partial exit (v2, 08.10 13:28, unchanged): take 1/2 at the Fib 1.618 extension of the last confirmed 2xATR
+                     zigzag leg (sim_targets.py HY2: origin + 1.618*(end-origin); if already behind entry -> the next
+                     extension 2.618), close-checked from the entry bar + 2; the rest stays under the 5xATR chandelier.
+                     No confirmed swing / no extension beyond entry -> pure chandelier + flag.
+  2. US stock SHORT: only if it passes the short rule (ck_score>=3 & close<SMA200). Multiplier stays 4xATR14.
+                     level_j = min(level_{j-1}, min(close since entry through j-1) + 4*ATR14[j-1]) (v2: 4x, was 3x),
+                     same causal bar: today's close does not tighten today's high. Exit when High >= level; fill = worse
+                     of level and Open. Initial = entry + 4*ATR14. Shorts failing the rule get NO stop and short_rule_pass=False.
   3. Crypto LONG   : fixed stop = entry - 3*ATR14, checked on the daily (UTC) close, no trailing, no take-profit target.
   4. Crypto SHORT  : FROZEN. Never output as a setup; written to frozen_crypto_shorts (separate CSV) for measurement only.
 EXPERIMENTAL (logged only, never changes the active stop/targets): see fib_elliott().
@@ -28,6 +34,7 @@ import numpy as np, pandas as pd
 warnings.filterwarnings("ignore")
 sys.path.insert(0, _SCANNER_ROOT)
 import scanner_momentum as SM
+import stop_policy as SPOL
 
 IAF = (_SCANNER_ROOT + "/trading-frameworks-eval/iaf/")
 _s = open(IAF + "sim_fib.py").read(); exec(_s[_s.index("def atr14"):_s.index("def clock")])           # atr14, zigzag
@@ -37,9 +44,10 @@ exec(_p[_p.index("def cci"):_p.index("cache={}")]); exec(_p[_p.index("def feats"
 ZZ = 2.0                                   # zigzag reversal threshold in ATRs (backtest value)
 RET = [0.382, 0.5, 0.618, 0.786]; EXT = [1.272, 1.618, 2.618]
 # 01.11.2026 (Ilan): stock stops trigger on an INTRADAY TOUCH (long: Low<=level, short: High>=level), fill = worse of level and Open.
-RULES = {("stock", "LONG"):  dict(stop_type="chandelier_touch", stop_atr_mult=4.0, trailing=True),
-         ("stock", "SHORT"): dict(stop_type="chandelier_touch", stop_atr_mult=4.0, trailing=True),   # v2 08.10: 4x (was 3x)
-         ("crypto", "LONG"): dict(stop_type="fixed_close", stop_atr_mult=3.0, trailing=False)}
+# Long multiplier is 5xATR14; short stays 4xATR14. Both come from stop_policy so the tracker, scanner and account match.
+RULES = {("stock", "LONG"):  dict(stop_type="chandelier_touch", stop_atr_mult=SPOL.stock_atr_mult("LONG"), trailing=True),
+         ("stock", "SHORT"): dict(stop_type="chandelier_touch", stop_atr_mult=SPOL.stock_atr_mult("SHORT"), trailing=True),   # v2 08.10: 4x (was 3x); not changed with the long 5x
+         ("crypto", "LONG"): dict(stop_type="fixed_close", stop_atr_mult=SPOL.CRYPTO_LONG_ATR_MULT, trailing=False)}
 FIB_TOL = 0.10                             # a wave ratio "deviates" if it is >10% (relative) away from every allowed Fib ratio
 W2_R = [0.382, 0.5, 0.618, 0.786]; W3_X = [1.0, 1.272, 1.618, 2.618]; W4_R = [0.236, 0.382, 0.5]; W5_X = [0.618, 1.0, 1.618]
 FIB_NUMS = [5, 8, 13, 21, 34, 55, 89, 144, 233]
@@ -84,8 +92,9 @@ def short_rule(x):
     ok = (ck is not None and ck >= 3) and (b200 == 1)
     return bool(ok), ck, (None if b200 is None or (isinstance(b200, float) and np.isnan(b200)) else int(b200))
 
-def active_stop(x, asset, direction, entry=None):
-    """Initial active stop for a new setup. entry=None -> last close is the reference (scan output before a trigger exists)."""
+def active_stop(x, asset, direction, entry=None, atr_mult=None):
+    """Initial active stop for a new setup. entry=None -> last close is the reference (scan output before a trigger exists).
+    atr_mult overrides the policy table (legacy 4x longs). It does not change the Fib 1.618 half-target price."""
     direction = direction.upper(); r = {c: None for c in STOP_COLS}; r["frozen_crypto_short"] = False
     a = atr14(x.High.values, x.Low.values, x.Close.values); A = a[-1] if len(a) else np.nan
     r["atr14_wilder"] = round(float(A), 4) if np.isfinite(A) else None
@@ -96,91 +105,103 @@ def active_stop(x, asset, direction, entry=None):
     if asset == "stock" and direction == "SHORT":
         ok, ck, b = short_rule(x); r.update(short_rule_pass=ok, short_ck_score=ck, below_sma200=b)
         if not ok: r["stop_type"] = "none (short rule failed)"; return r
-    rule = RULES[(asset, direction)]; r["stop_type"] = rule["stop_type"]; r["stop_atr_mult"] = rule["stop_atr_mult"]
-    if asset == "stock" and direction == "LONG": r.update(half_at_1618(x, ref, a))
+    rule = dict(RULES[(asset, direction)])
+    if atr_mult is not None: rule["stop_atr_mult"] = float(atr_mult)
+    r["stop_type"] = rule["stop_type"]; r["stop_atr_mult"] = rule["stop_atr_mult"]
+    if asset == "stock" and direction == "LONG": r.update(half_at_1618(x, ref, a, atr_mult=rule["stop_atr_mult"]))
     if np.isfinite(A):
-        sgn = 1 if direction == "LONG" else -1
-        st = ref - sgn * rule["stop_atr_mult"] * A
+        st = SPOL.initial_stop_price(direction, ref, A, atr_mult=rule["stop_atr_mult"])
         r["initial_stop"] = round(float(st), 4); r["initial_stop_pct"] = round(float(abs(ref - st) / ref * 100), 2)
     return r
 
-def half_at_1618(x, ref, a=None):
+def half_at_1618(x, ref, a=None, atr_mult=None):
     """ACTIVE for US stock longs (sim_targets.py variant HY2). Leg = last confirmed swing HIGH H1 + its origin LOW L0 (2xATR zigzag,
     pivots confirmed on/before the last completed bar). allext = L0 + r*(H1-L0), r in 1.272/1.618/2.618; target = the first
-    extension >= the 1.618 level that is still beyond the entry; none -> pure 4xATR chandelier (flagged)."""
+    extension >= the 1.618 level that is still beyond the entry; none -> pure chandelier (flagged). The 1.618 price does not
+    depend on the stop multiplier; the text names whichever chandelier the remainder sits under."""
+    ktxt = f"{(RULES[('stock', 'LONG')]['stop_atr_mult'] if atr_mult is None else float(atr_mult)):g}"
     h, l, c = x.High.values, x.Low.values, x.Close.values
     a = atr14(h, l, c) if a is None else a
     known = [p for p in (zigzag(h, l, a, ZZ) if len(a) else []) if p[3] <= len(h) - 1]
     idx = [j for j, p in enumerate(known) if p[0] == "H"]
     if not idx or idx[-1] == 0:
-        return dict(tp_half_1618=None, tp_half_fallback=True, partial_exit_rule="FALLBACK: no confirmed swing -> 100% under 4xATR chandelier")
+        return dict(tp_half_1618=None, tp_half_fallback=True, partial_exit_rule=f"FALLBACK: no confirmed swing -> 100% under {ktxt}xATR chandelier")
     H1, L0 = known[idx[-1]][1], known[idx[-1] - 1][1]; allext = [L0 + f * (H1 - L0) for f in EXT]
     ext = [t for t in allext if t - ref > 0]; cand = [t for t in ext if t - allext[1] >= 0]
     if not cand:
-        return dict(tp_half_1618=None, tp_half_fallback=True, partial_exit_rule="FALLBACK: 1.618/2.618 already behind entry -> 100% under 4xATR chandelier")
+        return dict(tp_half_1618=None, tp_half_fallback=True, partial_exit_rule=f"FALLBACK: 1.618/2.618 already behind entry -> 100% under {ktxt}xATR chandelier")
     lvl = "1.618" if cand[0] == allext[1] else "2.618 (1.618 already behind entry)"
     return dict(tp_half_1618=round(float(cand[0]), 4), tp_half_fallback=False,
-                partial_exit_rule=f"1/2 at Fib {lvl} = {cand[0]:.2f} on close; rest under 4xATR chandelier")
+                partial_exit_rule=f"1/2 at Fib {lvl} = {cand[0]:.2f} on close; rest under {ktxt}xATR chandelier")
 
 def _ratchet(sgn, prev, raw):
     """never loosen: longs keep the higher of the previous live level and the new chandelier value, shorts the lower."""
-    return max(prev, raw) if sgn == 1 else min(prev, raw)
+    return SPOL.ratchet("LONG" if sgn == 1 else "SHORT", prev, raw)
 
 def _touch(sgn, o, h, l, lv):
     """Intraday-touch exit price or None: long hit if Low<=lv, short if High>=lv; fill = worse of lv and the bar Open (gap)."""
-    if sgn == 1: return float(min(o, lv)) if l <= lv else None
-    return float(max(o, lv)) if h >= lv else None
+    return SPOL.touch_fill("LONG" if sgn == 1 else "SHORT", o, h, l, lv)
 
-def stop_status(x, asset, direction, entry_date, entry_price, tp_half=None):
-    """Live monitoring of an open trade, same semantics as the backtest close mode (sim_chand 'c' / sim_fib atr3 'c'):
-    entry bar k = first bar on/after entry_date; first check at the close of k+2; exit at that close.
-    Stock trailing stop (17.10 fix): level_j = ratchet(level_{j-1}, max/min close since entry through j-1 -/+ 4*ATR14[j-1]),
-    starting from the initial stop (entry -/+ 4*ATR14 of the bar before the entry bar). It only moves in the trade's favour:
-    never down for longs / up for shorts, and never below (long) / above (short) the initial stop (an ATR expansion used to
-    loosen it). The raw, un-ratcheted chandelier value is returned as next_level_raw for audit.
-    Stock longs with tp_half: 1/2 exits at the first close >= tp_half (stop checked first on the same close, as sim_targets 'c');
-    the remaining half stays under the same stop.
-    stop_type '*_touch' (stocks from 01.11.2026): checked from the entry bar on Low/High, fill = worse of level and Open;
-    stop_close then holds that fill price (kept for caller compatibility), plus exit_price / exit_mode.
+def _half_until(x, C, k, end, sgn, tp_half, half):
+    """Close-checked 1/2 at Fib, from the entry bar + 2 up to but not including a same-bar stop. The target price is unchanged."""
+    for j in range(k + 2, end):
+        if half["half_taken"]: break
+        if sgn * (C[j] - float(tp_half)) >= 0:
+            half.update(half_taken=True, half_date=str(x.index[j].date()), half_price=float(C[j]))
+
+def stop_status(x, asset, direction, entry_date, entry_price, tp_half=None, atr_mult=None):
+    """Live monitoring of an open trade.
+    entry bar k = first bar on/after entry_date. No bar on/after entry_date -> no exit (the entry has not traded).
+    Crypto fixed stop: first check at the close of k+2; a low that does not close through the stop does not exit.
+    Stock trailing stop: level_j = ratchet(level_{j-1}, extreme close through j-1 -/+ K*ATR14[j-1]), K = 5 long / 4 short,
+    starting from the initial stop (entry -/+ K*ATR14 of the bar before the entry bar). It only moves in the trade's favour.
+    atr_mult overrides K (legacy longs used 4). The raw chandelier is next_level_raw.
+    Stock touch (01.11): from the entry bar, long Low / short High vs the level known BEFORE that bar.
+    Fill = worse of level and Open. The level built from today's close is next_level for the next session only.
+    Stock longs with tp_half: 1/2 at the first close >= tp_half from k+2, and only if the stop did not exit first.
     Returns dict(next_level, initial_stop, stopped, stop_date, stop_close[, half_taken, half_date, half_price]).
-    next_level applies to the NEXT close."""
+    next_level applies to the NEXT session, never to the bar it was calculated from."""
     direction = direction.upper(); sgn = 1 if direction == "LONG" else -1
     rule = RULES.get((asset, direction))
     if rule is None: return dict(next_level=None, stopped=None, note="no active rule (frozen / failed short rule)")
-    H, L, C = x.High.values, x.Low.values, x.Close.values; A = atr14(H, L, C); K = rule["stop_atr_mult"]
+    rule = dict(rule)
+    if atr_mult is not None: rule["stop_atr_mult"] = float(atr_mult)
+    H, L, C = x.High.values, x.Low.values, x.Close.values; A = atr14(H, L, C); K = float(rule["stop_atr_mult"])
     k = int(np.searchsorted(x.index.values, np.datetime64(pd.Timestamp(entry_date)), side="left"))
-    Arule = A[k - 1] if 0 < k <= len(C) else A[-1]
-    init = float(entry_price - sgn * K * Arule)
+    Arule = A[k - 1] if 0 < k <= len(C) else (A[-1] if len(A) else np.nan)
+    init = float(SPOL.initial_stop_price(direction, entry_price, Arule, atr_mult=K)) if np.isfinite(Arule) else float("nan")
     has_tp = tp_half is not None and pd.notna(tp_half)
     half = dict(half_taken=False, half_date=None, half_price=None) if has_tp else {}
-    if k >= len(C) - 1:                       # no completed close after the entry bar yet -> the approved initial stop applies
-        return dict(next_level=round(init, 4), initial_stop=round(init, 4), stopped=False, note="initial stop (no close after entry bar yet)", **half)
+    if k >= len(C):                              # entry session has not traded
+        return dict(next_level=None if not np.isfinite(init) else round(init, 4), initial_stop=None if not np.isfinite(init) else round(init, 4),
+                    stopped=False, note="no entry bar yet", **half)
     if not rule["trailing"]:
+        if k >= len(C) - 1:                      # fixed stop: no completed close after the entry bar yet
+            return dict(next_level=round(init, 4), initial_stop=round(init, 4), stopped=False, note="initial stop (no close after entry bar yet)", **half)
         lv = init
         for j in range(k + 2, len(C)):
             if sgn * (C[j] - lv) <= 0: return dict(next_level=round(lv, 4), initial_stop=round(init, 4), stopped=True, stop_date=str(x.index[j].date()), stop_close=float(C[j]))
         return dict(next_level=round(lv, 4), initial_stop=round(init, 4), stopped=False)
-    touch = rule["stop_type"].endswith("_touch")
+    touch = str(rule["stop_type"]).endswith("_touch")
     O = x.Open.values
-    lv = init                                 # live level; ratchets from the initial stop, never loosens
-    if touch:                                 # intraday rule: the stop is live from the entry bar itself
-        for j in (k, k + 1):
-            if j >= len(C): break
-            if j == k + 1 and np.isfinite(A[k]): lv = _ratchet(sgn, lv, C[k] - sgn * K * A[k])
-            hit = _touch(sgn, O[j], H[j], L[j], lv)
-            if hit is not None:
-                return dict(next_level=round(lv, 4), initial_stop=round(init, 4), stopped=True, stop_date=str(x.index[j].date()),
-                            stop_close=hit, exit_price=hit, exit_mode="touch", **half)
+    if touch:
+        # Shared with the simulated account. Today's close cannot stop today's bar.
+        w = SPOL.walk_trailing_stop(O, H, L, C, A, direction, k, init, K)
+        if has_tp: _half_until(x, C, k, w["stop_index"] if w["stopped"] else len(C), sgn, tp_half, half)
+        if w["stopped"]:
+            hit = w["exit_price"]
+            return dict(next_level=round(float(w["level_checked"]), 4), initial_stop=round(init, 4), stopped=True,
+                        stop_date=str(x.index[w["stop_index"]].date()), stop_close=hit, exit_price=hit, exit_mode="touch", **half)
+        return dict(next_level=round(float(w["next_level"]), 4), next_level_raw=round(float(w["next_level_raw"]), 4),
+                    initial_stop=round(init, 4), stopped=False, **half)
+    if k >= len(C) - 1:                          # close-checked trailing: nothing to check until the bar after entry
+        return dict(next_level=round(init, 4), initial_stop=round(init, 4), stopped=False, note="initial stop (no close after entry bar yet)", **half)
+    lv = init
     ext = C[k]
     if k + 1 < len(C): ext = max(ext, C[k + 1]) if sgn == 1 else min(ext, C[k + 1])
     for j in range(k + 2, len(C)):
         if np.isfinite(A[j - 1]): lv = _ratchet(sgn, lv, ext - sgn * K * A[j - 1])
-        if touch:
-            hit = _touch(sgn, O[j], H[j], L[j], lv)
-            if hit is not None:
-                return dict(next_level=round(lv, 4), initial_stop=round(init, 4), stopped=True, stop_date=str(x.index[j].date()),
-                            stop_close=hit, exit_price=hit, exit_mode="touch", **half)
-        elif sgn * (C[j] - lv) <= 0:
+        if sgn * (C[j] - lv) <= 0:
             return dict(next_level=round(lv, 4), initial_stop=round(init, 4), stopped=True, stop_date=str(x.index[j].date()),
                         stop_close=float(C[j]), exit_price=float(C[j]), exit_mode="close", **half)
         if has_tp and not half["half_taken"] and sgn * (C[j] - tp_half) >= 0:

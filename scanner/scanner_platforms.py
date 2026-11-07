@@ -85,8 +85,8 @@ def select_candidates(run_dir, n_long=None, n_short=None):
     Universe: US stocks (no ETFs/indices), mcap >= $1.5B (mcap_ok and mcap_b >= 1.5), $vol20 > $14M, px >= 5.
     LONG : close > SMA50 and > SMA200, SMA50 slope up, ext20 <= 3 ATR (not stretched) -> rank by momentum_score (12-1, the coded score component).
     SHORT: only short_rule_pass=True (approved rule: ck_score>=3 and close<SMA200) -> rank by short_ck_score, then momentum_score_short.
-    Entry = last close (stop_entry_ref=last_close); LONG stop = initial_stop (entry-4xATR14), target = tp_half_1618 (half) or fallback;
-    SHORT stop = short_initial_stop (entry+4xATR14), no fixed target (4xATR chandelier).
+    Entry = last close (stop_entry_ref=last_close); LONG stop = initial_stop (entry-5xATR14), target = tp_half_1618 (half) or fallback;
+    SHORT stop = short_initial_stop (entry+4xATR14), no fixed target (4xATR chandelier, intraday touch).
     Diversity: at most MAX_PER_SECTOR (2) names per sector ETF per side, so one theme does not fill the list."""
     n_long = int(os.environ.get('PLATFORM_TOP_LONG', 5 if n_long is None else n_long)); n_short = int(os.environ.get('PLATFORM_TOP_SHORT', 5 if n_short is None else n_short))
     d = pd.read_csv(f'{run_dir}/scan_raw.csv')
@@ -101,12 +101,14 @@ def select_candidates(run_dir, n_long=None, n_short=None):
     out = []
     for _, r in L.iterrows():
         tgt = _f(r.get('tp_half_1618')); fb = str(r.get('tp_half_fallback')).lower() == 'true'
+        kx = f"{float(r['stop_atr_mult']):g}" if _f(r.get('stop_atr_mult')) else '5'
         out.append(dict(r.to_dict(), direction='LONG', entry=_f(r['px']), stop=_f(r['initial_stop']), target=None if fb else tgt,
-                        target_note=('אין סווינג מאושר - 100% בשנדלייר 4xATR' if fb or tgt is None else 'חצי ב-Fib 1.618 (סגירה), השאר בשנדלייר 4xATR'),
+                        target_note=(f'אין סווינג מאושר - 100% בשנדלייר {kx}xATR' if fb or tgt is None else f'חצי ב-Fib 1.618 (סגירה), השאר בשנדלייר {kx}xATR'),
                         rank_score=_f(r['momentum_score']), rank_basis='momentum_score (12-1, LONG)'))
     for _, r in S.iterrows():
+        ks = f"{float(r['short_stop_atr_mult']):g}" if _f(r.get('short_stop_atr_mult')) else '4'
         out.append(dict(r.to_dict(), direction='SHORT', entry=_f(r['px']), stop=_f(r['short_initial_stop']), target=None,
-                        target_note='ללא יעד קבוע - שנדלייר 4xATR14 על סגירה (כלל מאושר)',
+                        target_note=f'ללא יעד קבוע - שנדלייר {ks}xATR14 על מגע תוך-יומי (כלל מאושר)',
                         rank_score=_f(r['momentum_score_short']), rank_basis=f"short_ck_score={r.get('short_ck_score')}, momentum_score_short"))
     return out
 
