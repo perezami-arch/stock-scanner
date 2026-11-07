@@ -13,11 +13,12 @@ if not os.path.exists(os.path.join(ROOT, 'scanner_stops.py')):
 os.environ['SCANNER_ROOT'] = ROOT
 sys.path.insert(0, ROOT)
 import scanner_stops as ST          # noqa: E402
-# These fixtures are dated before 2026-11-07. Ask for the current rule on every bar;
-# the migration default (4x close until that date) is covered in test_stop_intraday_mult.
+# These fixtures predate both rule dates. Ask for the current rule on every bar.
+# The Nov 1 touch date and the Nov 7 long-5x date are covered in test_stop_intraday_mult.
 _stop_status = ST.stop_status
 def _current_policy(*a, **k):
     k.setdefault('policy_from', None)
+    k.setdefault('touch_from', None)
     return _stop_status(*a, **k)
 ST.stop_status = _current_policy
 

@@ -1,9 +1,10 @@
 """Direction-specific stock stops shared by the tracker, the scanner, and the simulated account.
 
-Current policy (Ilan, with the 01.11.2026 intraday-touch approval):
-  * US stock LONG  trailing chandelier = 5 x ATR14
-  * US stock SHORT trailing chandelier = 4 x ATR14 (unchanged)
+Two dates, not one:
+  * 2026-11-01: stock stops trigger on an intraday touch. Fill is the worse of the stop and the open.
+  * 2026-11-07: US stock LONG trailing chandelier becomes 5 x ATR14. SHORT stays 4 x ATR14.
   * Crypto LONG stays a fixed 3 x ATR14 stop on the close. Crypto shorts stay frozen.
+A recorded exit is never recomputed. A committed live stop is a floor from 2026-11-07, so 5x cannot loosen it.
 
 A level that is judged against bar j is built only from bars strictly before j.
 The level computed from bar j's own close and ATR applies to bar j+1. It is never
@@ -20,9 +21,11 @@ import datetime as _dt
 LEGACY_STOCK_ATR_MULT = {"LONG": 4.0, "SHORT": 4.0}
 CURRENT_STOCK_ATR_MULT = {"LONG": 5.0, "SHORT": 4.0}
 CRYPTO_LONG_ATR_MULT = 3.0
-# Ilan approved the long 5x multiplier and intraday-touch fills on this date.
-# Bars before it stay on the previously live rule (long 4x, judged on the close, fill at the stop).
-POLICY_EFFECTIVE = _dt.date(2026, 11, 7)
+# 2026-11-01 (PR #10, a008a20): intraday touch, fill = worse of stop and open.
+# 2026-11-07: LONG multiplier 4x -> 5x only. Touch does not start on this date.
+TOUCH_EFFECTIVE = _dt.date(2026, 11, 1)
+LONG_5X_EFFECTIVE = _dt.date(2026, 11, 7)
+POLICY_EFFECTIVE = LONG_5X_EFFECTIVE   # multiplier date; not the touch date
 
 
 def _direction(direction: str) -> str:
@@ -57,9 +60,9 @@ def _finite(v) -> bool:
 def stock_atr_mult(direction: str, legacy: bool = False, on_date=None, policy_from=None) -> float:
     """ATR multiplier for a US stock trailing stop.
 
-    legacy=True keeps the pre-approval 4x/4x table. A long bar before policy_from (default
-    2026-11-07 when on_date is set) also stays at 4x. Shorts are 4x on every date.
-    policy_from=None with on_date set means the current table, including 5x longs.
+    legacy=True keeps the pre-approval 4x/4x table. A long bar before policy_from (the 5x date,
+    2026-11-07) also stays at 4x. Touch is a separate date and does not change this multiplier.
+    Shorts are 4x on every date. policy_from=None means the current table, including 5x longs.
     """
     direction = _direction(direction)
     if legacy or (direction == "LONG" and on_date is not None and policy_from is not None and as_date(on_date) < as_date(policy_from)):
@@ -135,7 +138,7 @@ def _bar_date(dates, j):
 
 
 def walk_trailing_stop(opens, highs, lows, closes, atr, direction: str, entry_index: int, initial_stop: float, mult: float,
-                       dates=None, policy_from=None, floor=None, touch: bool = True) -> dict:
+                       dates=None, policy_from=None, floor=None, touch: bool = True, touch_from=None) -> dict:
     """Causal trailing stop.
 
     Bar j is judged with the level fixed from bars < j. Bar j's close updates the
@@ -143,23 +146,25 @@ def walk_trailing_stop(opens, highs, lows, closes, atr, direction: str, entry_in
     `entry_index` is the first bar the position can exit on (the entry session).
     Bars before it are ignored: no entry, no exit.
 
-    When `dates` and `policy_from` are set, a long uses 4xATR14 before that date and
-    `mult` on/after it, and the intraday touch starts on that date. Earlier bars are
-    close-checked. `floor` (a committed live stop) is applied only on/after the policy
-    date and to next_level, so the new multiplier cannot loosen a stop that was already live.
+    `policy_from` is the LONG 5x date (2026-11-07): a long uses 4xATR14 before it and
+    `mult` on/after it. `touch_from` is the intraday-touch date (2026-11-01). Earlier
+    bars are close-checked. The two dates are independent. `floor` (a committed live
+    stop) binds on/after the 5x date and on next_level, so 5x cannot loosen it.
+    policy_from=None and touch_from=None apply `mult` and `touch` on every bar.
     """
     direction = _direction(direction)
     n = len(closes)
     k = int(entry_index)
     init = float(initial_stop)
-    policy = as_date(policy_from) if policy_from is not None else None
+    long_5x = as_date(policy_from) if policy_from is not None else None
+    touch_on = as_date(touch_from) if touch_from is not None else None
     if k < 0 or k >= n:
         return dict(stopped=False, stop_index=None, exit_price=None, initial_stop=init,
                     next_level=init, next_level_raw=init, level_checked=None, note="no entry bar", exit_mode=None)
 
     def mult_j(j):
         day = _bar_date(dates, j)
-        if policy is not None and day is not None and direction == "LONG" and day < policy:
+        if long_5x is not None and day is not None and direction == "LONG" and day < long_5x:
             return float(LEGACY_STOCK_ATR_MULT["LONG"])
         return float(mult)
 
@@ -167,15 +172,15 @@ def walk_trailing_stop(opens, highs, lows, closes, atr, direction: str, entry_in
         if not touch:
             return False
         day = _bar_date(dates, j)
-        if policy is None or day is None:
+        if touch_on is None or day is None:
             return True
-        return day >= policy
+        return day >= touch_on
 
     def with_floor(j, level):
         if not _finite(floor):
             return level
         day = _bar_date(dates, j)
-        if policy is not None and day is not None and day < policy:
+        if long_5x is not None and day is not None and day < long_5x:
             return level
         return ratchet(direction, floor, level)
 
@@ -213,12 +218,13 @@ def walk_trailing_stop(opens, highs, lows, closes, atr, direction: str, entry_in
                 next_level=nxt, next_level_raw=raw, level_checked=lv, exit_mode=None)
 
 
-def account_stop_hit(direction: str, open_, high, low, stop, day, policy_from=POLICY_EFFECTIVE):
+def account_stop_hit(direction: str, open_, high, low, stop, day, touch_from=TOUCH_EFFECTIVE):
     """Exit price for one already-tracked account stop, or None.
 
     The level is the committed stop. This does not recompute a wider 5x stop.
-    Before policy_from a touch exits at that stop (the historical account fill).
-    On/after policy_from the fill is the worse of the stop and the open.
+    Before 2026-11-01 a touch exits at that stop (the pre-touch account fill).
+    On/after 2026-11-01 the fill is the worse of the stop and the open. That is the
+    touch date, not the 2026-11-07 long-multiplier date.
     """
     if stop is None or not _finite(stop):
         return None
@@ -227,10 +233,20 @@ def account_stop_hit(direction: str, open_, high, low, stop, day, policy_from=PO
     if touched is None:
         return None
     when = as_date(day)
-    policy = as_date(policy_from) if policy_from is not None else None
-    if policy is not None and when is not None and when < policy:
+    start = as_date(touch_from) if touch_from is not None else None
+    if start is not None and when is not None and when < start:
         return float(stop)
     return touched
+
+
+def apply_account_exit(existing, direction, open_, high, low, stop, day):
+    """Keep a recorded (date, price) exit. Only an open position can receive a new fill."""
+    if existing is not None:
+        return existing
+    hit = account_stop_hit(direction, open_, high, low, stop, day)
+    if hit is None:
+        return None
+    return (str(as_date(day)), hit)
 
 
 def replay_trailing(opens, highs, lows, closes, atr, direction: str, entry_index: int, entry_price: float,
@@ -239,7 +255,7 @@ def replay_trailing(opens, highs, lows, closes, atr, direction: str, entry_index
 
     policy_from defaults to None here (one multiplier for the whole path). The live account
     book does not rebuild old exits with this function; it keeps committed stops and uses
-    account_stop_hit. Pass policy_from=POLICY_EFFECTIVE to adopt 5x only from that date.
+    apply_account_exit. Pass policy_from=LONG_5X_EFFECTIVE to adopt 5x only from that date.
     """
     direction = _direction(direction)
     k = int(entry_index)

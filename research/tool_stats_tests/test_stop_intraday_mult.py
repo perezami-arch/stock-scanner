@@ -18,11 +18,12 @@ os.environ['SCANNER_ROOT'] = ROOT
 sys.path.insert(0, ROOT)
 import scanner_stops as ST          # noqa: E402
 import stop_policy as SPOL          # noqa: E402
-# Pure-rule fixtures below are dated before the 2026-11-07 migration. They opt into the current
-# 5x/touch rule. Migration tests call ST_RAW so the default policy date stays in force.
+# Pure-rule fixtures below predate Nov 1 and Nov 7. They opt into the current 5x/touch rule.
+# Migration tests pass the two dates explicitly.
 ST_RAW = ST.stop_status
 def _current_policy(*a, **k):
     k.setdefault('policy_from', None)
+    k.setdefault('touch_from', None)
     return ST_RAW(*a, **k)
 ST.stop_status = _current_policy
 
@@ -272,35 +273,56 @@ def _around_policy(last='2026-11-13', n=None, span_policy=True):
         assert x.index[-1].date() >= SPOL.POLICY_EFFECTIVE
     return x
 
-def test_pre_policy_long_stays_on_4x_close_and_is_not_revived_by_5x():
-    x = _around_policy(last='2026-11-06', n=W + 2, span_policy=False)
-    x.iloc[-1, x.columns.get_loc('Open')] = 91
-    x.iloc[-1, x.columns.get_loc('High')] = 92
-    x.iloc[-1, x.columns.get_loc('Low')] = 91
-    x.iloc[-1, x.columns.get_loc('Close')] = 91
-    entry, atr = x.index[W], _atr(x, W - 1)
-    replay_5x = ST_RAW(x, 'stock', 'LONG', entry, 100.0, policy_from=None)
-    migrated = ST_RAW(x, 'stock', 'LONG', entry, 100.0, policy_from=SPOL.POLICY_EFFECTIVE)
-    assert replay_5x['stopped'] is False                       # 5x touch would not have exited
-    assert migrated['initial_stop'] == pytest.approx(100 - 4 * atr, abs=1e-3)
-    assert migrated['stopped'] and migrated['exit_mode'] == 'close'
-    assert migrated['exit_price'] == 91 and migrated['stop_date'] < '2026-11-07'
-    kept = ST_RAW(x, 'stock', 'LONG', entry, 100.0, policy_from=SPOL.POLICY_EFFECTIVE, committed_exit={'date': '2026-10-23', 'price': 91.5})
-    assert kept['exit_mode'] == 'committed' and kept['stop_date'] == '2026-10-23' and kept['exit_price'] == 91.5
+def _stamp_last(x, o, h, l, c):
+    x.iloc[-1, x.columns.get_loc('Open')] = o
+    x.iloc[-1, x.columns.get_loc('High')] = h
+    x.iloc[-1, x.columns.get_loc('Low')] = l
+    x.iloc[-1, x.columns.get_loc('Close')] = c
+    return x
+
+def test_touch_starts_nov1_and_long_5x_starts_nov7():
+    # 2026-10-30: wick through the 4x stop, close holds above it. Close rule does not exit.
+    pre = _stamp_last(_around_policy(last='2026-10-30', n=W + 2, span_policy=False), 100, 100, 91, 93)
+    entry = pre.index[W]
+    before = ST_RAW(pre, 'stock', 'LONG', entry, 100.0, policy_from=SPOL.LONG_5X_EFFECTIVE, touch_from=SPOL.TOUCH_EFFECTIVE)
+    assert before['stopped'] is False and before['initial_stop'] == pytest.approx(100 - 4 * _atr(pre, W - 1), abs=1e-3)
+    # 2026-11-04: same wick is an intraday touch at 4x, fill = worse of stop and open. 5x would not exit.
+    nov4 = _stamp_last(_around_policy(last='2026-11-04', n=W + 2, span_policy=False), 100, 100, 91, 93)
+    entry = nov4.index[W]
+    touched = ST_RAW(nov4, 'stock', 'LONG', entry, 100.0, policy_from=SPOL.LONG_5X_EFFECTIVE, touch_from=SPOL.TOUCH_EFFECTIVE)
+    only_5x = ST_RAW(nov4, 'stock', 'LONG', entry, 100.0, policy_from=None, touch_from=None)
+    assert only_5x['stopped'] is False
+    assert touched['stopped'] and touched['exit_mode'] == 'touch' and touched['stop_date'] == '2026-11-04'
+    assert touched['initial_stop'] == pytest.approx(100 - 4 * _atr(nov4, W - 1), abs=1e-3)
+    assert touched['exit_price'] == pytest.approx(touched['initial_stop'], abs=1e-3)
+    # Gap on Nov 5 fills at the open, not at the stop. A stored Nov 4/5 fill is not recomputed.
+    gap = _stamp_last(_around_policy(last='2026-11-05', n=W + 2, span_policy=False), 80, 85, 70, 82)
+    entry = gap.index[W]
+    g = ST_RAW(gap, 'stock', 'LONG', entry, 100.0, policy_from=SPOL.LONG_5X_EFFECTIVE, touch_from=SPOL.TOUCH_EFFECTIVE)
+    assert g['stopped'] and g['stop_date'] == '2026-11-05' and g['exit_price'] == 80
+    kept = ST_RAW(gap, 'stock', 'LONG', entry, 100.0, policy_from=SPOL.LONG_5X_EFFECTIVE, touch_from=SPOL.TOUCH_EFFECTIVE,
+                  committed_exit={'date': '2026-11-04', 'price': 80.0})
+    assert kept['exit_mode'] == 'committed' and kept['stop_date'] == '2026-11-04' and kept['exit_price'] == 80.0
+    assert kept['stopped'] is True
 
 def test_open_long_live_stop_is_not_lowered_on_the_policy_date():
     x = _around_policy()
     entry = x.index[W]
-    pure = ST_RAW(x, 'stock', 'LONG', entry, 100.0, policy_from=None)
+    pure = ST_RAW(x, 'stock', 'LONG', entry, 100.0, policy_from=None, touch_from=None)
     floor = 96.0
-    migrated = ST_RAW(x, 'stock', 'LONG', entry, 100.0, policy_from=SPOL.POLICY_EFFECTIVE, floor=floor)
+    migrated = ST_RAW(x, 'stock', 'LONG', entry, 100.0, policy_from=SPOL.LONG_5X_EFFECTIVE, touch_from=SPOL.TOUCH_EFFECTIVE, floor=floor)
     assert pure['next_level'] < floor
     assert migrated['stopped'] is False
     assert migrated['next_level'] >= floor
     assert migrated['initial_stop'] == pytest.approx(100 - 4 * _atr(x, W - 1), abs=1e-3)
     fresh = bars([100] * (W + 3), 2.0)
     fresh.index = pd.bdate_range('2026-11-09', periods=len(fresh))
-    opened = ST_RAW(fresh, 'stock', 'LONG', fresh.index[W], 100.0, policy_from=SPOL.POLICY_EFFECTIVE)
+    opened = ST_RAW(fresh, 'stock', 'LONG', fresh.index[W], 100.0, policy_from=SPOL.LONG_5X_EFFECTIVE, touch_from=SPOL.TOUCH_EFFECTIVE)
+    mid = bars([100] * (W + 3), 2.0)
+    mid.index = pd.bdate_range(end='2026-11-06', periods=len(mid))
+    assert SPOL.TOUCH_EFFECTIVE <= mid.index[W].date() < SPOL.LONG_5X_EFFECTIVE
+    opened_mid = ST_RAW(mid, 'stock', 'LONG', mid.index[W], 100.0, policy_from=SPOL.LONG_5X_EFFECTIVE, touch_from=SPOL.TOUCH_EFFECTIVE)
+    assert opened_mid['initial_stop'] == pytest.approx(100 - 4 * _atr(mid, W - 1), abs=1e-3)
     assert opened['initial_stop'] == pytest.approx(100 - 5 * _atr(fresh, W - 1), abs=1e-3)
 
 def test_checkpoints_keep_a_closed_exit_and_the_open_floor(tmp_path, monkeypatch):
@@ -330,12 +352,17 @@ def test_checkpoints_keep_a_closed_exit_and_the_open_floor(tmp_path, monkeypatch
     finally:
         ST.stop_status = _current_policy
 
-def test_account_does_not_rewrite_pre_policy_fills():
+def test_account_fill_follows_nov1_and_keeps_recorded_exits():
+    # Before Nov 1 the historical account filled at the stop. Nov 4 and Nov 5 use worse-of.
     assert SPOL.account_stop_hit('LONG', 80, 85, 70, 90, '2026-10-30') == 90
-    assert SPOL.account_stop_hit('LONG', 80, 85, 70, 90, '2026-11-09') == 80
+    assert SPOL.account_stop_hit('LONG', 80, 85, 70, 90, '2026-11-04') == 80
+    assert SPOL.account_stop_hit('LONG', 80, 85, 70, 90, '2026-11-05') == 80
     assert SPOL.account_stop_hit('SHORT', 120, 130, 110, 110, '2026-10-30') == 110
-    assert SPOL.account_stop_hit('SHORT', 120, 130, 110, 110, '2026-11-09') == 120
+    assert SPOL.account_stop_hit('SHORT', 120, 130, 110, 110, '2026-11-04') == 120
     assert SPOL.account_stop_hit('LONG', 100, 101, 95, 90, '2026-11-09') is None
+    recorded = ('2026-11-04', 80.0)
+    assert SPOL.apply_account_exit(recorded, 'LONG', 80, 85, 70, 90, '2026-11-04') == recorded
+    assert SPOL.apply_account_exit(None, 'LONG', 80, 85, 70, 90, '2026-11-05') == ('2026-11-05', 80.0)
 
 def test_status_mismatch_flags_disagreement(tmp_path, capsys):
     a = tmp_path / 'tracker.csv'; b = tmp_path / 'account.csv'

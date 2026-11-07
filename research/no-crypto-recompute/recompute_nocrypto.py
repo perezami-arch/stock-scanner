@@ -69,12 +69,12 @@ def main(argv=None):
         for p in book:
             if not active(p, day) or day not in B[p[0]]: continue
             b = B[p[0]][day]; s, d, e, ed, g, half, ex, st = p
-            # Committed stop only. Do not rebuild it at 5x (that would loosen a long and rewrite balances).
-            # Before 2026-11-07 a touch still fills AT the stop. From that date the fill is the worse of stop and open.
-            if ex is None and st is not None and day > STOPS_CHECKED_THROUGH:
-                hit = SPOL.account_stop_hit('LONG' if d == 1 else 'SHORT', b['o'], b['h'], b['l'], st, day)
-                if hit is not None:
-                    p[6] = ex = (day, hit); stop_events.append((day, s, g, hit))
+            # Committed stop only. Do not rebuild it at 5x. A recorded exit (including a Nov 4/5 touch fill) is kept.
+            # Worse-of fill starts 2026-11-01. Before that, a touch fills at the stop.
+            if st is not None and day > STOPS_CHECKED_THROUGH:
+                new_ex = SPOL.apply_account_exit(ex, 'LONG' if d == 1 else 'SHORT', b['o'], b['h'], b['l'], st, day)
+                if ex is None and new_ex is not None:
+                    p[6] = ex = new_ex; stop_events.append((day, s, g, new_ex[1]))
             close = ex[1] if ex and ex[0] == day else b['c']
             if ed == day:   # new entry at the open
                 pl[g] += S_new * wret(p, close, day)

@@ -47,9 +47,10 @@ def update_paper(asof, path=None):
         tp = float(r.target_level) if (r.asset == 'stock' and r.direction == 'LONG' and pd.notna(r.target_level) and str(r.target_level) not in ('', 'nan')) else None
         st = ST.stop_status(x, r.asset, r.direction, r.entry_session, fill, tp_half=tp)
         if st.get('next_level') is None and not st.get('stopped'): d.loc[i, 'status'] = 'no active rule'; continue
-        # An entry from before 2026-11-07 keeps the stop it was opened with. New entries record the current multiplier.
+        # The 5x long multiplier starts 2026-11-07. An earlier entry keeps the 4x stop it was opened with.
+        # Touch (2026-11-01) does not change that recorded multiplier.
         entry_day = SPOL.as_date(r.entry_session)
-        prospective = entry_day is None or entry_day >= SPOL.POLICY_EFFECTIVE
+        prospective = entry_day is None or entry_day >= SPOL.LONG_5X_EFFECTIVE
         prev_stop = r.stop if 'stop' in d.columns else None
         keep_committed = (not prospective) and str(prev_stop or '') not in ('', 'nan', 'None')
         if keep_committed:

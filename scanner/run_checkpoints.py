@@ -106,8 +106,8 @@ def run(asof, registry, ledger, out_dir, budget_usd=1.0, no_models=False, max_ll
         done = set(filter(None, str(T.get('checkpoints_done') or '').split(',')))
         prev = json.loads(T['last_state']) if isinstance(T.get('last_state'), str) and T['last_state'].startswith('{') else {}
         last_dec = T.get('last_decision_utc') or T.get('cutoff_utc')
-        # --- exit. 5x longs and intraday touch apply from 2026-11-07 only. The stored current_stop is a floor
-        # (a recompute must not lower it) and a row that already has an exit is not replayed into a new one.
+        # --- exit. Touch and worse-of fill from 2026-11-01; long 5x only from 2026-11-07.
+        # The stored current_stop is a floor, and a row that already has an exit is not replayed.
         floor = _f(T.get('current_stop'))
         committed = {'date': T.get('exit_date'), 'price': T.get('exit_price')} if str(T.get('exit_date') or '') not in ('', 'None', 'nan') else None
         stp = ST.stop_status(x, asset, d, T['entry_session'], fill, tp_half=tp, floor=floor, committed_exit=committed)

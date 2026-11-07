@@ -149,16 +149,16 @@ def _half_until(x, C, k, end, sgn, tp_half, half):
         if sgn * (C[j] - float(tp_half)) >= 0:
             half.update(half_taken=True, half_date=str(x.index[j].date()), half_price=float(C[j]))
 
-def stop_status(x, asset, direction, entry_date, entry_price, tp_half=None, atr_mult=None, policy_from=SPOL.POLICY_EFFECTIVE, floor=None, committed_exit=None):
+def stop_status(x, asset, direction, entry_date, entry_price, tp_half=None, atr_mult=None, policy_from=SPOL.LONG_5X_EFFECTIVE, touch_from=SPOL.TOUCH_EFFECTIVE, floor=None, committed_exit=None):
     """Live monitoring of an open trade.
     entry bar k = first bar on/after entry_date. No bar on/after entry_date -> no exit (the entry has not traded).
     Crypto fixed stop: first check at the close of k+2; a low that does not close through the stop does not exit.
     Stock trailing stop: level_j = ratchet(level_{j-1}, extreme close through j-1 -/+ K*ATR14[j-1]).
     K is 4 for a long before policy_from (2026-11-07) and 5 on/after it; shorts stay 4. policy_from=None applies
-    the current K to every bar (tests and a trade that is entirely under the new rule).
-    atr_mult forces one K for the whole path. floor is a committed live stop: on/after the policy date, and on
-    next_level, the result never loosens past it. committed_exit={date, price} is returned as-is (a prior exit is not replayed).
-    Intraday touch (long low / short high, fill = worse of level and open) starts on policy_from. Earlier bars are close-checked.
+    the current K to every bar. touch_from (2026-11-01) is separate: intraday touch and the worse-of fill start
+    then, not on the 5x date. touch_from=None touches every bar.
+    atr_mult forces one K for the whole path. floor is a committed live stop and is not loosened by 5x.
+    committed_exit={date, price} is returned as-is (a prior exit, including a Nov 4/5 touch fill, is not replayed).
     The level built from today's close is next_level for the next session only.
     Stock longs with tp_half: 1/2 at the first close >= tp_half from k+2, and only if the stop did not exit first.
     Returns dict(next_level, initial_stop, stopped, stop_date, stop_close[, half_taken, half_date, half_price])."""
@@ -198,10 +198,9 @@ def stop_status(x, asset, direction, entry_date, entry_price, tp_half=None, atr_
     touch = str(rule["stop_type"]).endswith("_touch")
     O = x.Open.values
     if touch:
-        # Shared with the simulated account. Today's close cannot stop today's bar.
-        # policy_from splits 4x-close (before) from 5x-touch (on/after) so a long's live stop is not loosened.
+        # Today's close cannot stop today's bar. Touch starts 2026-11-01; long 5x starts 2026-11-07.
         post = float(rule["stop_atr_mult"]) if atr_mult is not None else (SPOL.CURRENT_STOCK_ATR_MULT[direction] if direction in SPOL.CURRENT_STOCK_ATR_MULT else K)
-        w = SPOL.walk_trailing_stop(O, H, L, C, A, direction, k, init, post, dates=dates, policy_from=policy_from, floor=floor, touch=True)
+        w = SPOL.walk_trailing_stop(O, H, L, C, A, direction, k, init, post, dates=dates, policy_from=policy_from, touch_from=touch_from, floor=floor, touch=True)
         if has_tp: _half_until(x, C, k, w["stop_index"] if w["stopped"] else len(C), sgn, tp_half, half)
         if w["stopped"]:
             hit = w["exit_price"]
