@@ -15,7 +15,7 @@ import os as _sr_os; _SCANNER_ROOT = _sr_os.environ.get('SCANNER_ROOT', '/worksp
 import os, sys, json, argparse, math, shutil, datetime as dt
 import numpy as np, pandas as pd
 sys.path.insert(0, _SCANNER_ROOT)
-import scanner_lessons as SLS, scanner_levelsfile as LF, scanner_stops as ST
+import scanner_lessons as SLS, scanner_levelsfile as LF, scanner_stops as ST, stop_policy as SPOL
 
 SKIP = 'skipped - no material change'
 PLATS = ('jev', 'grok', 'pplx', 'claude', 'gpt')
@@ -106,8 +106,11 @@ def run(asof, registry, ledger, out_dir, budget_usd=1.0, no_models=False, max_ll
         done = set(filter(None, str(T.get('checkpoints_done') or '').split(',')))
         prev = json.loads(T['last_state']) if isinstance(T.get('last_state'), str) and T['last_state'].startswith('{') else {}
         last_dec = T.get('last_decision_utc') or T.get('cutoff_utc')
-        # --- exit (stop rule: intraday touch for stocks from 01.11, close-checked otherwise; or the 20th session close)
-        stp = ST.stop_status(x, asset, d, T['entry_session'], fill, tp_half=tp)
+        # --- exit. 5x longs and intraday touch apply from 2026-11-07 only. The stored current_stop is a floor
+        # (a recompute must not lower it) and a row that already has an exit is not replayed into a new one.
+        floor = _f(T.get('current_stop'))
+        committed = {'date': T.get('exit_date'), 'price': T.get('exit_price')} if str(T.get('exit_date') or '') not in ('', 'None', 'nan') else None
+        stp = ST.stop_status(x, asset, d, T['entry_session'], fill, tp_half=tp, floor=floor, committed_exit=committed)
         exit_date = exit_px = reason = None
         if stp.get('stopped') and stp.get('stop_date'):
             k = int((s.index <= pd.Timestamp(stp['stop_date'])).sum())
@@ -127,7 +130,7 @@ def run(asof, registry, ledger, out_dir, budget_usd=1.0, no_models=False, max_ll
                 import scanner_crypto as SCR; xs.to_csv(SCR.bars_path(cp_dir, t))
             try:
                 L, xb = LF.build(c, cp_dir, cut, px_dir_for(asof)); L['earnings'] = {'status': 'checkpoint (not re-gated)'}
-                st_d = ST.stop_status(xs, asset, d, T['entry_session'], fill, tp_half=tp)
+                st_d = ST.stop_status(xs, asset, d, T['entry_session'], fill, tp_half=tp, floor=floor)
                 L['trade']['stop'] = st_d.get('next_level'); L['trade']['stop_rule'] = 'scanner_stops.stop_status (live, at this checkpoint)'
                 LF.save(L, cp_dir, c); LF.apply_trade(c, L)
                 try: c['_chart_png'] = LF.render(cp_dir, c, xb)['png']
@@ -173,7 +176,10 @@ def run(asof, registry, ledger, out_dir, budget_usd=1.0, no_models=False, max_ll
         lc = _f(x.Close.iloc[-1])
         reg.at[i, 'checkpoints_done'] = ','.join(sorted(done)); reg.at[i, 'last_state'] = json.dumps(prev, default=str)
         reg.at[i, 'last_decision_utc'] = last_dec; reg.at[i, 'last_close'] = lc; reg.at[i, 'last_close_date'] = str(x.index[-1].date())
-        reg.at[i, 'current_stop'] = stp.get('next_level'); reg.at[i, 'stop_initial_fill'] = stp.get('initial_stop')
+        live = stp.get('next_level')
+        if floor is not None and live is not None: live = SPOL.ratchet(d, floor, live)   # never publish a looser stop than the one already live
+        reg.at[i, 'current_stop'] = live
+        if _f(T.get('stop_initial_fill')) is None: reg.at[i, 'stop_initial_fill'] = stp.get('initial_stop')
         hp, hd = half_exit(stp, exit_date)
         reg.at[i, 'half_taken'] = None if 'half_taken' not in stp else bool(hd)
         reg.at[i, 'half_date'] = hd; reg.at[i, 'half_price'] = hp

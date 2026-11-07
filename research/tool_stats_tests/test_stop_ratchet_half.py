@@ -13,6 +13,13 @@ if not os.path.exists(os.path.join(ROOT, 'scanner_stops.py')):
 os.environ['SCANNER_ROOT'] = ROOT
 sys.path.insert(0, ROOT)
 import scanner_stops as ST          # noqa: E402
+# These fixtures are dated before 2026-11-07. Ask for the current rule on every bar;
+# the migration default (4x close until that date) is covered in test_stop_intraday_mult.
+_stop_status = ST.stop_status
+def _current_policy(*a, **k):
+    k.setdefault('policy_from', None)
+    return _stop_status(*a, **k)
+ST.stop_status = _current_policy
 
 def bars(closes, rng, start='2026-08-03', opens=None, highs=None):
     """daily OHLC: close given, high/low = close +/- rng/2 (rng per bar -> controls ATR14)."""

@@ -18,6 +18,13 @@ os.environ['SCANNER_ROOT'] = ROOT
 sys.path.insert(0, ROOT)
 import scanner_stops as ST          # noqa: E402
 import stop_policy as SPOL          # noqa: E402
+# Pure-rule fixtures below are dated before the 2026-11-07 migration. They opt into the current
+# 5x/touch rule. Migration tests call ST_RAW so the default policy date stays in force.
+ST_RAW = ST.stop_status
+def _current_policy(*a, **k):
+    k.setdefault('policy_from', None)
+    return ST_RAW(*a, **k)
+ST.stop_status = _current_policy
 
 def _load(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
@@ -194,19 +201,27 @@ def test_tracker_scanner_and_account_share_the_walk():
 def test_paper_ledger_records_direction_mult(tmp_path, monkeypatch):
     import run_checkpoints as RC, run_daily_report as RD
     x = bars([100] * (W + 3), 2.0)
+    x.index = pd.bdate_range('2026-11-09', periods=len(x))
     monkeypatch.setattr(RC, 'get_bars', lambda *a, **k: x)
     path = tmp_path / 'paper.csv'
     rows = []
     for direction in ('LONG', 'SHORT'):
         rows.append({'ticker': 'AAA', 'asset': 'stock', 'direction': direction, 'entry_session': str(x.index[W].date()),
-                     'target_level': '', 'stop_atr_mult': 4.0, 'status': 'pending_entry'})
+                     'target_level': '', 'stop_atr_mult': '', 'stop': '', 'status': 'pending_entry'})
+    old = bars([100] * (W + 3), 2.0)   # entry before the policy date keeps the stop it was opened with
+    old.index = pd.bdate_range(end='2026-10-30', periods=len(old))
+    rows.append({'ticker': 'OLD', 'asset': 'stock', 'direction': 'LONG', 'entry_session': '2026-10-19',
+                 'target_level': '', 'stop_atr_mult': 4.0, 'stop': 92.5, 'status': 'open'})
     pd.DataFrame(rows).to_csv(path, index=False)
-    assert RD.update_paper(str(x.index[-1] + pd.Timedelta(hours=30)), path=str(path)) == 2
+    monkeypatch.setattr(RC, 'get_bars', lambda *a, **k: x if a[0] == 'AAA' else old)
+    assert RD.update_paper(str(x.index[-1] + pd.Timedelta(hours=30)), path=str(path)) == 3
     out = pd.read_csv(path)
-    assert float(out.loc[out.direction == 'LONG', 'stop_atr_mult'].iloc[0]) == 5.0
-    assert float(out.loc[out.direction == 'SHORT', 'stop_atr_mult'].iloc[0]) == 4.0
-    long_stop = float(out.loc[out.direction == 'LONG', 'stop'].iloc[0])
-    assert long_stop == pytest.approx(100 - 5 * _atr(x, W - 1), abs=1e-3)
+    new_long = out[(out.ticker == 'AAA') & (out.direction == 'LONG')].iloc[0]
+    assert float(new_long.stop_atr_mult) == 5.0
+    assert float(new_long.stop) == pytest.approx(100 - 5 * _atr(x, W - 1), abs=1e-3)
+    assert float(out.loc[(out.ticker == 'AAA') & (out.direction == 'SHORT'), 'stop_atr_mult'].iloc[0]) == 4.0
+    kept = out[out.ticker == 'OLD'].iloc[0]
+    assert float(kept.stop_atr_mult) == 4.0 and float(kept.stop) == 92.5
 
 def test_tracker_registry_uses_the_same_initial_stop(tmp_path, monkeypatch):
     import run_checkpoints as RC, scanner_lessons as SLS
@@ -247,6 +262,81 @@ def test_account_dedup_keeps_earliest_ticker_direction():
     assert len(keys) == len(set(keys))
     assert len(book) == len(ACCT.P)
 
+def _around_policy(last='2026-11-13', n=None, span_policy=True):
+    """Business-day frame ending on `last`. Entry bar W is before 2026-11-07."""
+    n = n or (W + 20)
+    x = bars([100] * n, 2.0)
+    x.index = pd.bdate_range(end=last, periods=n)
+    assert x.index[W].date() < SPOL.POLICY_EFFECTIVE
+    if span_policy:
+        assert x.index[-1].date() >= SPOL.POLICY_EFFECTIVE
+    return x
+
+def test_pre_policy_long_stays_on_4x_close_and_is_not_revived_by_5x():
+    x = _around_policy(last='2026-11-06', n=W + 2, span_policy=False)
+    x.iloc[-1, x.columns.get_loc('Open')] = 91
+    x.iloc[-1, x.columns.get_loc('High')] = 92
+    x.iloc[-1, x.columns.get_loc('Low')] = 91
+    x.iloc[-1, x.columns.get_loc('Close')] = 91
+    entry, atr = x.index[W], _atr(x, W - 1)
+    replay_5x = ST_RAW(x, 'stock', 'LONG', entry, 100.0, policy_from=None)
+    migrated = ST_RAW(x, 'stock', 'LONG', entry, 100.0, policy_from=SPOL.POLICY_EFFECTIVE)
+    assert replay_5x['stopped'] is False                       # 5x touch would not have exited
+    assert migrated['initial_stop'] == pytest.approx(100 - 4 * atr, abs=1e-3)
+    assert migrated['stopped'] and migrated['exit_mode'] == 'close'
+    assert migrated['exit_price'] == 91 and migrated['stop_date'] < '2026-11-07'
+    kept = ST_RAW(x, 'stock', 'LONG', entry, 100.0, policy_from=SPOL.POLICY_EFFECTIVE, committed_exit={'date': '2026-10-23', 'price': 91.5})
+    assert kept['exit_mode'] == 'committed' and kept['stop_date'] == '2026-10-23' and kept['exit_price'] == 91.5
+
+def test_open_long_live_stop_is_not_lowered_on_the_policy_date():
+    x = _around_policy()
+    entry = x.index[W]
+    pure = ST_RAW(x, 'stock', 'LONG', entry, 100.0, policy_from=None)
+    floor = 96.0
+    migrated = ST_RAW(x, 'stock', 'LONG', entry, 100.0, policy_from=SPOL.POLICY_EFFECTIVE, floor=floor)
+    assert pure['next_level'] < floor
+    assert migrated['stopped'] is False
+    assert migrated['next_level'] >= floor
+    assert migrated['initial_stop'] == pytest.approx(100 - 4 * _atr(x, W - 1), abs=1e-3)
+    fresh = bars([100] * (W + 3), 2.0)
+    fresh.index = pd.bdate_range('2026-11-09', periods=len(fresh))
+    opened = ST_RAW(fresh, 'stock', 'LONG', fresh.index[W], 100.0, policy_from=SPOL.POLICY_EFFECTIVE)
+    assert opened['initial_stop'] == pytest.approx(100 - 5 * _atr(fresh, W - 1), abs=1e-3)
+
+def test_checkpoints_keep_a_closed_exit_and_the_open_floor(tmp_path, monkeypatch):
+    import run_checkpoints as RC, scanner_lessons as SLS
+    x = _around_policy(n=W + 12)
+    monkeypatch.setattr(RC, 'get_bars', lambda *a, **k: x)
+    ST.stop_status = ST_RAW
+    try:
+        entry = str(x.index[W].date())
+        reg = pd.DataFrame([
+            {'trade_id': 'OPEN', 'trade_key': 'AAA|LONG|x', 'ticker': 'AAA', 'asset': 'stock', 'direction': 'LONG',
+             'entry_session': entry, 'entry_ref': 100, 'status': 'open', 'current_stop': 96.0,
+             'checkpoints_done': '', 'is_trial': False, 'is_sim': False},
+            {'trade_id': 'SHUT', 'trade_key': 'BBB|LONG|y', 'ticker': 'BBB', 'asset': 'stock', 'direction': 'LONG',
+             'entry_session': entry, 'entry_ref': 100, 'status': 'closed', 'exit_date': '2026-10-23', 'exit_price': 91.5,
+             'exit_reason': 'סטופ', 'current_stop': 94.0, 'checkpoints_done': '', 'is_trial': False, 'is_sim': False},
+        ])
+        for k in SLS.REG_COLS:
+            if k not in reg: reg[k] = None
+        rp = str(tmp_path / 'reg.csv'); SLS.save_registry(reg, rp)
+        RC.run(str(x.index[-1] + pd.Timedelta(hours=30)), rp, str(tmp_path / 'ledger.csv'), str(tmp_path / 'cp'), no_models=True)
+        got = SLS.load_registry(rp).set_index('trade_id')
+        assert got.loc['SHUT', 'status'] == 'closed'
+        assert str(got.loc['SHUT', 'exit_date'])[:10] == '2026-10-23' and float(got.loc['SHUT', 'exit_price']) == 91.5
+        assert got.loc['OPEN', 'status'] == 'open'
+        assert float(got.loc['OPEN', 'current_stop']) >= 96.0
+    finally:
+        ST.stop_status = _current_policy
+
+def test_account_does_not_rewrite_pre_policy_fills():
+    assert SPOL.account_stop_hit('LONG', 80, 85, 70, 90, '2026-10-30') == 90
+    assert SPOL.account_stop_hit('LONG', 80, 85, 70, 90, '2026-11-09') == 80
+    assert SPOL.account_stop_hit('SHORT', 120, 130, 110, 110, '2026-10-30') == 110
+    assert SPOL.account_stop_hit('SHORT', 120, 130, 110, 110, '2026-11-09') == 120
+    assert SPOL.account_stop_hit('LONG', 100, 101, 95, 90, '2026-11-09') is None
+
 def test_status_mismatch_flags_disagreement(tmp_path, capsys):
     a = tmp_path / 'tracker.csv'; b = tmp_path / 'account.csv'
     base = [
@@ -266,3 +356,32 @@ def test_status_mismatch_flags_disagreement(tmp_path, capsys):
     ]
     pd.DataFrame(base).to_csv(a, index=False); pd.DataFrame(swapped).to_csv(b, index=False)
     assert MM.main(str(a), str(b)) == 1
+    # same status and exit date, different fill
+    priced = [dict(base[1], exit_price='10.50'), dict(base[0])]
+    pd.DataFrame(base).to_csv(a, index=False); pd.DataFrame(priced).to_csv(b, index=False)
+    assert MM.main(str(a), str(b)) == 1
+
+def test_mismatch_skips_paper_and_trial_only_account(tmp_path, monkeypatch):
+    import run_daily_report as RD
+    tracker = tmp_path / 'positions_registry.csv'
+    account = tmp_path / 'account_positions.csv'
+    real = {'ticker': 'AAA', 'direction': 'LONG', 'entry_session': '2026-10-19', 'status': 'closed',
+            'exit_date': '2026-10-23', 'exit_price': '91.5', 'is_trial': False}
+    pd.DataFrame([real]).to_csv(tracker, index=False)
+    pd.DataFrame([
+        {'ticker': 'AAA', 'direction': 'LONG', 'entry_session': '2026-10-19', 'status': 'closed',
+         'exit_date': '2026-10-23', 'exit_price': '91.5', 'book': 'real'},
+        {'ticker': 'TRIAL', 'direction': 'SHORT', 'entry_session': '2026-10-19', 'status': 'open',
+         'exit_date': '', 'exit_price': '', 'book': 'trial'},
+    ]).to_csv(account, index=False)
+    assert MM.daily_check(str(tracker), str(account))['ok'] is True
+    paper = tmp_path / 'paper_trades_ledger.csv'
+    pd.DataFrame([{'ticker': 'ZZ', 'paper_id': 'p', 'is_paper': True, 'status': 'open', 'entry_session': '2026-10-19'}]).to_csv(paper, index=False)
+    blocked = MM.daily_check(str(tracker), str(paper))
+    assert blocked['compared'] is False and 'paper' in blocked['blocker']
+    monkeypatch.setenv('ACCOUNT_POSITIONS', str(tmp_path / 'missing.csv'))
+    missing = RD.status_check(str(tracker))
+    assert missing['compared'] is False and 'paper' in missing['blocker'].lower()
+    text = open(os.path.join(REPO, 'scanner', 'scanner_platforms.py'), encoding='utf-8').read()
+    assert '5xATR14 chandelier for stock longs' in text
+    assert '4xATR14 chandelier on closes' not in text

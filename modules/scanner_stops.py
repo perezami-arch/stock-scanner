@@ -149,18 +149,19 @@ def _half_until(x, C, k, end, sgn, tp_half, half):
         if sgn * (C[j] - float(tp_half)) >= 0:
             half.update(half_taken=True, half_date=str(x.index[j].date()), half_price=float(C[j]))
 
-def stop_status(x, asset, direction, entry_date, entry_price, tp_half=None, atr_mult=None):
+def stop_status(x, asset, direction, entry_date, entry_price, tp_half=None, atr_mult=None, policy_from=SPOL.POLICY_EFFECTIVE, floor=None, committed_exit=None):
     """Live monitoring of an open trade.
     entry bar k = first bar on/after entry_date. No bar on/after entry_date -> no exit (the entry has not traded).
     Crypto fixed stop: first check at the close of k+2; a low that does not close through the stop does not exit.
-    Stock trailing stop: level_j = ratchet(level_{j-1}, extreme close through j-1 -/+ K*ATR14[j-1]), K = 5 long / 4 short,
-    starting from the initial stop (entry -/+ K*ATR14 of the bar before the entry bar). It only moves in the trade's favour.
-    atr_mult overrides K (legacy longs used 4). The raw chandelier is next_level_raw.
-    Stock touch (01.11): from the entry bar, long Low / short High vs the level known BEFORE that bar.
-    Fill = worse of level and Open. The level built from today's close is next_level for the next session only.
+    Stock trailing stop: level_j = ratchet(level_{j-1}, extreme close through j-1 -/+ K*ATR14[j-1]).
+    K is 4 for a long before policy_from (2026-11-07) and 5 on/after it; shorts stay 4. policy_from=None applies
+    the current K to every bar (tests and a trade that is entirely under the new rule).
+    atr_mult forces one K for the whole path. floor is a committed live stop: on/after the policy date, and on
+    next_level, the result never loosens past it. committed_exit={date, price} is returned as-is (a prior exit is not replayed).
+    Intraday touch (long low / short high, fill = worse of level and open) starts on policy_from. Earlier bars are close-checked.
+    The level built from today's close is next_level for the next session only.
     Stock longs with tp_half: 1/2 at the first close >= tp_half from k+2, and only if the stop did not exit first.
-    Returns dict(next_level, initial_stop, stopped, stop_date, stop_close[, half_taken, half_date, half_price]).
-    next_level applies to the NEXT session, never to the bar it was calculated from."""
+    Returns dict(next_level, initial_stop, stopped, stop_date, stop_close[, half_taken, half_date, half_price])."""
     direction = direction.upper(); sgn = 1 if direction == "LONG" else -1
     rule = RULES.get((asset, direction))
     if rule is None: return dict(next_level=None, stopped=None, note="no active rule (frozen / failed short rule)")
@@ -168,10 +169,22 @@ def stop_status(x, asset, direction, entry_date, entry_price, tp_half=None, atr_
     if atr_mult is not None: rule["stop_atr_mult"] = float(atr_mult)
     H, L, C = x.High.values, x.Low.values, x.Close.values; A = atr14(H, L, C); K = float(rule["stop_atr_mult"])
     k = int(np.searchsorted(x.index.values, np.datetime64(pd.Timestamp(entry_date)), side="left"))
+    dates = [SPOL.as_date(t) for t in x.index]
+    entry_day = dates[k] if k < len(dates) else SPOL.as_date(entry_date)
+    if asset == "stock" and atr_mult is None and direction == "LONG":
+        K = SPOL.stock_atr_mult(direction, on_date=entry_day, policy_from=policy_from)
     Arule = A[k - 1] if 0 < k <= len(C) else (A[-1] if len(A) else np.nan)
     init = float(SPOL.initial_stop_price(direction, entry_price, Arule, atr_mult=K)) if np.isfinite(Arule) else float("nan")
     has_tp = tp_half is not None and pd.notna(tp_half)
     half = dict(half_taken=False, half_date=None, half_price=None) if has_tp else {}
+    prior = committed_exit or {}
+    prior_day = SPOL.as_date(prior.get("date") if isinstance(prior, dict) else None)
+    if prior_day is not None:
+        px = prior.get("price")
+        kept = None if px is None or not SPOL._finite(px) else float(px)
+        return dict(next_level=None if floor is None else round(float(floor), 4), initial_stop=None if not np.isfinite(init) else round(init, 4),
+                    stopped=True, stop_date=str(prior_day), stop_close=kept, exit_price=kept, exit_mode="committed",
+                    note="prior exit preserved", **half)
     if k >= len(C):                              # entry session has not traded
         return dict(next_level=None if not np.isfinite(init) else round(init, 4), initial_stop=None if not np.isfinite(init) else round(init, 4),
                     stopped=False, note="no entry bar yet", **half)
@@ -186,12 +199,14 @@ def stop_status(x, asset, direction, entry_date, entry_price, tp_half=None, atr_
     O = x.Open.values
     if touch:
         # Shared with the simulated account. Today's close cannot stop today's bar.
-        w = SPOL.walk_trailing_stop(O, H, L, C, A, direction, k, init, K)
+        # policy_from splits 4x-close (before) from 5x-touch (on/after) so a long's live stop is not loosened.
+        post = float(rule["stop_atr_mult"]) if atr_mult is not None else (SPOL.CURRENT_STOCK_ATR_MULT[direction] if direction in SPOL.CURRENT_STOCK_ATR_MULT else K)
+        w = SPOL.walk_trailing_stop(O, H, L, C, A, direction, k, init, post, dates=dates, policy_from=policy_from, floor=floor, touch=True)
         if has_tp: _half_until(x, C, k, w["stop_index"] if w["stopped"] else len(C), sgn, tp_half, half)
         if w["stopped"]:
             hit = w["exit_price"]
             return dict(next_level=round(float(w["level_checked"]), 4), initial_stop=round(init, 4), stopped=True,
-                        stop_date=str(x.index[w["stop_index"]].date()), stop_close=hit, exit_price=hit, exit_mode="touch", **half)
+                        stop_date=str(x.index[w["stop_index"]].date()), stop_close=hit, exit_price=hit, exit_mode=w.get("exit_mode") or "touch", **half)
         return dict(next_level=round(float(w["next_level"]), 4), next_level_raw=round(float(w["next_level_raw"]), 4),
                     initial_stop=round(init, 4), stopped=False, **half)
     if k >= len(C) - 1:                          # close-checked trailing: nothing to check until the bar after entry

@@ -47,10 +47,18 @@ def update_paper(asof, path=None):
         tp = float(r.target_level) if (r.asset == 'stock' and r.direction == 'LONG' and pd.notna(r.target_level) and str(r.target_level) not in ('', 'nan')) else None
         st = ST.stop_status(x, r.asset, r.direction, r.entry_session, fill, tp_half=tp)
         if st.get('next_level') is None and not st.get('stopped'): d.loc[i, 'status'] = 'no active rule'; continue
-        mult = SPOL.stop_atr_mult(r.asset, r.direction)
-        init = st.get('initial_stop')
-        d.loc[i, ['entry_price', 'stop', 'status']] = [round(fill, 6), None if init is None else round(float(init), 6), 'open']
-        if mult is not None: d.loc[i, 'stop_atr_mult'] = mult
+        # An entry from before 2026-11-07 keeps the stop it was opened with. New entries record the current multiplier.
+        entry_day = SPOL.as_date(r.entry_session)
+        prospective = entry_day is None or entry_day >= SPOL.POLICY_EFFECTIVE
+        prev_stop = r.stop if 'stop' in d.columns else None
+        keep_committed = (not prospective) and str(prev_stop or '') not in ('', 'nan', 'None')
+        if keep_committed:
+            d.loc[i, ['entry_price', 'status']] = [round(fill, 6), 'open']
+        else:
+            mult = SPOL.stop_atr_mult(r.asset, r.direction, legacy=not prospective and str(r.asset) == 'stock' and str(r.direction).upper() == 'LONG')
+            init = st.get('initial_stop')
+            d.loc[i, ['entry_price', 'stop', 'status']] = [round(fill, 6), None if init is None else round(float(init), 6), 'open']
+            if mult is not None: d.loc[i, 'stop_atr_mult'] = mult
         for j in range(min(20, len(s))): d.loc[i, f'cum_d{j + 1}'] = round(sgn * (float(s.Close.iloc[j]) / fill - 1), 6)
         ex = None
         if st.get('stopped') and (s.index <= pd.Timestamp(st['stop_date'])).sum() <= 20: ex = (st['stop_date'], st['stop_close'], 'stop')
@@ -59,6 +67,12 @@ def update_paper(asof, path=None):
         n += 1
     d.to_csv(path, index=False)
     return n
+
+def status_check(registry):
+    """Run ops/status_mismatch against the simulated-account position file. Never the paper ledger."""
+    import status_mismatch as MM
+    account = os.environ.get('ACCOUNT_POSITIONS', os.path.join(_SCANNER_ROOT, 'scan-runs', 'account_positions.csv'))
+    return MM.daily_check(registry, account)
 
 def paper_line():
     f = os.environ.get('PAPER_LEDGER', (_SCANNER_ROOT + '/scan-runs/paper_trades_ledger.csv'))
@@ -145,6 +159,20 @@ def main():
     try: update_paper(asof)
     except Exception as e: print('paper update failed:', e)
     w(f'\n## 6. עסקאות נייר\n{paper_line()}')
+    chk = status_check(a.registry)
+    w('\n## 7. התאמת סטטוס — טרקר מול חשבון הסימולציה')
+    w('ההשוואה היא ספר הפוזיציות (real, ו-trial רק אם יש שורות trial בטרקר) מול חשבון הסימולציה. עסקאות נייר לא נכנסות.')
+    if chk.get('blocker'):
+        w(f"- **חסם:** {chk['blocker']}")
+        print('STATUS MISMATCH BLOCKER:', chk['blocker'])
+    elif chk.get('ok'):
+        w('- תואם: סטטוס, תאריך יציאה ומחיר יציאה.')
+        print('status OK: tracker and account agree')
+    else:
+        w(f"- **אי-התאמה ({len(chk['mismatches'])}):**")
+        for row in chk['mismatches']:
+            w(f"  - {row.get('ticker')} {row.get('direction', '')} {row.get('entry_session', '')} book={row.get('book', '')}")
+        print(f"STATUS MISMATCH: {len(chk['mismatches'])} position(s)")
     mdp = f'{out}/daily_report_he.md'; open(mdp, 'w').write('\n'.join(L) + '\n')
     try: UR._pdf(open(mdp).read(), f'{out}/daily_report_he.pdf', base=out)
     except Exception as e: print('pdf failed:', e)
