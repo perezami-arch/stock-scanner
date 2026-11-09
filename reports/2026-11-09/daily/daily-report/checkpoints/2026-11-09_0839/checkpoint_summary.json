@@ -1,0 +1,658 @@
+{
+ "asof_utc": "2026-11-09 06:39:21.626886+00:00",
+ "cp_dir": "/home/runner/work/stock-scanner/stock-scanner/runtime/scan-runs/daily/2026-11-09/checkpoints/2026-11-09_0839",
+ "open_before": 37,
+ "checkpoints": [
+  {
+   "ticker": "NFLX",
+   "direction": "SHORT",
+   "day": 10,
+   "triggers": [],
+   "llm_called": false,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": 2.69,
+   "stop": 69.4898,
+   "actions": {}
+  },
+  {
+   "ticker": "UBER",
+   "direction": "SHORT",
+   "day": 10,
+   "triggers": [
+    "VA120: below→inside",
+    "ספירת אליוט השתנתה (W3 in progress (provisional) → no valid count)",
+    "ספירת אליוט v1 בוטלה"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": "שלילי"
+   },
+   "unrealized_dir_pct": -2.96,
+   "stop": 71.9367,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "TXN",
+   "direction": "LONG",
+   "day": 10,
+   "triggers": [
+    "קרוב לסטופ (פחות מ-1 ATR)",
+    "איבד SMA50"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 7,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": -3.53,
+   "stop": 274.8498,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "AMGN",
+   "direction": "LONG",
+   "day": 10,
+   "triggers": [
+    "Jev: 1 כותרות מהותיות בביטחון נמוך/חשודות",
+    "הגיע ליעד Fib 1.618"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": 3.49,
+   "stop": 431.8452,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "AAPL",
+   "direction": "LONG",
+   "day": 10,
+   "triggers": [
+    "Jev: 1 כותרות מהותיות בביטחון נמוך/חשודות",
+    "ספירת אליוט השתנתה (W2 in progress (provisional) → W2 correction expanded flat: C done -> W3 may start)",
+    "ספירת אליוט v1 בוטלה"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": "חיובי"
+   },
+   "unrealized_dir_pct": -0.45,
+   "stop": 323.8409,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "T",
+   "direction": "SHORT",
+   "day": 10,
+   "triggers": [
+    "Jev: 2 כותרות מהותיות בביטחון נמוך/חשודות"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": "ניטרלי/מעורב"
+   },
+   "unrealized_dir_pct": -4.49,
+   "stop": 23.3865,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "PFE",
+   "direction": "LONG",
+   "day": 10,
+   "triggers": [
+    "ספירת אליוט השתנתה (W3 in progress (provisional) → W3 done (in W4))"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": "חיובי"
+   },
+   "unrealized_dir_pct": -0.6,
+   "stop": 27.8888,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "TMO",
+   "direction": "LONG",
+   "day": 10,
+   "triggers": [
+    "Jev: 2 כותרות מהותיות בביטחון נמוך/חשודות"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 10,
+    "n_material": 0,
+    "sentiment_label": "ניטרלי/מעורב"
+   },
+   "unrealized_dir_pct": 2.8,
+   "stop": 630.5504,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "NFLX",
+   "direction": "SHORT",
+   "day": 5,
+   "triggers": [],
+   "llm_called": false,
+   "jev": {
+    "n_headlines": 13,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": -1.95,
+   "stop": 69.8398,
+   "actions": {}
+  },
+  {
+   "ticker": "CRWD",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "Jev: 1 כותרות מהותיות בביטחון נמוך/חשודות",
+    "איבד SMA50",
+    "VA120: above→inside"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": -14.27,
+   "stop": 200.0438,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "ISRG",
+   "direction": "SHORT",
+   "day": 5,
+   "triggers": [
+    "חזר מעל SMA200",
+    "VA120: inside→above"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 4,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": -2.96,
+   "stop": 488.2632,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "TXN",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "קרוב לסטופ (פחות מ-1 ATR)",
+    "איבד SMA50"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 6,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": -8.79,
+   "stop": 272.0488,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "NOW",
+   "direction": "SHORT",
+   "day": 5,
+   "triggers": [
+    "Jev: 1 כותרות מהותיות",
+    "Jev: 2 כותרות מהותיות בביטחון נמוך/חשודות"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 1,
+    "sentiment_label": "חיובי"
+   },
+   "unrealized_dir_pct": 2.75,
+   "stop": 131.2589,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "MRK",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "Jev: 2 כותרות מהותיות בביטחון נמוך/חשודות"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": "חיובי"
+   },
+   "unrealized_dir_pct": -1.4,
+   "stop": 131.9026,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "BA",
+   "direction": "SHORT",
+   "day": 5,
+   "triggers": [
+    "Jev: 1 כותרות מהותיות בביטחון נמוך/חשודות"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": "חיובי"
+   },
+   "unrealized_dir_pct": -0.11,
+   "stop": 195.7291,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "DE",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "Jev: 1 כותרות מהותיות",
+    "VA120: above→inside"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 8,
+    "n_material": 1,
+    "sentiment_label": "חיובי"
+   },
+   "unrealized_dir_pct": 0.35,
+   "stop": 601.9515,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "JNJ",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "Jev: 3 כותרות מהותיות בביטחון נמוך/חשודות",
+    "VA120: inside→above"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 9,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": 1.53,
+   "stop": 248.6868,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "SLB",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "איבד SMA50",
+    "איבד SMA200"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 7,
+    "n_material": 0,
+    "sentiment_label": "שלילי"
+   },
+   "unrealized_dir_pct": -4.55,
+   "stop": 46.1583,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "KO",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [],
+   "llm_called": false,
+   "jev": {
+    "n_headlines": 7,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": 1.47,
+   "stop": 89.1803,
+   "actions": {}
+  },
+  {
+   "ticker": "META",
+   "direction": "SHORT",
+   "day": 5,
+   "triggers": [],
+   "llm_called": false,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": null
+   },
+   "unrealized_dir_pct": 0.7,
+   "stop": 696.1948,
+   "actions": {}
+  },
+  {
+   "ticker": "URI",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "קרוב לסטופ (פחות מ-1 ATR)",
+    "VA120: above→inside",
+    "ספירת אליוט השתנתה (W3 in progress (provisional) → W3 done (in W4))"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 1,
+    "n_material": 0,
+    "sentiment_label": "חיובי"
+   },
+   "unrealized_dir_pct": -11.29,
+   "stop": 1035.4381,
+   "actions": {
+    "grok": "hold"
+   }
+  },
+  {
+   "ticker": "ABBV",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [],
+   "llm_called": false,
+   "jev": {
+    "n_headlines": 15,
+    "n_material": 0,
+    "sentiment_label": "ניטרלי/מעורב"
+   },
+   "unrealized_dir_pct": 0.32,
+   "stop": 266.9166,
+   "actions": {}
+  },
+  {
+   "ticker": "TMO",
+   "direction": "LONG",
+   "day": 5,
+   "triggers": [
+    "Jev: 2 כותרות מהותיות בביטחון נמוך/חשודות"
+   ],
+   "llm_called": true,
+   "jev": {
+    "n_headlines": 7,
+    "n_material": 0,
+    "sentiment_label": "ניטרלי/מעורב"
+   },
+   "unrealized_dir_pct": -0.73,
+   "stop": 624.8159,
+   "actions": {
+    "grok": "hold"
+   }
+  }
+ ],
+ "closed": [],
+ "pending_entry": [],
+ "scoreboard": [
+  {
+   "platform": "claude",
+   "decision_point": "d10",
+   "n_rows": 7,
+   "n_calls": 0,
+   "right": 0,
+   "wrong": 0,
+   "no_call": 7,
+   "hit_rate": NaN,
+   "actions_scored": 1,
+   "actions_right": 0,
+   "distinct_entry_days": 2,
+   "mean_excess_when_with": NaN
+  },
+  {
+   "platform": "claude",
+   "decision_point": "d5",
+   "n_rows": 11,
+   "n_calls": 4,
+   "right": 3,
+   "wrong": 1,
+   "no_call": 7,
+   "hit_rate": 0.75,
+   "actions_scored": 5,
+   "actions_right": 3,
+   "distinct_entry_days": 3,
+   "mean_excess_when_with": -0.051
+  },
+  {
+   "platform": "claude",
+   "decision_point": "entry",
+   "n_rows": 9,
+   "n_calls": 1,
+   "right": 0,
+   "wrong": 1,
+   "no_call": 8,
+   "hit_rate": 0.0,
+   "actions_scored": 0,
+   "actions_right": 0,
+   "distinct_entry_days": 3,
+   "mean_excess_when_with": -0.0864
+  },
+  {
+   "platform": "gpt",
+   "decision_point": "d10",
+   "n_rows": 7,
+   "n_calls": 0,
+   "right": 0,
+   "wrong": 0,
+   "no_call": 0,
+   "hit_rate": NaN,
+   "actions_scored": 0,
+   "actions_right": 0,
+   "distinct_entry_days": 2,
+   "mean_excess_when_with": NaN
+  },
+  {
+   "platform": "gpt",
+   "decision_point": "d5",
+   "n_rows": 11,
+   "n_calls": 4,
+   "right": 4,
+   "wrong": 0,
+   "no_call": 0,
+   "hit_rate": 1.0,
+   "actions_scored": 4,
+   "actions_right": 4,
+   "distinct_entry_days": 3,
+   "mean_excess_when_with": NaN
+  },
+  {
+   "platform": "gpt",
+   "decision_point": "entry",
+   "n_rows": 9,
+   "n_calls": 0,
+   "right": 0,
+   "wrong": 0,
+   "no_call": 5,
+   "hit_rate": NaN,
+   "actions_scored": 0,
+   "actions_right": 0,
+   "distinct_entry_days": 3,
+   "mean_excess_when_with": NaN
+  },
+  {
+   "platform": "grok",
+   "decision_point": "d10",
+   "n_rows": 7,
+   "n_calls": 2,
+   "right": 0,
+   "wrong": 2,
+   "no_call": 5,
+   "hit_rate": 0.0,
+   "actions_scored": 4,
+   "actions_right": 0,
+   "distinct_entry_days": 2,
+   "mean_excess_when_with": -0.0751
+  },
+  {
+   "platform": "grok",
+   "decision_point": "d5",
+   "n_rows": 11,
+   "n_calls": 3,
+   "right": 0,
+   "wrong": 3,
+   "no_call": 8,
+   "hit_rate": 0.0,
+   "actions_scored": 6,
+   "actions_right": 0,
+   "distinct_entry_days": 3,
+   "mean_excess_when_with": -0.1144
+  },
+  {
+   "platform": "grok",
+   "decision_point": "entry",
+   "n_rows": 9,
+   "n_calls": 3,
+   "right": 0,
+   "wrong": 3,
+   "no_call": 6,
+   "hit_rate": 0.0,
+   "actions_scored": 0,
+   "actions_right": 0,
+   "distinct_entry_days": 3,
+   "mean_excess_when_with": -0.0557
+  },
+  {
+   "platform": "jev",
+   "decision_point": "d10",
+   "n_rows": 7,
+   "n_calls": 4,
+   "right": 0,
+   "wrong": 4,
+   "no_call": 1,
+   "hit_rate": 0.0,
+   "actions_scored": 0,
+   "actions_right": 0,
+   "distinct_entry_days": 2,
+   "mean_excess_when_with": -0.0987
+  },
+  {
+   "platform": "jev",
+   "decision_point": "d5",
+   "n_rows": 11,
+   "n_calls": 1,
+   "right": 0,
+   "wrong": 1,
+   "no_call": 1,
+   "hit_rate": 0.0,
+   "actions_scored": 0,
+   "actions_right": 0,
+   "distinct_entry_days": 3,
+   "mean_excess_when_with": -0.1156
+  },
+  {
+   "platform": "jev",
+   "decision_point": "entry",
+   "n_rows": 9,
+   "n_calls": 4,
+   "right": 0,
+   "wrong": 4,
+   "no_call": 1,
+   "hit_rate": 0.0,
+   "actions_scored": 0,
+   "actions_right": 0,
+   "distinct_entry_days": 3,
+   "mean_excess_when_with": -0.0824
+  },
+  {
+   "platform": "pplx",
+   "decision_point": "d10",
+   "n_rows": 7,
+   "n_calls": 0,
+   "right": 0,
+   "wrong": 0,
+   "no_call": 1,
+   "hit_rate": NaN,
+   "actions_scored": 1,
+   "actions_right": 0,
+   "distinct_entry_days": 2,
+   "mean_excess_when_with": NaN
+  },
+  {
+   "platform": "pplx",
+   "decision_point": "d5",
+   "n_rows": 11,
+   "n_calls": 1,
+   "right": 0,
+   "wrong": 1,
+   "no_call": 4,
+   "hit_rate": 0.0,
+   "actions_scored": 5,
+   "actions_right": 0,
+   "distinct_entry_days": 3,
+   "mean_excess_when_with": -0.2309
+  },
+  {
+   "platform": "pplx",
+   "decision_point": "entry",
+   "n_rows": 9,
+   "n_calls": 1,
+   "right": 0,
+   "wrong": 1,
+   "no_call": 4,
+   "hit_rate": 0.0,
+   "actions_scored": 0,
+   "actions_right": 0,
+   "distinct_entry_days": 3,
+   "mean_excess_when_with": -0.0409
+  }
+ ],
+ "spent_usd": 0.8438,
+ "ledger_rows_written": 115,
+ "llm_positions": 18,
+ "skipped_rows": 20
+}
