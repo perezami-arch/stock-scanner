@@ -213,6 +213,11 @@ PAPER_COLS = ['paper_id', 'run_dir', 'scan_asof_local', 'cutoff_utc', 'alert_dat
               'earnings_gate', 'watch_short_below_va120', 'momentum_score', 'short_ck_score', 'levels_file', 'status', 'exit_date', 'exit_price',
               'exit_reason'] + [f'cum_d{k}' for k in range(1, 21)] + ['is_paper', 'weight']
 
+def paper_stop_atr_mult(asset, direction):
+    """Stock long 5xATR14, stock short 4xATR14, crypto long 3x. Same table as the tracker and the simulated account."""
+    import stop_policy as SPOL
+    return SPOL.stop_atr_mult(asset, direction)
+
 def append_paper(run_dir, rows, cut, asof):
     import scanner_levelsfile as LF
     es = LF.entry_session(cut)
@@ -225,7 +230,7 @@ def append_paper(run_dir, rows, cut, asof):
                     'entry_rule': 'next session open' if not crypto else 'next UTC day open', 'entry_session': str(es.date()) if not crypto else
                     str((pd.Timestamp(cut).tz_convert('UTC').normalize() + pd.Timedelta(days=1)).date()), 'entry_price': None,
                     'atr14_at_cutoff': (L.get('technical') or {}).get('atr14_wilder'), 'stop_rule': L['trade'].get('stop_rule'),
-                    'stop_atr_mult': 3.0 if crypto else 4.0, 'stop': None,
+                    'stop_atr_mult': paper_stop_atr_mult(c.get('asset', 'stock'), c['direction']), 'stop': None,
                     'target_level': L['trade'].get('target') if c['direction'] == 'LONG' and not crypto else None, 'target_rule': L['trade'].get('target_rule'),
                     'earnings_gate': (L.get('earnings') or {}).get('status'), 'watch_short_below_va120': c.get('watch_short_below_va120'),
                     'momentum_score': c.get('momentum_score'), 'short_ck_score': c.get('short_ck_score'), 'levels_file': LF.path(run_dir, c),

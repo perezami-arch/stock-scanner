@@ -1,6 +1,6 @@
-"""17.10 fixes in the positions tracker: (1) the 4xATR14 stock trailing stop only ratchets in the trade's favour and never
-crosses the initial stop; (2) the 1/2 take-profit at Fib 1.618 (stock longs, close-checked) is recorded in the registry
-with its date / price and the whole-position (weighted) return.
+"""17.10 fixes in the positions tracker: (1) the stock trailing stop (long 5xATR14, short 4xATR14) only ratchets in the
+trade's favour and never crosses the initial stop; (2) the 1/2 take-profit at Fib 1.618 (stock longs, close-checked) is
+recorded in the registry with its date / price and the whole-position (weighted) return.
 Run: python -m pytest research/tool_stats_tests/test_stop_ratchet_half.py  (builds a throw-away SCANNER_ROOT with ops/materialize_root.sh)."""
 import os, sys, subprocess, tempfile, json
 import numpy as np, pandas as pd
@@ -13,6 +13,14 @@ if not os.path.exists(os.path.join(ROOT, 'scanner_stops.py')):
 os.environ['SCANNER_ROOT'] = ROOT
 sys.path.insert(0, ROOT)
 import scanner_stops as ST          # noqa: E402
+# These fixtures predate both rule dates. Ask for the current rule on every bar.
+# The Nov 1 touch date and the Nov 7 long-5x date are covered in test_stop_intraday_mult.
+_stop_status = ST.stop_status
+def _current_policy(*a, **k):
+    k.setdefault('policy_from', None)
+    k.setdefault('touch_from', None)
+    return _stop_status(*a, **k)
+ST.stop_status = _current_policy
 
 def bars(closes, rng, start='2026-08-03', opens=None, highs=None):
     """daily OHLC: close given, high/low = close +/- rng/2 (rng per bar -> controls ATR14)."""
@@ -46,7 +54,9 @@ def test_long_floor_at_initial_stop():
     rg = [2] * W + [12] * 8
     x = bars(cl, rg); s = _series(x, W, 'LONG', 100.0)
     init = s[0]['initial_stop']
-    assert abs(init - (100 - 4 * ST.atr14(x.High.values, x.Low.values, x.Close.values)[W - 1])) < 1e-3
+    K = ST.RULES[('stock', 'LONG')]['stop_atr_mult']
+    assert K == 5.0
+    assert abs(init - (100 - K * ST.atr14(x.High.values, x.Low.values, x.Close.values)[W - 1])) < 1e-3
     assert all(d['next_level'] >= init - 1e-9 for d in s)
     assert s[-1]['next_level_raw'] < init and s[-1]['next_level'] == init
 
@@ -60,11 +70,17 @@ def test_short_mirror_never_loosens():
     assert max(lv) <= init + 1e-9 and s[-1]['next_level_raw'] > s[-1]['next_level'] + 1
 
 def test_ratchet_triggers_exit_that_plain_rule_missed():
-    # after the run-up the ratcheted stop (~102) is hit by a close of 101 even though ATR expansion pushed the raw level below 101
+    # after the run-up the ratcheted stop is touched by the last low even though ATR expansion pushed the raw chandelier below that low
     cl = [100] * W + [100, 104, 108, 112, 114, 114, 114, 114, 101]
     rg = [2] * (W + 5) + [16, 16, 16, 16]
-    x = bars(cl, rg); s = ST.stop_status(x, 'stock', 'LONG', x.index[W], 100.0)
-    assert s['stopped'] and s['stop_date'] == str(x.index[-1].date()) and s['stop_close'] == 101
+    x = bars(cl, rg)
+    prev = ST.stop_status(x.iloc[:-1], 'stock', 'LONG', x.index[W], 100.0)
+    s = ST.stop_status(x, 'stock', 'LONG', x.index[W], 100.0)
+    # the plain chandelier has already loosened below the low; the ratchet is what the low touches
+    assert prev['stopped'] is False and prev['next_level_raw'] < float(x.Low.iloc[-1]) < prev['next_level']
+    assert s['stopped'] and s['stop_date'] == str(x.index[-1].date()) and s['exit_mode'] == 'touch'
+    assert s['stop_close'] == pytest.approx(prev['next_level'], abs=5e-4)
+    assert s['stop_close'] < float(x.Open.iloc[-1])
 
 def test_half_take_profit_close_checked_ko_like():
     # KO 13-15.10: entry bar k, k+1 trades above the target intraday but closes below, k+2 closes at 92.00 >= 91.6363

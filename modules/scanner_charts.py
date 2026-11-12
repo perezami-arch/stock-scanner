@@ -9,7 +9,7 @@ Every number drawn comes from the SAME point-in-time data and the SAME functions
                 only builds IMPULSE counts (1-5); it does not compute A-B-C corrections, so none are drawn.
   * Fib       : scanner_stops.fib_elliott() -> fib_r382..r786, fib_tp_1272/1618 (leg = geometry.swing_anchor()).
   * VP120     : scanner_geometry.volume_profile() -> vp120_poc / vah / val (last 120 daily bars).
-  * Stops     : scanner_stops.active_stop() -> initial_stop (entry -/+ 4xATR14), tp_half_1618 (LONG active target).
+  * Stops     : scanner_stops.active_stop() -> initial_stop (long entry - 5xATR14, short entry + 4xATR14), tp_half_1618 (LONG active target).
                 Scan output values (platform_enrichment.csv entry/stop/target) are drawn when passed and cross-checked.
   * S/R       : optional, from scanner_levels.levels_for() (experimental, weight 0).
 Usage:
@@ -128,7 +128,8 @@ def build_levels(symbol, cutoff, direction, asset="stock", px_dir=None, score=No
     trade = {"entry": _f(entry) if entry is not None else last_close, "entry_ref": "last_close",
              "stop": _f(stop) if stop is not None else _f(stp.get("initial_stop")), "stop_rule": f"{stp.get('stop_type')} {stp.get('stop_atr_mult')}xATR14",
              "target": _f(target) if target is not None else (_f(stp.get("tp_half_1618")) if direction == "LONG" else None),
-             "target_rule": "1/2 at Fib 1.618 (close), rest 4xATR chandelier" if direction == "LONG" else "none (4xATR14 chandelier on close)",
+             "target_rule": (f"1/2 at Fib 1.618 (close), rest {float(stp.get('stop_atr_mult')):g}xATR chandelier" if direction == "LONG" and stp.get("stop_atr_mult") not in (None, "")
+                            else (f"none ({float(stp.get('stop_atr_mult')):g}xATR14 chandelier, intraday touch)" if stp.get("stop_atr_mult") not in (None, "") else "none")),
              "target_note": target_note}
     vp = GEO.volume_profile(x, None, asset, direction)
     L = {"schema_version": "levels-1.0", "symbol": symbol, "asset": asset, "direction": direction, "scan_type": "SWING", "run_id": run_id,
@@ -328,12 +329,12 @@ def render_from_levels(levels, bars_df, out_png, bars=130, max_bars=250, dpi=130
     else: notes.append("no Fib anchor")
     # entry / stop / target
     xs0 = max(0, N - 30) - 0.5
-    for key, nm, v, c_, lw in (("entry", "ENTRY (last close)", T.get("entry"), C_ENTRY, 1.6), ("stop", "STOP 4xATR14", T.get("stop"), C_STOP, 2.0),
+    for key, nm, v, c_, lw in (("entry", "ENTRY (last close)", T.get("entry"), C_ENTRY, 1.6), ("stop", T.get("stop_rule") or "STOP", T.get("stop"), C_STOP, 2.0),
                                 ("target", "TARGET (1/2 at Fib 1.618)" if direction == "LONG" else "TARGET", T.get("target"), C_TGT, 2.0)):
         if v is None: continue
         if not inrange(v, 0.8): off_chart.append(f"{nm} {_fmt(v)}"); continue
         ax.plot([xs0, xr], [v, v], color=c_, lw=lw, zorder=7); labels_right.append((v, f"{nm}  {_fmt(v)}", c_)); drawn[key] = v
-    if direction == "SHORT" and T.get("target") is None: notes.append("SHORT: no fixed target - 4xATR14 chandelier on close (approved rule)")
+    if direction == "SHORT" and T.get("target") is None: notes.append("SHORT: no fixed target - " + str(T.get("stop_rule") or "4xATR14 chandelier, intraday touch") + " (approved rule)")
     ys = [ymin_c, ymax_c] + [v for v, _, _ in labels_right]
     ylo, yhi = min(ys), max(ys); m_ = (yhi - ylo) * 0.04
     ax.set_ylim(ylo - m_ * 3.2, yhi + m_ * 2.4); ax.set_xlim(-1, xr)

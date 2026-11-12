@@ -172,7 +172,7 @@ _mc = {r['t']: ('n/a' if r['t'] in ETF_LIKE else (r['mcap_b']*1e9 if r.get('mcap
 mom = SM.compute([(t,'stock') for t in out['t'] if not t.startswith('^')], asof=SCAN_ASOF, mcaps=_mc, verbose=False)
 out = out.merge(mom.drop(columns=['asset','mcap_b']).rename(columns={'ticker':'t'}), on='t', how='left')
 out['mcap_ok'] = out['t'].isin(ETF_LIKE) | (out['mcap_b'].fillna(0) >= SM.MCAP_FLOOR_USD/1e9)   # $1.5B floor, US stocks
-# ---- ACTIVE STOPS (approved 08.10, v2 13:28): LONG view = chandelier 4xATR14 (close) + 1/2 at Fib 1.618; SHORT only if the short rule passes = chandelier 4xATR14.
+# ---- ACTIVE STOPS (approved 08.10, v2 13:28; long 5x 01.11): LONG view = chandelier 5xATR14 (intraday touch) + 1/2 at Fib 1.618; SHORT only if the short rule passes = chandelier 4xATR14.
 #      Reference entry = last close until the setup has a trigger price. Experimental Fib/Elliott columns = LONG view, logged only.
 _px_dir = f"{SM.CACHE_ROOT}/{SCAN_ASOF.strftime('%Y%m%dT%H%MZ')}"
 _st = []
@@ -291,7 +291,7 @@ out.to_csv(f'{OUTDIR}/scan_raw.csv', index=False, encoding='utf-8-sig')
 MCOLS=['t','momentum_12_1','momentum_score','momentum_points','missing_history_flag','lowvol_60d','lowvol_score','excluded_reason']
 print('\n=== MOMENTUM 12-1 (score component 10/100; lowvol = experimental, weight 0) ===')
 print(out[~out['t'].str.startswith('^')].sort_values('momentum_score',ascending=False)[MCOLS].to_string(index=False))
-print('\n=== ACTIVE STOPS (LONG chandelier 4xATR14 close + 1/2 at Fib 1.618; SHORT chandelier 4xATR14 only if short rule passes) + EXPERIMENTAL fib/elliott ===')
+print('\n=== ACTIVE STOPS (LONG chandelier 5xATR14 touch + 1/2 at Fib 1.618; SHORT chandelier 4xATR14 touch only if short rule passes) + EXPERIMENTAL fib/elliott ===')
 SCOLS=['t','px','atr14_wilder','initial_stop','initial_stop_pct','tp_half_1618','tp_half_fallback','short_rule_pass','short_initial_stop','fib_stop_struct','elliott_count_valid','elliott_wave_label','elliott_target_w3','elliott_target_w5']
 print(out[~out['t'].str.startswith('^')][SCOLS].to_string(index=False))
 out.to_csv(f'{OUTDIR}/scan_raw.csv', index=False, encoding='utf-8-sig')
